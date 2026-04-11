@@ -23,7 +23,12 @@ Four phases from raw field recordings to judge-ready demo. Phase 1 builds the va
   3. The startup assertion fires and rejects any configuration where sr/n_fft >= 6Hz — catching misconfiguration before silent failures
   4. Each recording is classified as generator, car, plane, or mixed based on spectral flatness
   5. Phase information is preserved for artifact-free reconstruction via ISTFT
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Config module + ingestor (DSP constants, annotation parser, call segmentation, noise gap extraction)
+- [ ] 01-02-PLAN.md — Spectrogram + noise classifier (STFT with phase preservation, spectral flatness classification)
+- [ ] 01-03-PLAN.md — CLI entrypoint + pytest test suite (scripts/ingest.py, tests/test_pipeline.py)
 
 ### Phase 2: Harmonic Detection & Denoising
 **Goal**: The system detects elephant f0 via subharmonic summation and applies a time-varying harmonic comb mask to extract clean vocalizations — demonstrated to work on at least 5 known calls
@@ -63,7 +68,7 @@ Four phases from raw field recordings to judge-ready demo. Phase 1 builds the va
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Pipeline Foundation | 0/TBD | Not started | - |
+| 1. Pipeline Foundation | 0/3 | Not started | - |
 | 2. Harmonic Detection & Denoising | 0/TBD | Not started | - |
 | 3. Batch Processing & API | 0/TBD | Not started | - |
 | 4. React Frontend & Demo | 0/TBD | Not started | - |
