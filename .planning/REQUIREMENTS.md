@@ -15,9 +15,9 @@
 
 ### Spectral Analysis
 
-- [ ] **SPEC-01**: System computes STFT with n_fft=8192+ for infrasonic frequency resolution (~5.4Hz/bin at 44.1kHz)
-- [ ] **SPEC-02**: System preserves original phase for artifact-free reconstruction via ISTFT
-- [ ] **SPEC-03**: System classifies noise type per recording (generator/car/plane/mixed) using spectral flatness
+- [x] **SPEC-01**: System computes STFT with n_fft=8192+ for infrasonic frequency resolution (~5.4Hz/bin at 44.1kHz)
+- [x] **SPEC-02**: System preserves original phase for artifact-free reconstruction via ISTFT
+- [x] **SPEC-03**: System classifies noise type per recording (generator/car/plane/mixed) using spectral flatness
 
 ### Harmonic Processing
 
@@ -88,9 +88,9 @@
 | INGEST-03 | Phase 1 | Complete |
 | INGEST-04 | Phase 1 | Complete |
 | INGEST-05 | Phase 1 | Complete |
-| SPEC-01 | Phase 1 | Pending |
-| SPEC-02 | Phase 1 | Pending |
-| SPEC-03 | Phase 1 | Pending |
+| SPEC-01 | Phase 1 | Complete |
+| SPEC-02 | Phase 1 | Complete |
+| SPEC-03 | Phase 1 | Complete |
 | HARM-01 | Phase 2 | Pending |
 | HARM-02 | Phase 2 | Pending |
 | HARM-03 | Phase 2 | Pending |

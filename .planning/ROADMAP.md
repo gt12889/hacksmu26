@@ -27,7 +27,7 @@ Four phases from raw field recordings to judge-ready demo. Phase 1 builds the va
 
 Plans:
 - [x] 01-01-PLAN.md — Config module + ingestor (DSP constants, annotation parser, call segmentation, noise gap extraction)
-- [ ] 01-02-PLAN.md — Spectrogram + noise classifier (STFT with phase preservation, spectral flatness classification)
+- [x] 01-02-PLAN.md — Spectrogram + noise classifier (STFT with phase preservation, spectral flatness classification)
 - [ ] 01-03-PLAN.md — CLI entrypoint + pytest test suite (scripts/ingest.py, tests/test_pipeline.py)
 
 ### Phase 2: Harmonic Detection & Denoising
@@ -68,7 +68,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Pipeline Foundation | 1/3 | In Progress|  |
+| 1. Pipeline Foundation | 2/3 | In Progress|  |
 | 2. Harmonic Detection & Denoising | 0/TBD | Not started | - |
 | 3. Batch Processing & API | 0/TBD | Not started | - |
 | 4. React Frontend & Demo | 0/TBD | Not started | - |
