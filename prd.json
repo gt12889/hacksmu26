@@ -1,0 +1,255 @@
+{
+  "project": "ElephantVoices Denoiser",
+  "branchName": "ralph/elephant-denoiser",
+  "description": "Elephant vocalization denoising system for HackSMU - exploits strict harmonic structure of elephant rumbles to surgically extract calls from overlapping mechanical noise (generators, cars, planes). Python + FastAPI + React stack.",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Project scaffolding and dependencies",
+      "description": "As a developer, I need the project structure and all dependencies installed so the team can start building in parallel.",
+      "acceptanceCriteria": [
+        "Python project with pyproject.toml or requirements.txt containing: librosa, noisereduce, scipy, numpy, pandas, matplotlib, fastapi, uvicorn, python-multipart",
+        "React app scaffolded in frontend/ directory with Vite + TypeScript",
+        "Frontend dependencies: react, recharts or wavesurfer.js for spectrogram visualization",
+        "Directory structure: pipeline/, api/, frontend/, data/, output/",
+        "README.md with setup instructions for all team members",
+        "Typecheck passes"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "Spreadsheet parser and call segmenter",
+      "description": "As a researcher, I want the system to parse the call timestamp spreadsheet and auto-segment each recording into individual call clips so I can process them independently.",
+      "acceptanceCriteria": [
+        "Reads spreadsheet (CSV/Excel) with columns for filename, start time, end time, call type",
+        "Loads each audio file using librosa with sr=None to preserve original sample rate",
+        "Extracts individual call segments based on timestamps with configurable padding (default 2s before/after)",
+        "Extracts noise-only segments from gaps between calls for noise profiling",
+        "Outputs segment metadata as JSON: {file, start, end, call_type, duration, sample_rate}",
+        "Handles all 44 recordings and 212 calls without crashing",
+        "Typecheck passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": "This is the data ingestion foundation. All downstream stages depend on this."
+    },
+    {
+      "id": "US-003",
+      "title": "Noise type classifier",
+      "description": "As a pipeline developer, I need to classify noise type (generator, car, plane, mixed) from non-call segments so the denoising strategy can adapt per recording.",
+      "acceptanceCriteria": [
+        "Computes spectral flatness from noise-only segments to distinguish broadband vs tonal noise",
+        "Classifies noise into categories: generator (near-constant tonal), car (transient broadband), plane (slow-sweep broadband), mixed/unknown",
+        "Generator detection: identifies near-constant spectral signature with fundamental ~30Hz and harmonics",
+        "Returns noise profile dict: {type, spectral_flatness, estimated_fundamentals[], power_spectrum}",
+        "Works on noise segments extracted by US-002",
+        "Typecheck passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": "Engine noise fundamental ~30Hz with 2nd harmonic at 60Hz directly overlaps elephant rumble fundamentals. Classification drives strategy selection."
+    },
+    {
+      "id": "US-004",
+      "title": "Large-window STFT and spectrogram computation",
+      "description": "As a pipeline developer, I need high-resolution spectrograms with n_fft=8192+ so elephant fundamentals at 10-20Hz are actually resolvable.",
+      "acceptanceCriteria": [
+        "Computes STFT with n_fft=8192 (or 16384 for extra resolution) using librosa",
+        "Frequency resolution sufficient to distinguish 10Hz bins (verify: sr/n_fft <= 10)",
+        "Returns magnitude spectrogram and phase for later reconstruction",
+        "Generates and saves visualization-ready spectrogram images (matplotlib) for before/after comparison",
+        "Handles variable sample rates from different recordings",
+        "Typecheck passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": "Most teams will use default n_fft=1024 and get garbage resolution below 50Hz. This is a key differentiator."
+    },
+    {
+      "id": "US-005",
+      "title": "Harmonic-percussive source separation (HPSS)",
+      "description": "As a pipeline developer, I need to separate harmonic content (elephant rumbles) from percussive/transient content (car sounds, clicks) using HPSS.",
+      "acceptanceCriteria": [
+        "Applies librosa.decompose.hpss() with tuned kernel_size for infrasonic content",
+        "Uses median filtering along time axis to enhance horizontal harmonic contours (Zeppelzauer method)",
+        "Returns harmonic component spectrogram with enhanced horizontal structures",
+        "Percussive component captures transient noise for removal",
+        "Before/after spectrogram comparison saved as PNG",
+        "Typecheck passes"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": "Elephant rumbles are strongly harmonic. HPSS separates them from transient noise. Median filter along time axis is the Zeppelzauer spectro-temporal enhancement."
+    },
+    {
+      "id": "US-006",
+      "title": "Subharmonic summation for f0 detection",
+      "description": "As a pipeline developer, I need to detect the fundamental frequency of elephant calls by summing energy at harmonic multiples, since the 2nd harmonic is stronger than the fundamental.",
+      "acceptanceCriteria": [
+        "Implements subharmonic summation: sweeps f0 candidates from 8-25Hz",
+        "For each candidate f0, sums power at 2*f0, 3*f0, 4*f0... up to 1000Hz",
+        "Detects f0 by working backward from stronger higher harmonics (2nd harmonic is strongest)",
+        "Returns detected f0 per time frame with confidence score",
+        "Handles cases where fundamental is completely masked by noise",
+        "Normalized summation (NSSH method): normalizes by number of harmonics summed",
+        "Typecheck passes"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": "Critical domain insight: 2nd harmonic of elephant rumbles is significantly stronger than fundamental. Detect f0 by looking at stronger harmonics first. NSSH achieves 30% more precision/recall than spectrogram cross-correlation at low SNR."
+    },
+    {
+      "id": "US-007",
+      "title": "Harmonic comb mask builder",
+      "description": "As a pipeline developer, I need to build a binary frequency mask that preserves energy only at integer multiples of the detected f0, surgically isolating elephant harmonics.",
+      "acceptanceCriteria": [
+        "Given detected f0, creates narrow bandpass filters at f0, 2*f0, 3*f0... up to 1000Hz",
+        "Bandwidth of each band is configurable (default: +/- 5Hz around each harmonic)",
+        "Mask is time-varying: follows f0 track across frames as call frequency modulates",
+        "Applies mask to magnitude spectrogram, preserving elephant energy and suppressing everything else",
+        "Reconstructs audio from masked spectrogram using original phase + istft",
+        "Output audio clearly contains elephant call with dramatically reduced noise",
+        "Typecheck passes"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": "This is THE differentiator. The harmonic comb exploits the mathematical structure (integer-multiple harmonics) that is unique to elephant vocalizations."
+    },
+    {
+      "id": "US-008",
+      "title": "Residual noise cleanup with spectral gating",
+      "description": "As a pipeline developer, I need to apply noisereduce spectral gating on the comb-masked output to clean up remaining artifacts.",
+      "acceptanceCriteria": [
+        "Applies noisereduce non-stationary spectral gating on comb-masked audio for general cleanup",
+        "For generator recordings: uses stationary variant with noise profile from non-call segments",
+        "Noise profile sourced from segments identified by US-002",
+        "Strategy selection driven by noise type from US-003",
+        "Output is final cleaned audio file (WAV format)",
+        "SNR improvement measurable compared to input",
+        "Typecheck passes"
+      ],
+      "priority": 8,
+      "passes": false,
+      "notes": "noisereduce non-stationary mode was literally tested on airplane noise overlapping bird calls. Perfect for this use case."
+    },
+    {
+      "id": "US-009",
+      "title": "Batch processing pipeline with confidence scoring",
+      "description": "As a researcher, I want all 212 calls batch-processed with per-call confidence scores so I can prioritize which cleaned recordings to trust.",
+      "acceptanceCriteria": [
+        "Orchestrates full pipeline (US-002 through US-008) for all 212 calls",
+        "Per-call confidence score (0-100%) based on: harmonics survived count, SNR improvement dB, harmonic integrity (integer ratio check)",
+        "Exports each cleaned call as standalone WAV clip named by original file + call index",
+        "Generates summary CSV: filename, call_index, original_SNR, cleaned_SNR, confidence, harmonics_detected, f0_estimate",
+        "Exports in Raven Pro compatible format (WAV + selection table .txt)",
+        "Total processing completes in reasonable time (< 30 min for all 212 calls)",
+        "Typecheck passes"
+      ],
+      "priority": 9,
+      "passes": false,
+      "notes": "Immediately deployable deliverable. Raven Pro is the standard bioacoustics annotation tool - one-line metadata addition signals we understand their workflow."
+    },
+    {
+      "id": "US-010",
+      "title": "FastAPI backend with processing endpoints",
+      "description": "As a web user, I need API endpoints to upload recordings, trigger processing, and retrieve results.",
+      "acceptanceCriteria": [
+        "POST /api/upload - accepts audio file upload, stores in data/ directory",
+        "POST /api/process - triggers denoising pipeline on uploaded file, returns job ID",
+        "GET /api/status/{job_id} - returns processing status and progress",
+        "GET /api/result/{job_id} - returns cleaned audio file + spectrogram data as JSON",
+        "GET /api/batch/summary - returns batch processing summary CSV data",
+        "CORS enabled for React frontend",
+        "Typecheck passes"
+      ],
+      "priority": 10,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-011",
+      "title": "React spectrogram visualization component",
+      "description": "As a judge viewing the demo, I want to see animated before/after spectrograms with the harmonic comb mask overlaid so I can visually understand what the algorithm does.",
+      "acceptanceCriteria": [
+        "Displays noisy input spectrogram on top, clean output spectrogram on bottom",
+        "Harmonic comb mask overlaid in distinct color (e.g., cyan) showing what the algorithm kept vs removed",
+        "Spectrograms render from JSON data returned by API",
+        "Responsive layout that works on a projector/large screen for demo",
+        "Loading state while processing",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 11,
+      "passes": false,
+      "notes": "Visual wow factor for judges. Before/after with the comb mask overlay is the money shot."
+    },
+    {
+      "id": "US-012",
+      "title": "Audio playback with before/after toggle",
+      "description": "As a judge, I want to hear the before and after audio so I can confirm the denoising actually works.",
+      "acceptanceCriteria": [
+        "Play/pause controls for original noisy audio",
+        "Play/pause controls for cleaned audio",
+        "A/B toggle button to switch between noisy and clean while playing at same timestamp",
+        "Waveform visualization synced with playback position",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 12,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-013",
+      "title": "LALAL.AI baseline comparison panel",
+      "description": "As a presenter, I want to show side-by-side comparison of our results vs generic AI tools (LALAL.AI) to demonstrate why domain-specific approaches win.",
+      "acceptanceCriteria": [
+        "Panel showing: Original | LALAL.AI result | Our result side by side",
+        "Spectrograms for all three versions",
+        "SNR metrics displayed for each",
+        "Narrative text explaining where generic tools fail on infrasonic content",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 13,
+      "passes": false,
+      "notes": "Framing: 'we tested existing AI tools, they fail on infrasonic bioacoustics, so we built something domain-specific'. Pre-process a few samples through LALAL.AI manually."
+    },
+    {
+      "id": "US-014",
+      "title": "Multi-elephant speaker separation",
+      "description": "As a researcher, I want overlapping elephant calls separated into individual caller tracks when multiple elephants vocalize simultaneously.",
+      "acceptanceCriteria": [
+        "Detects multiple f0 tracks when more than one elephant is calling",
+        "Identifies crossing harmonics (harmonics from different calls cross; same-caller harmonics never cross)",
+        "Assigns separate f0 tracks to each caller using harmonic spacing constraint",
+        "Outputs separate cleaned WAV per detected caller",
+        "Handles at least 2 simultaneous callers",
+        "Typecheck passes"
+      ],
+      "priority": 14,
+      "passes": false,
+      "notes": "STRETCH GOAL. Addresses one of ElephantVoices' hardest unsolved problems. Maps to their questions about elephant 'conversation'."
+    },
+    {
+      "id": "US-015",
+      "title": "Confidence dashboard and batch results viewer",
+      "description": "As a researcher, I want a dashboard showing all 212 processed calls with confidence scores, sortable and filterable, so I can quickly find the best results.",
+      "acceptanceCriteria": [
+        "Table view of all processed calls with columns: filename, call#, f0, SNR_before, SNR_after, confidence, noise_type",
+        "Sortable by any column",
+        "Filterable by confidence threshold and noise type",
+        "Click any row to view its spectrogram and play audio",
+        "Export filtered results as CSV",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 15,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}
