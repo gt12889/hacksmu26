@@ -7,11 +7,11 @@
 
 ### Data Ingestion
 
-- [ ] **INGEST-01**: System parses annotation spreadsheet (CSV/Excel) to extract call timestamps, filenames, and noise type
-- [ ] **INGEST-02**: System loads audio files at native sample rate (sr=None) without silent resampling
-- [ ] **INGEST-03**: System segments recordings into individual call clips with configurable padding (default 2s)
-- [ ] **INGEST-04**: System extracts noise-only segments from gaps between calls for noise profiling
-- [ ] **INGEST-05**: System asserts sr/n_fft < 6Hz at startup to prevent silent resolution failures
+- [x] **INGEST-01**: System parses annotation spreadsheet (CSV/Excel) to extract call timestamps, filenames, and noise type
+- [x] **INGEST-02**: System loads audio files at native sample rate (sr=None) without silent resampling
+- [x] **INGEST-03**: System segments recordings into individual call clips with configurable padding (default 2s)
+- [x] **INGEST-04**: System extracts noise-only segments from gaps between calls for noise profiling
+- [x] **INGEST-05**: System asserts sr/n_fft < 6Hz at startup to prevent silent resolution failures
 
 ### Spectral Analysis
 
@@ -83,11 +83,11 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INGEST-01 | Phase 1 | Pending |
-| INGEST-02 | Phase 1 | Pending |
-| INGEST-03 | Phase 1 | Pending |
-| INGEST-04 | Phase 1 | Pending |
-| INGEST-05 | Phase 1 | Pending |
+| INGEST-01 | Phase 1 | Complete |
+| INGEST-02 | Phase 1 | Complete |
+| INGEST-03 | Phase 1 | Complete |
+| INGEST-04 | Phase 1 | Complete |
+| INGEST-05 | Phase 1 | Complete |
 | SPEC-01 | Phase 1 | Pending |
 | SPEC-02 | Phase 1 | Pending |
 | SPEC-03 | Phase 1 | Pending |
