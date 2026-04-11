@@ -6,7 +6,7 @@ Four phases from raw field recordings to judge-ready demo. Phase 1 builds the va
 
 ## Phases
 
-- [ ] **Phase 1: Pipeline Foundation** - Ingest, segment, and compute high-res spectrograms from field recordings
+- [x] **Phase 1: Pipeline Foundation** - Ingest, segment, and compute high-res spectrograms from field recordings (completed 2026-04-11)
 - [ ] **Phase 2: Harmonic Detection & Denoising** - Detect elephant f0, build comb mask, apply residual cleanup — proven on real calls
 - [ ] **Phase 3: Batch Processing & API** - Scale to all 212 calls with confidence scoring and FastAPI layer
 - [ ] **Phase 4: React Frontend & Demo** - Spectrogram visualization, A/B audio toggle, LALAL.AI comparison, confidence dashboard
@@ -28,7 +28,7 @@ Four phases from raw field recordings to judge-ready demo. Phase 1 builds the va
 Plans:
 - [x] 01-01-PLAN.md — Config module + ingestor (DSP constants, annotation parser, call segmentation, noise gap extraction)
 - [x] 01-02-PLAN.md — Spectrogram + noise classifier (STFT with phase preservation, spectral flatness classification)
-- [ ] 01-03-PLAN.md — CLI entrypoint + pytest test suite (scripts/ingest.py, tests/test_pipeline.py)
+- [x] 01-03-PLAN.md — CLI entrypoint + pytest test suite (scripts/ingest.py, tests/test_pipeline.py)
 
 ### Phase 2: Harmonic Detection & Denoising
 **Goal**: The system detects elephant f0 via subharmonic summation and applies a time-varying harmonic comb mask to extract clean vocalizations — demonstrated to work on at least 5 known calls
@@ -68,7 +68,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Pipeline Foundation | 2/3 | In Progress|  |
+| 1. Pipeline Foundation | 3/3 | Complete   | 2026-04-11 |
 | 2. Harmonic Detection & Denoising | 0/TBD | Not started | - |
 | 3. Batch Processing & API | 0/TBD | Not started | - |
 | 4. React Frontend & Demo | 0/TBD | Not started | - |
