@@ -76,7 +76,7 @@ Plans:
 
 Plans:
 - [x] 04-01-PLAN.md — pipeline/scoring.py (compute_snr_db lifted from demo_spectrograms.py, compute_confidence formula) + requirements.txt (fastapi, uvicorn, python-multipart)
-- [ ] 04-02-PLAN.md — pipeline/batch_runner.py (run_batch, write_summary_csv, write_raven_selection_table) + tests/test_batch_runner.py
+- [x] 04-02-PLAN.md — pipeline/batch_runner.py (run_batch, write_summary_csv, write_raven_selection_table) + tests/test_batch_runner.py
 - [ ] 04-03-PLAN.md — scripts/batch_process.py CLI entrypoint (--synthetic mode, progress feedback, output dir structure)
 - [ ] 04-04-PLAN.md — api/ package (main.py, jobs.py, models.py, all 5 route files) + tests/test_api.py
 
@@ -109,6 +109,6 @@ Plans:
 | 1. Pipeline Foundation | 3/3 | Complete | 2026-04-11 |
 | 2. Harmonic Detection & Denoising | 2/2 | Complete | 2026-04-12 |
 | 3. Demo Spectrograms & Measurements | 1/1 | Complete   | 2026-04-12 |
-| 4. Batch Processing & API | 1/4 | In Progress|  |
+| 4. Batch Processing & API | 2/4 | In Progress|  |
 | 5. React Frontend & Demo | 0/TBD | Not started | - |
 | 6. Multi-Speaker Separation | 0/TBD | Not started | - |

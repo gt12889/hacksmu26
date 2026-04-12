@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-batch-processing-api 04-01-PLAN.md
-last_updated: "2026-04-12T03:17:03.146Z"
+stopped_at: Completed 04-batch-processing-api 04-02-PLAN.md
+last_updated: "2026-04-12T03:22:40.683Z"
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 10
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-04-11)
 ## Current Position
 
 Phase: 04 (Batch Processing & API) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Plan: 2 of 4
 | Phase 02-harmonic-detection-denoising P02 | 2 | 2 tasks | 2 files |
 | Phase 03-demo-spectrograms-measurements P01 | 4 | 2 tasks | 3 files |
 | Phase 04-batch-processing-api P01 | 2 | 2 tasks | 3 files |
+| Phase 04-batch-processing-api P02 | 4 minutes | 1 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,10 @@ Recent decisions affecting current work:
 - [Phase 03-demo-spectrograms-measurements]: SNR computed on linear magnitude**2 power (not dB-scale) — standard acoustic measurement convention
 - [Phase 04-batch-processing-api]: compute_snr_db lifted verbatim from scripts/demo_spectrograms.py — unifies demo and batch scoring implementations
 - [Phase 04-batch-processing-api]: compute_confidence takes f0_contour array directly (not ctx dict) — decouples from caller structure
+- [Phase 04-batch-processing-api]: Result dict uses f0_median_hz, snr_before_db, snr_after_db — prevents write_summary_csv KeyError
+- [Phase 04-batch-processing-api]: SNR-after via re-STFT on audio_clean (not masked_magnitude) — matches demo_spectrograms.py pattern
+- [Phase 04-batch-processing-api]: WAV export normalizes before sf.write to prevent PCM_16 clipping from noisereduce output
+- [Phase 04-batch-processing-api]: Raven TSV floats formatted as f'{value:.6f}' — locale-safe, no comma-decimal ambiguity
 
 ### Pending Todos
 
@@ -95,6 +100,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-12T03:17:03.143Z
-Stopped at: Completed 04-batch-processing-api 04-01-PLAN.md
+Last session: 2026-04-12T03:22:40.681Z
+Stopped at: Completed 04-batch-processing-api 04-02-PLAN.md
 Resume file: None

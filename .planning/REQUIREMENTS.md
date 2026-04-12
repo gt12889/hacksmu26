@@ -46,11 +46,11 @@
 
 ### Batch Processing
 
-- [ ] **BATCH-01**: System processes all 212 calls through full pipeline without manual intervention
+- [x] **BATCH-01**: System processes all 212 calls through full pipeline without manual intervention
 - [x] **BATCH-02**: System computes per-call confidence score (0-100%) based on: harmonics survived, SNR improvement, harmonic integrity
-- [ ] **BATCH-03**: System exports each cleaned call as standalone WAV at native sample rate
-- [ ] **BATCH-04**: System generates summary CSV with metrics per call (filename, f0, SNR_before, SNR_after, confidence, noise_type)
-- [ ] **BATCH-05**: System exports in Raven Pro compatible format (WAV + selection table .txt)
+- [x] **BATCH-03**: System exports each cleaned call as standalone WAV at native sample rate
+- [x] **BATCH-04**: System generates summary CSV with metrics per call (filename, f0, SNR_before, SNR_after, confidence, noise_type)
+- [x] **BATCH-05**: System exports in Raven Pro compatible format (WAV + selection table .txt)
 
 ### Web API
 
@@ -113,11 +113,11 @@
 | DEMO-05 | Phase 3 | Complete |
 | DEMO-06 | Phase 3 | Complete |
 | DEMO-07 | Phase 3 | Complete |
-| BATCH-01 | Phase 4 | Pending |
+| BATCH-01 | Phase 4 | Complete |
 | BATCH-02 | Phase 4 | Complete |
-| BATCH-03 | Phase 4 | Pending |
-| BATCH-04 | Phase 4 | Pending |
-| BATCH-05 | Phase 4 | Pending |
+| BATCH-03 | Phase 4 | Complete |
+| BATCH-04 | Phase 4 | Complete |
+| BATCH-05 | Phase 4 | Complete |
 | API-01 | Phase 4 | Pending |
 | API-02 | Phase 4 | Pending |
 | API-03 | Phase 4 | Pending |
