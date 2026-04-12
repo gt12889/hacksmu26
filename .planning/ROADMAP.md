@@ -12,7 +12,7 @@ Six phases from raw field recordings to judge-ready demo. Phases 1-2 build the v
 - [x] **Phase 4: Batch Processing & API** - Scale to all 212 calls with confidence scoring and FastAPI layer (completed 2026-04-12)
 - [x] **Phase 5: React Frontend & Demo** - Spectrogram visualization, A/B audio toggle, LALAL.AI comparison, confidence dashboard (completed 2026-04-12)
 - [x] **Phase 6: Multi-Speaker Separation** - Detect and separate overlapping elephant calls using crossing harmonic analysis (completed 2026-04-12)
-- [ ] **Phase 7: Demo Audio & Proxy Fixes** - Gap closure: add _original.wav export, fix Vite proxy port, dedupe compute_snr_db
+- [x] **Phase 7: Demo Audio & Proxy Fixes** - Gap closure: add _original.wav export, fix Vite proxy port, dedupe compute_snr_db (completed 2026-04-12)
 - [ ] **Phase 8: Frontend Component Integration** - Gap closure: rewrite App.tsx to integrate upload/result components alongside static demo
 - [ ] **Phase 9: Polish Remaining Gaps** - Gap closure: API-05 spectrogram endpoint decision, MULTI-02 short-track filter
 
@@ -128,7 +128,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 07-01-PLAN.md — Deduplicate compute_snr_db import, add _original.wav export, unify Vite proxy to port 8000
+- [x] 07-01-PLAN.md — Deduplicate compute_snr_db import, add _original.wav export, unify Vite proxy to port 8000
 
 ### Phase 8: Frontend Component Integration
 **Goal**: Integrate the upload/process/result component tree (UploadPanel, ConfidenceTable, CallDetail, SpectrogramView, ABPlayer, ComparisonPanel) into App.tsx alongside the existing static 3-noise-type demo, preserving the ElephantVoices brand styling
@@ -165,6 +165,6 @@ Plans:
 | 4. Batch Processing & API | 4/4 | Complete   | 2026-04-12 |
 | 5. React Frontend & Demo | 4/4 | Complete   | 2026-04-12 |
 | 6. Multi-Speaker Separation | 2/2 | Complete   | 2026-04-12 |
-| 7. Demo Audio & Proxy Fixes | 0/1 | Not started | - |
+| 7. Demo Audio & Proxy Fixes | 1/1 | Complete   | 2026-04-12 |
 | 8. Frontend Component Integration | 0/TBD | Not started | - |
 | 9. Polish Remaining Gaps | 0/TBD | Not started | - |

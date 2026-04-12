@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-multi-speaker-separation 06-02-PLAN.md
-last_updated: "2026-04-12T04:57:10.935Z"
+stopped_at: Completed 07-demo-audio-proxy-fixes 07-01-PLAN.md
+last_updated: "2026-04-12T14:53:37.107Z"
 progress:
-  total_phases: 6
-  completed_phases: 6
-  total_plans: 16
-  completed_plans: 16
+  total_phases: 9
+  completed_phases: 7
+  total_plans: 17
+  completed_plans: 17
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-11)
 
 **Core value:** Denoise elephant vocalizations by exploiting their harmonic integer-multiple structure — surgical extraction where generic AI tools fail on infrasonic content
-**Current focus:** Phase 06 — Multi-Speaker Separation
+**Current focus:** Phase 07 — Demo Audio & Proxy Fixes
 
 ## Current Position
 
-Phase: 06
-Plan: Not started
+Phase: 07 (Demo Audio & Proxy Fixes) — EXECUTING
+Plan: 1 of 1
 
 ## Performance Metrics
 
@@ -62,6 +62,7 @@ Plan: Not started
 | Phase 05-react-frontend-demo P04 | 85 | 2 tasks | 6 files |
 | Phase 06-multi-speaker-separation P01 | 52 | 2 tasks | 3 files |
 | Phase 06-multi-speaker-separation P02 | 25 | 1 tasks | 1 files |
+| Phase 07-demo-audio-proxy-fixes P01 | 5 | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -114,6 +115,9 @@ Recent decisions affecting current work:
 - [Phase 06-multi-speaker-separation]: Fixed 0.5 Hz SHS step in detect_f0_shs_topk: coarse hz_per_bin/2 step cannot resolve sources 4 Hz apart
 - [Phase 06-multi-speaker-separation]: Bypass is_multi_speaker gate for synthetic demo — gate unreliable on pure harmonic synthetics; always proceeds with separation and prints gate result informatively
 - [Phase 06-multi-speaker-separation]: TRACK_COLORS red/blue (#FF4444/#4488FF) for maximum contrast against magma spectrogram at 300 dpi
+- [Phase 07-demo-audio-proxy-fixes]: Import compute_snr_db from pipeline.scoring — single canonical implementation, no duplicates
+- [Phase 07-demo-audio-proxy-fixes]: make_demo_figure returns 3-tuple (png, clean_wav, original_wav) — enables frontend A/B toggle
+- [Phase 07-demo-audio-proxy-fixes]: Both Vite proxy rules target port 8000 — FastAPI is a single process, split ports were a configuration bug
 
 ### Pending Todos
 
@@ -127,6 +131,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-12T04:56:44.228Z
-Stopped at: Completed 06-multi-speaker-separation 06-02-PLAN.md
+Last session: 2026-04-12T14:53:37.104Z
+Stopped at: Completed 07-demo-audio-proxy-fixes 07-01-PLAN.md
 Resume file: None

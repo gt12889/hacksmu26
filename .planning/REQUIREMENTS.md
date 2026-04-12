@@ -41,7 +41,7 @@
 - [x] **DEMO-03**: Overlays detected f0 contour on cleaned spectrogram as a traced line
 - [x] **DEMO-04**: Annotates harmonic spacing markers (f0, 2f0, 3f0...) on spectrogram with labeled arrows/lines
 - [x] **DEMO-05**: Displays SNR improvement (dB), call duration, and detected f0 range as text annotations on each figure
-- [ ] **DEMO-06**: Generates side-by-side 3-panel figure per noise type: original | comb mask overlay | cleaned result (reassigned to Phase 7 — needs _original.wav export)
+- [x] **DEMO-06**: Generates side-by-side 3-panel figure per noise type: original | comb mask overlay | cleaned result (reassigned to Phase 7 — needs _original.wav export)
 - [x] **DEMO-07**: Exports cleaned WAV files alongside figures for audio playback during pitch
 
 ### Batch Processing
@@ -111,7 +111,7 @@
 | DEMO-03 | Phase 3 | Complete |
 | DEMO-04 | Phase 3 | Complete |
 | DEMO-05 | Phase 3 | Complete |
-| DEMO-06 | Phase 7 | Pending |
+| DEMO-06 | Phase 7 | Complete |
 | DEMO-07 | Phase 3 | Complete |
 | BATCH-01 | Phase 4 | Complete |
 | BATCH-02 | Phase 4 | Complete |
