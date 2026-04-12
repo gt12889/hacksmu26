@@ -13,10 +13,9 @@ from api.models import BatchSummaryResponse
 
 router = APIRouter()
 
-BATCH_OUTPUT_DIR = Path("data/outputs")
-
 # Allowed root directories for batch audio serving (resolved at import time)
 _REPO_ROOT = Path(__file__).resolve().parents[2]  # api/routes/batch.py -> api/ -> repo root
+BATCH_OUTPUT_DIR = _REPO_ROOT / "data" / "outputs"
 _ALLOWED_ROOTS = [
     (_REPO_ROOT / "data" / "outputs").resolve(),
     (_REPO_ROOT / "cleaned").resolve(),
@@ -32,17 +31,39 @@ async def batch_results() -> JSONResponse:
     """
     results: list[dict] = []
     if BATCH_OUTPUT_DIR.exists():
-        for summary_csv in sorted(BATCH_OUTPUT_DIR.glob("*/summary.csv")):
+        # Accept both summary.csv and batch_summary.csv
+        candidates = list(BATCH_OUTPUT_DIR.glob("*/summary.csv")) + list(
+            BATCH_OUTPUT_DIR.glob("*/batch_summary.csv")
+        )
+        # De-dup (summary.csv may be a symlink to batch_summary.csv)
+        seen: set[Path] = set()
+        for summary_csv in sorted(candidates):
+            real = summary_csv.resolve()
+            if real in seen:
+                continue
+            seen.add(real)
             try:
                 df = pd.read_csv(summary_csv)
             except Exception:
                 continue
             run_dir = summary_csv.parent
-            for row in df.to_dict(orient="records"):
-                # Rewrite clean_wav_path to absolute path relative to run_dir if needed
+            cleaned_dir = run_dir / "cleaned"
+            for idx, row in enumerate(df.to_dict(orient="records")):
+                # Derive clean_wav_path if not in CSV
                 wav = row.get("clean_wav_path", "")
-                if wav and not Path(str(wav)).is_absolute():
+                if not wav:
+                    stem = Path(str(row.get("filename", ""))).stem
+                    derived = cleaned_dir / f"{stem}_{idx:04d}_clean.wav"
+                    if derived.exists():
+                        row["clean_wav_path"] = str(derived.resolve())
+                    else:
+                        row["clean_wav_path"] = ""
+                elif not Path(str(wav)).is_absolute():
                     row["clean_wav_path"] = str((run_dir / wav).resolve())
+                # Ensure all fields the frontend expects exist
+                row.setdefault("start", 0.0)
+                row.setdefault("end", 0.0)
+                row.setdefault("call_index", idx)
                 results.append(row)
     return JSONResponse(
         status_code=200,
