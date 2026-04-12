@@ -837,6 +837,112 @@ function HomePage({ navigate }: { navigate: (r: Route) => void }) {
       </div>
 
       <SpecsBar />
+
+      {/* About ElephantVoices — real client context */}
+      <section className="section container" style={{ paddingTop: '3.5rem', paddingBottom: '3.5rem' }}>
+        <div className="section-header">
+          <p className="section-label">THE CLIENT</p>
+          <h2 className="section-title" style={{ textTransform: 'uppercase', letterSpacing: '-0.01em' }}>
+            ELEPHANTVOICES
+          </h2>
+        </div>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1.4fr 1fr',
+          gap: '2rem',
+          marginTop: '1.5rem',
+        }}>
+          <div style={{
+            padding: '1.75rem 2rem',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border)',
+            borderLeft: '4px solid var(--brown)',
+            borderRadius: '8px',
+          }}>
+            <p style={{ fontSize: '0.95rem', lineHeight: 1.7, marginBottom: '1rem' }}>
+              Led by <strong>Dr. Joyce Poole</strong> and <strong>Petter Granli</strong>, ElephantVoices documents,
+              classifies, and analyzes elephant communication. Denoising is their preprocessing step
+              for two flagship datasets used by researchers worldwide.
+            </p>
+            <p style={{ fontSize: '0.95rem', lineHeight: 1.7, marginBottom: '1rem' }}>
+              Their current approach leans on spectrogram-based analysis and supervised ML classifiers,
+              often in collaboration with academic partners including <strong>UC Berkeley Linguistics</strong>.
+              The challenge: field recordings arrive contaminated by anthropogenic noise — generators,
+              vehicles, aircraft, chainsaws — that overlaps directly with the infrasonic harmonic
+              structure of elephant calls.
+            </p>
+            <p style={{ fontSize: '0.95rem', lineHeight: 1.7, marginBottom: 0 }}>
+              High-quality denoising isn't cosmetic for them. It's the gating factor on whether a
+              recording can enter the ECD, be labeled by a classifier, or support acoustic-seismic
+              integration studies.
+            </p>
+          </div>
+          <div style={{
+            display: 'grid',
+            gridTemplateRows: 'repeat(4, 1fr)',
+            gap: '0.75rem',
+          }}>
+            <div style={{ padding: '1rem 1.25rem', background: 'var(--bg-warm)', border: '1px solid var(--border)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '0.62rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>ELEPHANT CALLS DATABASE</div>
+              <div style={{ fontSize: '1.4rem', color: 'var(--brown)', letterSpacing: '-0.02em' }}>10,400+ CALLS</div>
+            </div>
+            <div style={{ padding: '1rem 1.25rem', background: 'var(--bg-warm)', border: '1px solid var(--border)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '0.62rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>ELEPHANT ETHOGRAM</div>
+              <div style={{ fontSize: '1.4rem', color: 'var(--brown)', letterSpacing: '-0.02em' }}>250 FIELD RECORDINGS</div>
+            </div>
+            <div style={{ padding: '1rem 1.25rem', background: 'var(--bg-warm)', border: '1px solid var(--border)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '0.62rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>ACADEMIC PARTNERS</div>
+              <div style={{ fontSize: '1rem', color: 'var(--brown)', letterSpacing: '-0.01em' }}>UC BERKELEY LINGUISTICS</div>
+            </div>
+            <div style={{ padding: '1rem 1.25rem', background: 'var(--bg-warm)', border: '1px solid var(--border)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '0.62rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>SIGNAL TYPES</div>
+              <div style={{ fontSize: '1rem', color: 'var(--brown)', letterSpacing: '-0.01em' }}>ACOUSTIC + SEISMIC</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Their current approach */}
+        <div style={{ marginTop: '2.5rem' }}>
+          <p style={{ fontSize: '0.62rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+            CURRENT APPROACH
+          </p>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: '0.75rem',
+          }}>
+            {[
+              { title: 'SPECTROGRAM ANALYSIS', body: 'Visual isolation of vocalizations from background noise.' },
+              { title: 'ML CLASSIFIERS', body: 'Supervised models tag call types — quality of input gates accuracy.' },
+              { title: 'DATABASE CURATION', body: 'Every field recording is consistently denoised before entering the ECD.' },
+              { title: 'SEISMIC INTEGRATION', body: 'Acoustic and ground-transmitted components of rumbles analyzed together.' },
+            ].map(item => (
+              <div
+                key={item.title}
+                style={{
+                  padding: '1.1rem 1.25rem',
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--border)',
+                  borderTop: '3px solid var(--brown)',
+                  borderRadius: '6px',
+                }}
+              >
+                <div style={{
+                  fontSize: '0.68rem',
+                  letterSpacing: '0.1em',
+                  color: 'var(--brown)',
+                  marginBottom: '0.45rem',
+                }}>
+                  {item.title}
+                </div>
+                <div style={{ fontSize: '0.82rem', lineHeight: 1.55, color: 'var(--text)' }}>
+                  {item.body}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   )
 }
