@@ -125,7 +125,10 @@ Plans:
   2. Vite proxy routes both `/api` and `/static` to a single port
   3. `scripts/demo_spectrograms.py` imports compute_snr_db from pipeline/scoring.py (no local copy)
   4. Frontend A/B audio toggle plays original and cleaned without 404s
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 07-01-PLAN.md — Deduplicate compute_snr_db import, add _original.wav export, unify Vite proxy to port 8000
 
 ### Phase 8: Frontend Component Integration
 **Goal**: Integrate the upload/process/result component tree (UploadPanel, ConfidenceTable, CallDetail, SpectrogramView, ABPlayer, ComparisonPanel) into App.tsx alongside the existing static 3-noise-type demo, preserving the ElephantVoices brand styling
@@ -162,6 +165,6 @@ Plans:
 | 4. Batch Processing & API | 4/4 | Complete   | 2026-04-12 |
 | 5. React Frontend & Demo | 4/4 | Complete   | 2026-04-12 |
 | 6. Multi-Speaker Separation | 2/2 | Complete   | 2026-04-12 |
-| 7. Demo Audio & Proxy Fixes | 0/TBD | Not started | - |
+| 7. Demo Audio & Proxy Fixes | 0/1 | Not started | - |
 | 8. Frontend Component Integration | 0/TBD | Not started | - |
 | 9. Polish Remaining Gaps | 0/TBD | Not started | - |
