@@ -6,6 +6,7 @@ import { CallDetail } from './components/CallDetail'
 import { ConfidenceTable } from './components/ConfidenceTable'
 import { getBatchResults, batchAudioUrl, uploadAudioUrl, audioUrl } from './api/client'
 import type { CallResult } from './types/api'
+import ElephantViewer from './ElephantViewer'
 
 // ─── Noise type config ──────────────────────────────────────────────────────
 const NOISE_CONFIG = {
@@ -785,29 +786,33 @@ function HomePage({ navigate }: { navigate: (r: Route) => void }) {
     <>
       {/* Hero */}
       <div className="hero">
-        <div className="hero-inner">
-          <div className="hero-eyebrow fade-up fade-up-1">
-            ElephantVoices Field Recording Denoiser
-          </div>
-          <h1 className="hero-headline fade-up fade-up-2">
-            We don't just<br />
-            <span className="accent">remove noise.</span>
-          </h1>
-          <p className="hero-sub fade-up fade-up-3">
-            We exploit the <strong>mathematical structure of elephant vocalizations</strong> to
-            surgically extract calls even when they share the exact same frequency band as the noise.
-            44 field recordings. 212 annotated calls. Three noise types.{' '}
-            <strong>One domain-specific insight.</strong>
-          </p>
-          <div className="hero-actions fade-up fade-up-4">
-            <button className="btn-primary" onClick={() => navigate('demo')}>
-              ⚗ Launch Demo →
-            </button>
-            <div className="stat-pills">
-              <div className="stat-pill"><strong>212</strong> calls processed</div>
-              <div className="stat-pill"><strong>174</strong> tests passing</div>
-              <div className="stat-pill"><strong>3</strong> noise types</div>
+        <div className="hero-inner hero-split">
+          <div className="hero-text">
+            <div className="hero-eyebrow fade-up fade-up-1">
+              ElephantVoices Field Recording Denoiser
             </div>
+            <h1 className="hero-headline fade-up fade-up-2">
+              We don't just<br />
+              <span className="accent">remove noise.</span>
+            </h1>
+            <p className="hero-sub fade-up fade-up-3">
+              Extracting elephant calls from noisy field recordings using their unique harmonic structure.
+            </p>
+            <div className="hero-actions fade-up fade-up-4">
+              <button className="btn-primary" onClick={() => navigate('demo')}>
+                ⚗ Launch Demo →
+              </button>
+              <div className="stat-pills">
+                <div className="stat-pill"><strong>212</strong> calls processed</div>
+                <div className="stat-pill"><strong>174</strong> tests passing</div>
+                <div className="stat-pill"><strong>3</strong> noise types</div>
+              </div>
+            </div>
+          </div>
+
+          {/* 3D Elephant Model */}
+          <div className="elephant-viewer-wrapper fade-up fade-up-4">
+            <ElephantViewer />
           </div>
         </div>
       </div>
