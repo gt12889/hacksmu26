@@ -162,7 +162,7 @@ export default function ElephantViewer() {
     }
 
     const { analyser, data } = audioState.current
-    analyser.getByteFrequencyData(data)
+    analyser.getByteFrequencyData(data as unknown as Uint8Array<ArrayBuffer>)
 
     const binCount = data.length
     const bars: number[] = []
