@@ -579,6 +579,251 @@ function MultiSpeakerSection() {
   )
 }
 
+// ─── Simple hash router ──────────────────────────────────────────────────────
+type Route = 'home' | 'demo'
+
+function useHashRoute(): [Route, (r: Route) => void] {
+  const parse = (): Route => {
+    const h = window.location.hash.replace(/^#\/?/, '')
+    return h === 'demo' ? 'demo' : 'home'
+  }
+  const [route, setRoute] = useState<Route>(parse())
+  useEffect(() => {
+    const handler = () => setRoute(parse())
+    window.addEventListener('hashchange', handler)
+    return () => window.removeEventListener('hashchange', handler)
+  }, [])
+  const navigate = useCallback((r: Route) => {
+    window.location.hash = r === 'home' ? '/' : `/${r}`
+  }, [])
+  return [route, navigate]
+}
+
+// ─── Header (shared) ─────────────────────────────────────────────────────────
+function AppHeader({ route, navigate }: { route: Route; navigate: (r: Route) => void }) {
+  return (
+    <>
+      <div className="top-bar" />
+      <header className="header">
+        <div className="header-inner">
+          <a
+            href="#/"
+            className="logo"
+            onClick={(e) => { e.preventDefault(); navigate('home') }}
+            style={{ textDecoration: 'none', cursor: 'pointer' }}
+          >
+            <span className="logo-mark">🐘</span>
+            <div>
+              <span className="logo-text">ElephantVoices Denoiser</span>
+              <span className="logo-sub">Harmonic Comb Masking · Infrasonic Bioacoustics</span>
+            </div>
+          </a>
+          <div className="header-right">
+            <nav style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginRight: '1.5rem' }}>
+              <a
+                href="#/"
+                onClick={(e) => { e.preventDefault(); navigate('home') }}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: route === 'home' ? 'var(--orange)' : 'var(--text-muted)',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  borderBottom: route === 'home' ? '2px solid var(--orange)' : '2px solid transparent',
+                  paddingBottom: '2px',
+                }}
+              >
+                Home
+              </a>
+              <a
+                href="#/demo"
+                onClick={(e) => { e.preventDefault(); navigate('demo') }}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: route === 'demo' ? 'var(--orange)' : 'var(--text-muted)',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  borderBottom: route === 'demo' ? '2px solid var(--orange)' : '2px solid transparent',
+                  paddingBottom: '2px',
+                }}
+              >
+                Demo
+              </a>
+            </nav>
+            <span className="tagline">HackSMU 2026 · Southern Methodist University</span>
+            <span className="badge">HackSMU 2026</span>
+          </div>
+        </div>
+      </header>
+    </>
+  )
+}
+
+// ─── Home Page ───────────────────────────────────────────────────────────────
+function HomePage({ navigate }: { navigate: (r: Route) => void }) {
+  return (
+    <>
+      {/* Hero */}
+      <div className="hero">
+        <div className="hero-inner">
+          <div className="hero-eyebrow fade-up fade-up-1">
+            ElephantVoices Field Recording Denoiser
+          </div>
+          <h1 className="hero-headline fade-up fade-up-2">
+            We don't just<br />
+            <span className="accent">remove noise.</span>
+          </h1>
+          <p className="hero-sub fade-up fade-up-3">
+            We exploit the <strong>mathematical structure of elephant vocalizations</strong> to
+            surgically extract calls even when they share the exact same frequency band as the noise.
+            44 field recordings. 212 annotated calls. Three noise types.{' '}
+            <strong>One domain-specific insight.</strong>
+          </p>
+          <div className="hero-actions fade-up fade-up-4">
+            <button className="btn-primary" onClick={() => navigate('demo')}>
+              ⚗ Launch Demo →
+            </button>
+            <div className="stat-pills">
+              <div className="stat-pill"><strong>212</strong> calls processed</div>
+              <div className="stat-pill"><strong>174</strong> tests passing</div>
+              <div className="stat-pill"><strong>3</strong> noise types</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="divider" />
+      <SpecsBar />
+      <div className="divider" />
+      <ScienceSection />
+      <div className="divider" />
+      <ComparisonSection />
+      <div className="divider" />
+
+      {/* Call-to-action */}
+      <section className="section container" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+        <div className="section-header">
+          <p className="section-label">Interactive Demo</p>
+          <h2 className="section-title">See It In Action</h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.75rem', maxWidth: '60ch', marginLeft: 'auto', marginRight: 'auto' }}>
+            Before/after spectrograms from real ElephantVoices recordings, upload your own WAV,
+            browse all 212 processed calls, and watch multi-speaker separation on overlapping rumbles.
+          </p>
+        </div>
+        <button
+          className="btn-primary"
+          onClick={() => navigate('demo')}
+          style={{ marginTop: '2rem', fontSize: '1rem', padding: '0.9rem 2rem' }}
+        >
+          Open the Demo →
+        </button>
+      </section>
+    </>
+  )
+}
+
+// ─── Demo Page ───────────────────────────────────────────────────────────────
+function DemoPage({
+  status, jobProgress, jobMessage, metadata,
+  activeUpload, setActiveUpload, handleGenerate,
+}: {
+  status: DemoStatus
+  jobProgress: number
+  jobMessage: string
+  metadata: Metadata | null
+  activeUpload: ActiveResult | null
+  setActiveUpload: (v: ActiveResult | null) => void
+  handleGenerate: () => void
+}) {
+  return (
+    <>
+      {/* Compact demo hero */}
+      <div className="hero" style={{ minHeight: 'auto', padding: '3rem 2rem 2rem' }}>
+        <div className="hero-inner">
+          <div className="hero-eyebrow fade-up fade-up-1">Live Demo</div>
+          <h1 className="hero-headline fade-up fade-up-2" style={{ fontSize: '2.5rem' }}>
+            Interactive <span className="accent">Spectrograms</span>
+          </h1>
+          <p className="hero-sub fade-up fade-up-3" style={{ maxWidth: '60ch' }}>
+            Real ElephantVoices recordings. Real denoising. Upload your own, browse all 212,
+            or watch multi-speaker separation.
+          </p>
+        </div>
+      </div>
+
+      <div className="divider" />
+
+      {/* Demo section */}
+      <section className="section container">
+        <div className="section-header">
+          <p className="section-label">Before &amp; After · Real Data</p>
+          <h2 className="section-title">Three Noise Types</h2>
+          {status === 'ready' && (
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+              3-panel spectrograms: Original · Comb Mask · Cleaned — y-axis 0–500 Hz
+            </p>
+          )}
+        </div>
+        {status === 'checking' && (
+          <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+            Checking demo status...
+          </div>
+        )}
+        {status === 'not_ready' && (
+          <div style={{ padding: '3rem', textAlign: 'center' }}>
+            <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>
+              Demo assets not yet generated.
+            </p>
+            <button className="btn-primary" onClick={handleGenerate}>
+              ⚗ Generate Demo Now
+            </button>
+          </div>
+        )}
+        {status === 'generating' && (
+          <div style={{ padding: '3rem', textAlign: 'center' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', marginBottom: '1rem' }}>
+              {jobMessage || 'Generating...'} ({jobProgress}%)
+            </p>
+            <div style={{
+              width: '100%', maxWidth: '400px', margin: '0 auto',
+              height: '4px', background: 'var(--border)', borderRadius: '2px', overflow: 'hidden',
+            }}>
+              <div style={{
+                width: `${jobProgress}%`, height: '100%',
+                background: 'var(--orange)', transition: 'width 0.3s',
+              }} />
+            </div>
+          </div>
+        )}
+        {status === 'ready' && (
+          <div className="demo-grid">
+            {NOISE_TYPES.map((nt) => (
+              <DemoCard key={nt} noiseType={nt} metadata={metadata} />
+            ))}
+          </div>
+        )}
+        {status === 'error' && (
+          <div style={{ padding: '3rem', textAlign: 'center', color: '#ff6b6b' }}>
+            Error loading demo. Check that backend is running at /api/demo/status.
+          </div>
+        )}
+      </section>
+
+      <div className="divider" />
+      <UploadSection active={activeUpload} onActive={setActiveUpload} />
+      <div className="divider" />
+      <BatchSection />
+      <div className="divider" />
+      <MultiSpeakerSection />
+    </>
+  )
+}
+
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [status, setStatus] = useState<DemoStatus>('checking')
@@ -645,123 +890,24 @@ export default function App() {
     }
   }, [checkStatus])
 
+  const [route, navigate] = useHashRoute()
+
   return (
     <div>
-      {/* Top brown accent bar — matches elephantvoices.org */}
-      <div className="top-bar" />
+      <AppHeader route={route} navigate={navigate} />
 
-      {/* Header */}
-      <header className="header">
-        <div className="header-inner">
-          <div className="logo">
-            <span className="logo-mark">🐘</span>
-            <div>
-              <span className="logo-text">ElephantVoices Denoiser</span>
-              <span className="logo-sub">Harmonic Comb Masking · Infrasonic Bioacoustics</span>
-            </div>
-          </div>
-          <div className="header-right">
-            <span className="tagline">HackSMU 2026 · Southern Methodist University</span>
-            <span className="badge">HackSMU 2026</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero */}
-      <div className="hero">
-        <div className="hero-inner">
-          <div className="hero-eyebrow fade-up fade-up-1">
-            ElephantVoices Field Recording Denoiser
-          </div>
-          <h1 className="hero-headline fade-up fade-up-2">
-            We don't just<br />
-            <span className="accent">remove noise.</span>
-          </h1>
-          <p className="hero-sub fade-up fade-up-3">
-            We exploit the <strong>mathematical structure of elephant vocalizations</strong> to
-            surgically extract calls even when they share the exact same frequency band as the noise.
-            44 field recordings. 212 annotated calls. Three noise types.{' '}
-            <strong>One domain-specific insight.</strong>
-          </p>
-          <div className="hero-actions fade-up fade-up-4">
-            {status === 'not_ready' && (
-              <button className="btn-primary" onClick={handleGenerate}>
-                ⚗ Run Pipeline
-              </button>
-            )}
-            {status === 'ready' && (
-              <button className="btn-secondary" onClick={handleGenerate}>
-                ↺ Re-generate
-              </button>
-            )}
-            <div className="stat-pills">
-              <div className="stat-pill"><strong>212</strong> calls processed</div>
-              <div className="stat-pill">SNR <strong>+5–8 dB</strong> improvement</div>
-              <div className="stat-pill"><strong>3</strong> noise types</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="divider" />
-      <SpecsBar />
-      <div className="divider" />
-
-      {/* Demo section */}
-      <section className="section container">
-        <div className="section-header">
-          <p className="section-label">Live Demo</p>
-          <h2 className="section-title">Before &amp; After</h2>
-          {status === 'ready' && (
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-              3-panel spectrograms: Original · Comb Mask · Cleaned — y-axis 0–500 Hz
-            </p>
-          )}
-        </div>
-
-        {status === 'checking' && (
-          <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>
-            Checking pipeline status...
-          </div>
-        )}
-
-        {status === 'not_ready' && (
-          <NotReadyPanel onGenerate={handleGenerate} />
-        )}
-
-        {status === 'generating' && (
-          <LoadingPanel progress={jobProgress} message={jobMessage} />
-        )}
-
-        {status === 'error' && (
-          <div style={{ textAlign: 'center', padding: '3rem', color: '#ef4444', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>
-            Could not connect to API. Make sure the backend is running on port 8000.
-            <br />
-            <button className="btn-secondary" style={{ marginTop: '1.5rem' }} onClick={checkStatus}>
-              Retry
-            </button>
-          </div>
-        )}
-
-        {status === 'ready' && (
-          <div className="demo-grid">
-            {NOISE_TYPES.map(nt => (
-              <DemoCard key={nt} noiseType={nt} metadata={metadata} />
-            ))}
-          </div>
-        )}
-      </section>
-
-      <div className="divider" />
-      <ScienceSection />
-      <div className="divider" />
-      <ComparisonSection />
-      <div className="divider" />
-      <UploadSection active={activeUpload} onActive={setActiveUpload} />
-      <div className="divider" />
-      <BatchSection />
-      <div className="divider" />
-      <MultiSpeakerSection />
+      {route === 'home' && <HomePage navigate={navigate} />}
+      {route === 'demo' && (
+        <DemoPage
+          status={status}
+          jobProgress={jobProgress}
+          jobMessage={jobMessage}
+          metadata={metadata}
+          activeUpload={activeUpload}
+          setActiveUpload={setActiveUpload}
+          handleGenerate={handleGenerate}
+        />
+      )}
 
       {/* Footer */}
       <footer className="footer">
@@ -773,11 +919,15 @@ export default function App() {
             </span>
           </div>
           <div className="footer-links">
-            <a className="footer-link" href="https://github.com" target="_blank" rel="noreferrer">
+            <a className="footer-link" href="https://github.com/gt12889/hacksmu26" target="_blank" rel="noreferrer">
               GitHub ↗
             </a>
-            <a className="footer-link" href="#" onClick={e => { e.preventDefault(); handleGenerate() }}>
-              Re-run Demo
+            <a
+              className="footer-link"
+              href="#/demo"
+              onClick={(e) => { e.preventDefault(); navigate('demo') }}
+            >
+              Launch Demo
             </a>
           </div>
         </div>
