@@ -89,7 +89,13 @@ Plans:
   2. The A/B audio toggle switches playback between noisy and cleaned audio at the same timestamp with a single button click
   3. The three-panel comparison (Original | LALAL.AI | Our result) shows SNR metrics beneath each panel — demonstrating our domain-specific advantage
   4. The confidence dashboard table is sortable and filterable; clicking any row loads that call's spectrogram and audio into the main view
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [x] 05-01-PLAN.md — Backend endpoints: GET /api/batch/results + GET /api/upload/{file_id}/audio
+- [x] 05-02-PLAN.md — Frontend scaffold: Vite + React + TS + wavesurfer deps, types, api client, useJobStatus hook
+- [ ] 05-03-PLAN.md — SpectrogramView + CombOverlay + ABPlayer components (UI-01, UI-02)
+- [ ] 05-04-PLAN.md — UploadPanel + ConfidenceTable + CallDetail + ComparisonPanel + App wiring + verification checkpoint (UI-03, UI-04, UI-05)
 
 ### Phase 6: Multi-Speaker Separation
 **Goal**: When multiple elephants vocalize simultaneously, the system detects separate f0 tracks, identifies crossing harmonics, and outputs individual cleaned tracks per caller — demonstrated on at least one overlapping call
@@ -110,5 +116,5 @@ Plans:
 | 2. Harmonic Detection & Denoising | 2/2 | Complete | 2026-04-12 |
 | 3. Demo Spectrograms & Measurements | 1/1 | Complete   | 2026-04-12 |
 | 4. Batch Processing & API | 4/4 | Complete   | 2026-04-12 |
-| 5. React Frontend & Demo | 0/TBD | Not started | - |
+| 5. React Frontend & Demo | 2/4 | In Progress|  |
 | 6. Multi-Speaker Separation | 0/TBD | Not started | - |

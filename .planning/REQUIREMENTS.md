@@ -63,11 +63,11 @@
 
 ### Web Frontend
 
-- [ ] **UI-01**: Before/after spectrogram display with harmonic comb mask overlay in distinct color
-- [ ] **UI-02**: Audio playback with A/B toggle between noisy and cleaned at same timestamp
-- [ ] **UI-03**: Side-by-side comparison panel: Original | LALAL.AI | Our result with SNR metrics
-- [ ] **UI-04**: Confidence dashboard with sortable/filterable table of all processed calls
-- [ ] **UI-05**: Click any row in dashboard to view spectrogram and play audio
+- [x] **UI-01**: Before/after spectrogram display with harmonic comb mask overlay in distinct color
+- [x] **UI-02**: Audio playback with A/B toggle between noisy and cleaned at same timestamp
+- [x] **UI-03**: Side-by-side comparison panel: Original | LALAL.AI | Our result with SNR metrics
+- [x] **UI-04**: Confidence dashboard with sortable/filterable table of all processed calls
+- [x] **UI-05**: Click any row in dashboard to view spectrogram and play audio
 
 ### Multi-Speaker Separation
 
@@ -124,11 +124,11 @@
 | API-04 | Phase 4 | Complete |
 | API-05 | Phase 4 | Complete |
 | API-06 | Phase 4 | Complete |
-| UI-01 | Phase 5 | Pending |
-| UI-02 | Phase 5 | Pending |
-| UI-03 | Phase 5 | Pending |
-| UI-04 | Phase 5 | Pending |
-| UI-05 | Phase 5 | Pending |
+| UI-01 | Phase 5 | Complete |
+| UI-02 | Phase 5 | Complete |
+| UI-03 | Phase 5 | Complete |
+| UI-04 | Phase 5 | Complete |
+| UI-05 | Phase 5 | Complete |
 | MULTI-01 | Phase 6 | Pending |
 | MULTI-02 | Phase 6 | Pending |
 | MULTI-03 | Phase 6 | Pending |
