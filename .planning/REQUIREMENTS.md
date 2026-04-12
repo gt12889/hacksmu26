@@ -21,18 +21,18 @@
 
 ### Harmonic Processing
 
-- [ ] **HARM-01**: System applies HPSS with tuned kernel to separate harmonic elephant content from transient noise
-- [ ] **HARM-02**: System applies median filtering along time axis to enhance horizontal harmonic contours (Zeppelzauer method)
-- [ ] **HARM-03**: System detects f0 via subharmonic summation sweeping 8-25Hz, summing power at integer multiples up to 1000Hz
-- [ ] **HARM-04**: System includes octave-check heuristic to prevent 2f0 misdetection as fundamental
-- [ ] **HARM-05**: System builds time-varying harmonic comb mask at integer multiples of detected f0 (±5Hz bandwidth)
-- [ ] **HARM-06**: System applies comb mask to magnitude spectrogram and reconstructs audio via ISTFT with original phase
+- [x] **HARM-01**: System applies HPSS with tuned kernel to separate harmonic elephant content from transient noise
+- [x] **HARM-02**: System applies median filtering along time axis to enhance horizontal harmonic contours (Zeppelzauer method)
+- [x] **HARM-03**: System detects f0 via subharmonic summation sweeping 8-25Hz, summing power at integer multiples up to 1000Hz
+- [x] **HARM-04**: System includes octave-check heuristic to prevent 2f0 misdetection as fundamental
+- [x] **HARM-05**: System builds time-varying harmonic comb mask at integer multiples of detected f0 (±5Hz bandwidth)
+- [x] **HARM-06**: System applies comb mask to magnitude spectrogram and reconstructs audio via ISTFT with original phase
 
 ### Noise Cleanup
 
-- [ ] **CLEAN-01**: System applies noisereduce non-stationary spectral gating on comb-masked output
-- [ ] **CLEAN-02**: System uses stationary noisereduce with noise profile for generator-type recordings
-- [ ] **CLEAN-03**: System selects cleanup strategy based on noise type classification
+- [x] **CLEAN-01**: System applies noisereduce non-stationary spectral gating on comb-masked output
+- [x] **CLEAN-02**: System uses stationary noisereduce with noise profile for generator-type recordings
+- [x] **CLEAN-03**: System selects cleanup strategy based on noise type classification
 
 ### Demo Spectrograms & Acoustic Measurements
 
@@ -77,15 +77,15 @@
 | SPEC-01 | Phase 1 | Complete |
 | SPEC-02 | Phase 1 | Complete |
 | SPEC-03 | Phase 1 | Complete |
-| HARM-01 | Phase 2 | Pending |
-| HARM-02 | Phase 2 | Pending |
-| HARM-03 | Phase 2 | Pending |
-| HARM-04 | Phase 2 | Pending |
-| HARM-05 | Phase 2 | Pending |
-| HARM-06 | Phase 2 | Pending |
-| CLEAN-01 | Phase 2 | Pending |
-| CLEAN-02 | Phase 2 | Pending |
-| CLEAN-03 | Phase 2 | Pending |
+| HARM-01 | Phase 2 | Complete |
+| HARM-02 | Phase 2 | Complete |
+| HARM-03 | Phase 2 | Complete |
+| HARM-04 | Phase 2 | Complete |
+| HARM-05 | Phase 2 | Complete |
+| HARM-06 | Phase 2 | Complete |
+| CLEAN-01 | Phase 2 | Complete |
+| CLEAN-02 | Phase 2 | Complete |
+| CLEAN-03 | Phase 2 | Complete |
 | DEMO-01 | Phase 3 | Pending |
 | DEMO-02 | Phase 3 | Pending |
 | DEMO-03 | Phase 3 | Pending |
