@@ -142,7 +142,7 @@ When two elephants call at once, their harmonics **cross** in the time-frequency
 ```bash
 git clone https://github.com/gt12889/hacksmu26
 cd hacksmu26
-pip install -r requirements.txt
+pip install -r requirements-backend.txt
 cd frontend && npm install && cd ..
 bash scripts/start_demo.sh
 # → http://localhost:5173

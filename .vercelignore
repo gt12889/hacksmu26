@@ -1,0 +1,19 @@
+# Python backend — not deployed to Vercel (too large, and we only ship the static frontend)
+.venv/
+api/
+pipeline/
+scripts/
+tests/
+models/
+data/
+.planning/
+*.py
+requirements.txt
+
+# Caches
+__pycache__/
+*.pyc
+node_modules/
+
+# Symlinks
+data/recordings/

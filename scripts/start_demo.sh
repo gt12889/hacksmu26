@@ -12,7 +12,7 @@ echo ""
 # Check Python deps
 if ! python -c "import fastapi" 2>/dev/null; then
     echo "Installing Python dependencies..."
-    pip install -r requirements.txt
+    pip install -r requirements-backend.txt
 fi
 
 # Start FastAPI backend in background

@@ -21,7 +21,7 @@ cd hacksmu26
 # Python backend
 python -m venv .venv
 source .venv/bin/activate   # or: .venv\Scripts\activate on Windows
-pip install -r requirements.txt
+pip install -r requirements-backend.txt
 
 # Frontend
 cd frontend && npm install && cd ..
@@ -111,7 +111,7 @@ You didn't activate the venv or didn't install requirements:
 
 ```bash
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-backend.txt
 ```
 
 ### "npm run dev fails"

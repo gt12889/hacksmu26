@@ -1,0 +1,56 @@
+{
+  "generator": {
+    "baseline": {
+      "harmonic_dominance": 0.6888,
+      "approach": "noisereduce-only"
+    },
+    "ml_finetuned": {
+      "harmonic_dominance": 0.7596,
+      "approach": "sklearn-mlp-trained-on-80-rumbles"
+    },
+    "ours": {
+      "harmonic_dominance": 0.7645,
+      "approach": "hpss+shs+comb+noisereduce"
+    },
+    "improvement_pct": 11,
+    "ml_vs_baseline_pct": 10,
+    "f0_median_hz": 19.72,
+    "engine_hz_estimate": 29.3
+  },
+  "car": {
+    "baseline": {
+      "harmonic_dominance": 0.6252,
+      "approach": "noisereduce-only"
+    },
+    "ml_finetuned": {
+      "harmonic_dominance": 0.7502,
+      "approach": "sklearn-mlp-trained-on-80-rumbles"
+    },
+    "ours": {
+      "harmonic_dominance": 0.6779,
+      "approach": "hpss+shs+comb+noisereduce"
+    },
+    "improvement_pct": 8,
+    "ml_vs_baseline_pct": 20,
+    "f0_median_hz": 16.79,
+    "engine_hz_estimate": 58.59
+  },
+  "plane": {
+    "baseline": {
+      "harmonic_dominance": 0.658,
+      "approach": "noisereduce-only"
+    },
+    "ml_finetuned": {
+      "harmonic_dominance": 0.7286,
+      "approach": "sklearn-mlp-trained-on-80-rumbles"
+    },
+    "ours": {
+      "harmonic_dominance": 0.6808,
+      "approach": "hpss+shs+comb+noisereduce"
+    },
+    "improvement_pct": 3,
+    "ml_vs_baseline_pct": 11,
+    "f0_median_hz": 16.79,
+    "engine_hz_estimate": 5.86
+  }
+}

@@ -89,7 +89,7 @@ From the repo root:
 python -m venv .venv
 # Windows: .venv\Scripts\activate
 # macOS/Linux: source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-backend.txt
 ```
 
 Run the API on **port 8001** so it matches the Vite dev server proxies for `/api` and `/static` (see `frontend/vite.config.ts`):

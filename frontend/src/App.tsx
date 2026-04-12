@@ -7,6 +7,7 @@ import { ConfidenceTable } from './components/ConfidenceTable'
 import { getBatchResults, batchAudioUrl, uploadAudioUrl, audioUrl } from './api/client'
 import type { CallResult } from './types/api'
 import ElephantViewer from './ElephantViewer'
+import CurvedLoop from './components/CurvedLoop'
 
 // ─── Noise type config ──────────────────────────────────────────────────────
 const NOISE_CONFIG = {
@@ -784,28 +785,28 @@ function AppHeader({ route, navigate }: { route: Route; navigate: (r: Route) => 
 function HomePage({ navigate }: { navigate: (r: Route) => void }) {
   return (
     <>
-      {/* Hero */}
+      {/* Hero — industrial, minimal */}
       <div className="hero">
         <div className="hero-inner hero-split">
           <div className="hero-text">
             <div className="hero-eyebrow fade-up fade-up-1">
-              ElephantVoices Field Recording Denoiser
+              HACKSMU 2026 · ELEPHANTVOICES
             </div>
             <h1 className="hero-headline fade-up fade-up-2">
-              We don't just<br />
-              <span className="accent">remove noise.</span>
+              DENOISE<br />
+              <span className="accent">ELEPHANT RUMBLES.</span>
             </h1>
             <p className="hero-sub fade-up fade-up-3">
-              Extracting elephant calls from noisy field recordings using their unique harmonic structure.
+              Harmonic comb masking. 44 recordings. 212 rumbles. No ML required.
             </p>
             <div className="hero-actions fade-up fade-up-4">
               <button className="btn-primary" onClick={() => navigate('demo')}>
-                ⚗ Launch Demo →
+                LAUNCH DEMO →
               </button>
               <div className="stat-pills">
-                <div className="stat-pill"><strong>212</strong> calls processed</div>
-                <div className="stat-pill"><strong>174</strong> tests passing</div>
-                <div className="stat-pill"><strong>3</strong> noise types</div>
+                <div className="stat-pill"><strong>212</strong> CALLS</div>
+                <div className="stat-pill"><strong>174</strong> TESTS</div>
+                <div className="stat-pill"><strong>n_fft=8192</strong></div>
               </div>
             </div>
           </div>
@@ -817,32 +818,25 @@ function HomePage({ navigate }: { navigate: (r: Route) => void }) {
         </div>
       </div>
 
-      <div className="divider" />
-      <SpecsBar />
-      <div className="divider" />
-      <ScienceSection />
-      <div className="divider" />
-      <ComparisonSection />
-      <div className="divider" />
+      {/* Curved marquee */}
+      <div style={{
+        padding: '3rem 0 1rem',
+        background: 'var(--bg-warm)',
+        color: 'var(--brown)',
+        overflow: 'hidden',
+        borderTop: '2px solid var(--brown)',
+        borderBottom: '2px solid var(--brown)',
+      }}>
+        <CurvedLoop
+          marqueeText="🐘 ELEPHANTVOICES · RUMBLE · HARMONIC COMB · SUBHARMONIC SUMMATION · "
+          speed={1.5}
+          curveAmount={180}
+          direction="left"
+          interactive
+        />
+      </div>
 
-      {/* Call-to-action */}
-      <section className="section container" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
-        <div className="section-header">
-          <p className="section-label">Interactive Demo</p>
-          <h2 className="section-title">See It In Action</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.75rem', maxWidth: '60ch', marginLeft: 'auto', marginRight: 'auto' }}>
-            Before/after spectrograms from real ElephantVoices recordings, upload your own WAV,
-            browse all 212 processed calls, and watch multi-speaker separation on overlapping rumbles.
-          </p>
-        </div>
-        <button
-          className="btn-primary"
-          onClick={() => navigate('demo')}
-          style={{ marginTop: '2rem', fontSize: '1rem', padding: '0.9rem 2rem' }}
-        >
-          Open the Demo →
-        </button>
-      </section>
+      <SpecsBar />
     </>
   )
 }
