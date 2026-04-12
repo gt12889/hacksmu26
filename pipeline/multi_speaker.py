@@ -205,6 +205,14 @@ def link_f0_tracks(
     for track_idx in range(n_tracks):
         tracks[track_idx] = median_filter(tracks[track_idx], size=9)
 
+    # MULTI-02: Drop tracks shorter than MIN_TRACK_FRAMES valid (non-zero) frames.
+    # Applied after median smoothing and before sort so that zeroed tracks sort to
+    # the front (mean=0) giving deterministic ordering even with filtered tracks.
+    for track_idx in range(n_tracks):
+        valid_frames = int(np.sum(tracks[track_idx] > 0))
+        if valid_frames < MIN_TRACK_FRAMES:
+            tracks[track_idx, :] = 0.0
+
     # Sort tracks by mean f0 ascending so track 0 = lower pitch, track 1 = higher pitch
     # This gives deterministic labelling regardless of which candidate scored higher
     track_means = tracks.mean(axis=1)
