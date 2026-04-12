@@ -12,6 +12,10 @@ export interface NoiseMetrics {
   source_file?: string
   call_window?: string
   real_data?: boolean
+  harmonic_dominance_baseline?: number
+  harmonic_dominance_ours?: number
+  harmonic_dominance_ml?: number | null
+  harmonic_dominance_delta?: number
 }
 
 export interface Metadata {

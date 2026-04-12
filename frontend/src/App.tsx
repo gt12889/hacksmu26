@@ -154,31 +154,37 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
       {/* Metrics */}
       <div className="card-metrics">
         <div className="metric">
-          <span className="metric-label">SNR Before</span>
+          <span className="metric-label">Harmonic (Baseline)</span>
           <span className="metric-value">
-            {metrics ? `${metrics.snr_before.toFixed(1)} dB` : '—'}
+            {metrics?.harmonic_dominance_baseline !== undefined
+              ? `${metrics.harmonic_dominance_baseline.toFixed(1)}%`
+              : '—'}
           </span>
         </div>
         <div className="metric">
-          <span className="metric-label">SNR After</span>
+          <span className="metric-label">Harmonic (Ours)</span>
           <span className="metric-value positive">
-            {metrics ? `${metrics.snr_after.toFixed(1)} dB` : '—'}
+            {metrics?.harmonic_dominance_ours !== undefined
+              ? `${metrics.harmonic_dominance_ours.toFixed(1)}%`
+              : '—'}
           </span>
         </div>
         <div className="metric">
-          <span className="metric-label">Δ SNR</span>
+          <span className="metric-label">vs Baseline</span>
           <span className="metric-value positive">
-            {metrics ? `${metrics.snr_improvement >= 0 ? '+' : ''}${metrics.snr_improvement.toFixed(1)} dB` : '—'}
+            {metrics?.harmonic_dominance_delta !== undefined
+              ? `${metrics.harmonic_dominance_delta >= 0 ? '+' : ''}${metrics.harmonic_dominance_delta.toFixed(1)}%`
+              : '—'}
           </span>
         </div>
         <div className="metric">
-          <span className="metric-label">f0 Range</span>
+          <span className="metric-label">f₀ Range</span>
           <span className="metric-value cyan" style={{ fontSize: '0.72rem' }}>
             {metrics ? `${metrics.f0_min.toFixed(0)}–${metrics.f0_max.toFixed(0)} Hz` : '—'}
           </span>
         </div>
         <div className="metric">
-          <span className="metric-label">f0 Median</span>
+          <span className="metric-label">f₀ Median</span>
           <span className="metric-value cyan">
             {metrics ? `${metrics.f0_median.toFixed(1)} Hz` : '—'}
           </span>
@@ -937,6 +943,7 @@ function DemoPage({
 type MLMetrics = {
   [key in NoiseType]?: {
     baseline: { harmonic_dominance: number; approach: string }
+    ml_finetuned?: { harmonic_dominance: number; approach: string }
     ours: { harmonic_dominance: number; approach: string }
     improvement_pct: number
     f0_median_hz: number
@@ -974,7 +981,7 @@ function MLComparePage() {
 
       <div className="divider" />
 
-      {/* The pitch bar */}
+      {/* The pitch bar — 3 approaches */}
       <section className="section container">
         <div style={{
           display: 'grid',
@@ -989,14 +996,32 @@ function MLComparePage() {
             borderRadius: '8px',
           }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
-              The ML-style approach
+              Generic baseline
             </div>
-            <div style={{ fontWeight: 700, color: 'var(--orange)', fontSize: '1.1rem', marginBottom: '0.5rem' }}>
+            <div style={{ fontWeight: 700, color: 'var(--orange)', fontSize: '1.05rem', marginBottom: '0.5rem' }}>
               noisereduce (stationary)
             </div>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
-              Generic spectral-gating. Zero domain knowledge. This is what 99% of bioacoustic
-              projects do — and it's what most "AI denoisers" actually are under the hood.
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+              Generic spectral-gating. Zero domain knowledge. What 99% of bioacoustic
+              projects use. Preserves any strong harmonic structure — including engines.
+            </p>
+          </div>
+          <div style={{
+            padding: '1.5rem',
+            background: 'rgba(59, 130, 246, 0.08)',
+            border: '1px solid rgba(59, 130, 246, 0.3)',
+            borderRadius: '8px',
+          }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+              Fine-tuned ML
+            </div>
+            <div style={{ fontWeight: 700, color: 'var(--blue)', fontSize: '1.05rem', marginBottom: '0.5rem' }}>
+              sklearn MLP (128·64)
+            </div>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+              Real ML model — MLPRegressor trained on 80 real ElephantVoices rumbles (16 k
+              frames) to predict our comb mask. Learns an approximation of the harmonic prior
+              from data.
             </p>
           </div>
           <div style={{
@@ -1008,31 +1033,36 @@ function MLComparePage() {
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
               Our approach
             </div>
-            <div style={{ fontWeight: 700, color: '#00c864', fontSize: '1.1rem', marginBottom: '0.5rem' }}>
+            <div style={{ fontWeight: 700, color: '#00c864', fontSize: '1.05rem', marginBottom: '0.5rem' }}>
               HPSS + SHS + Comb + noisereduce
             </div>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
-              Domain-specific. Detects elephant f₀ via subharmonic summation, then builds a
-              narrow comb mask at k·f₀ to preserve only elephant harmonics.
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+              Domain-specific classical DSP. Detects elephant f₀ via subharmonic summation,
+              builds a narrow comb mask at k·f₀ — encodes the harmonic prior explicitly.
             </p>
           </div>
-          <div style={{
-            padding: '1.5rem',
-            background: 'rgba(59, 130, 246, 0.08)',
-            border: '1px solid rgba(59, 130, 246, 0.3)',
-            borderRadius: '8px',
+        </div>
+        <div style={{
+          padding: '1rem 1.25rem',
+          background: 'var(--bg-warm)',
+          border: '1px solid var(--border)',
+          borderRadius: '8px',
+          marginBottom: '2rem',
+        }}>
+          <span style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.68rem',
+            color: 'var(--text-muted)',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
           }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
-              Metric
-            </div>
-            <div style={{ fontWeight: 700, color: 'var(--blue)', fontSize: '1.1rem', marginBottom: '0.5rem' }}>
-              Harmonic Dominance
-            </div>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
-              Fraction of energy in the 0-500 Hz band that sits on k·f₀ peaks. Higher = more
-              elephant, less junk. Measured on the re-STFT of each approach's cleaned output.
-            </p>
-          </div>
+            Metric
+          </span>
+          <span style={{ margin: '0 0.75rem', color: 'var(--text-muted)' }}>·</span>
+          <strong style={{ fontSize: '0.88rem' }}>Harmonic Dominance</strong>
+          <span style={{ marginLeft: '0.75rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            Fraction of 0–500 Hz energy sitting on k·f₀ peaks (higher = cleaner harmonic extraction)
+          </span>
         </div>
       </section>
 
@@ -1060,17 +1090,23 @@ function MLComparePage() {
                 {cfg.label}
               </span>
               {m && (
-                <div style={{ display: 'flex', gap: '1.5rem', marginLeft: 'auto', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
+                <div style={{ display: 'flex', gap: '1.25rem', marginLeft: 'auto', fontFamily: 'var(--font-mono)', fontSize: '0.76rem', flexWrap: 'wrap' }}>
                   <div>
                     <span style={{ color: 'var(--text-muted)' }}>Baseline: </span>
                     <strong style={{ color: 'var(--orange)' }}>{(m.baseline.harmonic_dominance * 100).toFixed(1)}%</strong>
                   </div>
+                  {m.ml_finetuned && (
+                    <div>
+                      <span style={{ color: 'var(--text-muted)' }}>ML: </span>
+                      <strong style={{ color: 'var(--blue)' }}>{(m.ml_finetuned.harmonic_dominance * 100).toFixed(1)}%</strong>
+                    </div>
+                  )}
                   <div>
                     <span style={{ color: 'var(--text-muted)' }}>Ours: </span>
                     <strong style={{ color: '#00c864' }}>{(m.ours.harmonic_dominance * 100).toFixed(1)}%</strong>
                   </div>
                   <div>
-                    <span style={{ color: 'var(--text-muted)' }}>Δ: </span>
+                    <span style={{ color: 'var(--text-muted)' }}>Δ vs baseline: </span>
                     <strong style={{ color: '#00c864' }}>+{m.improvement_pct}%</strong>
                   </div>
                 </div>
