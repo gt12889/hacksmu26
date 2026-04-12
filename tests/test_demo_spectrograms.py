@@ -72,9 +72,10 @@ def test_make_demo_figure_creates_files(tmp_path):
     """make_demo_figure must produce a PNG and WAV file at expected paths."""
     y, sr, noise_clip, noise_type_dict = build_synthetic_call("car")
     ctx = process_call(y, sr, noise_type_dict, noise_clip=noise_clip)
-    png_path, wav_path = make_demo_figure("car", ctx, y, tmp_path)
+    png_path, wav_path, wav_original_path = make_demo_figure("car", ctx, y, tmp_path)
     assert png_path.exists(), f"PNG file not found: {png_path}"
     assert wav_path.exists(), f"WAV file not found: {wav_path}"
+    assert wav_original_path.exists(), f"Original WAV not found: {wav_original_path}"
     # 300 dpi 18x5 figure — should be well above 50KB
     assert png_path.stat().st_size > 50_000, (
         f"PNG is suspiciously small ({png_path.stat().st_size} bytes); "
@@ -89,9 +90,10 @@ def test_all_three_noise_types_produce_files(tmp_path):
     for noise_type in ["generator", "car", "plane"]:
         y, sr, noise_clip, noise_type_dict = build_synthetic_call(noise_type)
         ctx = process_call(y, sr, noise_type_dict, noise_clip=noise_clip)
-        png_path, wav_path = make_demo_figure(noise_type, ctx, y, tmp_path)
+        png_path, wav_path, wav_original_path = make_demo_figure(noise_type, ctx, y, tmp_path)
         assert png_path.exists(), f"PNG missing for noise_type={noise_type}"
         assert wav_path.exists(), f"WAV missing for noise_type={noise_type}"
+        assert wav_original_path.exists(), f"Original WAV missing for noise_type={noise_type}"
 
 
 # ─── Test 6: WAV is valid PCM, normalized to [-1, 1] ─────────────────────────
@@ -102,7 +104,7 @@ def test_wav_is_valid_pcm(tmp_path):
 
     y, sr, noise_clip, noise_type_dict = build_synthetic_call("plane")
     ctx = process_call(y, sr, noise_type_dict, noise_clip=noise_clip)
-    _, wav_path = make_demo_figure("plane", ctx, y, tmp_path)
+    _, wav_path, _orig = make_demo_figure("plane", ctx, y, tmp_path)
 
     audio, read_sr = sf.read(str(wav_path))
     assert read_sr == sr, f"Sample rate mismatch: expected {sr}, got {read_sr}"
