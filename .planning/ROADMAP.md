@@ -12,6 +12,9 @@ Six phases from raw field recordings to judge-ready demo. Phases 1-2 build the v
 - [x] **Phase 4: Batch Processing & API** - Scale to all 212 calls with confidence scoring and FastAPI layer (completed 2026-04-12)
 - [x] **Phase 5: React Frontend & Demo** - Spectrogram visualization, A/B audio toggle, LALAL.AI comparison, confidence dashboard (completed 2026-04-12)
 - [x] **Phase 6: Multi-Speaker Separation** - Detect and separate overlapping elephant calls using crossing harmonic analysis (completed 2026-04-12)
+- [ ] **Phase 7: Demo Audio & Proxy Fixes** - Gap closure: add _original.wav export, fix Vite proxy port, dedupe compute_snr_db
+- [ ] **Phase 8: Frontend Component Integration** - Gap closure: rewrite App.tsx to integrate upload/result components alongside static demo
+- [ ] **Phase 9: Polish Remaining Gaps** - Gap closure: API-05 spectrogram endpoint decision, MULTI-02 short-track filter
 
 ## Phase Details
 
@@ -112,6 +115,43 @@ Plans:
 - [x] 06-01-PLAN.md — pipeline/multi_speaker.py + tests/test_multi_speaker.py (TDD: detect_f0_shs_topk, link_f0_tracks, separate_speakers, is_multi_speaker, is_harmonic_overlap)
 - [x] 06-02-PLAN.md — scripts/demo_multi_speaker.py (MULTI-04 figure: spectrogram + two colored f0 tracks + per-caller WAV export)
 
+### Phase 7: Demo Audio & Proxy Fixes
+**Goal**: Close integration gaps blocking the A/B audio demo — add `_original.wav` export to demo_spectrograms, unify Vite proxy port, deduplicate compute_snr_db between demo and batch scoring
+**Depends on**: Phase 5
+**Requirements**: DEMO-06
+**Gap Closure**: Closes gaps from v1.0 milestone audit (DEMO-06 partial, Vite proxy split, compute_snr_db duplication)
+**Success Criteria**:
+  1. `data/outputs/demo/{generator,car,plane}_original.wav` files exist after running demo_spectrograms.py --synthetic
+  2. Vite proxy routes both `/api` and `/static` to a single port
+  3. `scripts/demo_spectrograms.py` imports compute_snr_db from pipeline/scoring.py (no local copy)
+  4. Frontend A/B audio toggle plays original and cleaned without 404s
+**Plans**: TBD
+
+### Phase 8: Frontend Component Integration
+**Goal**: Integrate the upload/process/result component tree (UploadPanel, ConfidenceTable, CallDetail, SpectrogramView, ABPlayer, ComparisonPanel) into App.tsx alongside the existing static 3-noise-type demo, preserving the ElephantVoices brand styling
+**Depends on**: Phase 7
+**Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05
+**Gap Closure**: Closes 4 unsatisfied + 1 partial UI requirements from v1.0 audit
+**Success Criteria**:
+  1. App.tsx renders the static 3-noise demo cards at the top (preserved from teammate's design)
+  2. App.tsx renders an UploadPanel below that triggers the real API flow
+  3. Uploading a WAV shows processing status via useJobStatus, then displays CallDetail with SpectrogramView + ABPlayer on completion
+  4. ConfidenceTable loads from /api/batch/results and is sortable/filterable
+  5. ComparisonPanel shows Original | LALAL.AI | Our Result with SNR metrics
+  6. Clicking a confidence table row opens its CallDetail inline
+**Plans**: TBD
+
+### Phase 9: Polish Remaining Gaps
+**Goal**: Resolve the two smallest audit gaps — decide API-05 spectrogram endpoint (generate PNG in batch_runner OR remove route), implement MULTI-02 short-track filter via MIN_TRACK_FRAMES
+**Depends on**: Phase 6
+**Requirements**: API-05, MULTI-02
+**Gap Closure**: Closes remaining partial requirements from v1.0 audit
+**Success Criteria**:
+  1. GET /api/result/{job_id}/spectrogram/{call_index} either returns a PNG or is cleanly removed
+  2. link_f0_tracks filters out tracks shorter than MIN_TRACK_FRAMES
+  3. test_multi_speaker.py adds a test for the short-track filter
+**Plans**: TBD
+
 ## Progress
 
 | Phase | Plans Complete | Status | Completed |
@@ -122,3 +162,6 @@ Plans:
 | 4. Batch Processing & API | 4/4 | Complete   | 2026-04-12 |
 | 5. React Frontend & Demo | 4/4 | Complete   | 2026-04-12 |
 | 6. Multi-Speaker Separation | 2/2 | Complete   | 2026-04-12 |
+| 7. Demo Audio & Proxy Fixes | 0/TBD | Not started | - |
+| 8. Frontend Component Integration | 0/TBD | Not started | - |
+| 9. Polish Remaining Gaps | 0/TBD | Not started | - |

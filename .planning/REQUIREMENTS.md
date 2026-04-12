@@ -41,7 +41,7 @@
 - [x] **DEMO-03**: Overlays detected f0 contour on cleaned spectrogram as a traced line
 - [x] **DEMO-04**: Annotates harmonic spacing markers (f0, 2f0, 3f0...) on spectrogram with labeled arrows/lines
 - [x] **DEMO-05**: Displays SNR improvement (dB), call duration, and detected f0 range as text annotations on each figure
-- [x] **DEMO-06**: Generates side-by-side 3-panel figure per noise type: original | comb mask overlay | cleaned result
+- [ ] **DEMO-06**: Generates side-by-side 3-panel figure per noise type: original | comb mask overlay | cleaned result (reassigned to Phase 7 — needs _original.wav export)
 - [x] **DEMO-07**: Exports cleaned WAV files alongside figures for audio playback during pitch
 
 ### Batch Processing
@@ -63,11 +63,11 @@
 
 ### Web Frontend
 
-- [x] **UI-01**: Before/after spectrogram display with harmonic comb mask overlay in distinct color
-- [x] **UI-02**: Audio playback with A/B toggle between noisy and cleaned at same timestamp
-- [x] **UI-03**: Side-by-side comparison panel: Original | LALAL.AI | Our result with SNR metrics
-- [x] **UI-04**: Confidence dashboard with sortable/filterable table of all processed calls
-- [x] **UI-05**: Click any row in dashboard to view spectrogram and play audio
+- [ ] **UI-01**: Before/after spectrogram display with harmonic comb mask overlay in distinct color (reassigned to Phase 8 gap closure)
+- [ ] **UI-02**: Audio playback with A/B toggle between noisy and cleaned at same timestamp (reassigned to Phase 8 gap closure)
+- [ ] **UI-03**: Side-by-side comparison panel: Original | LALAL.AI | Our result with SNR metrics (reassigned to Phase 8 gap closure)
+- [ ] **UI-04**: Confidence dashboard with sortable/filterable table of all processed calls (reassigned to Phase 8 gap closure)
+- [ ] **UI-05**: Click any row in dashboard to view spectrogram and play audio (reassigned to Phase 8 gap closure)
 
 ### Multi-Speaker Separation
 
@@ -111,7 +111,7 @@
 | DEMO-03 | Phase 3 | Complete |
 | DEMO-04 | Phase 3 | Complete |
 | DEMO-05 | Phase 3 | Complete |
-| DEMO-06 | Phase 3 | Complete |
+| DEMO-06 | Phase 7 | Pending |
 | DEMO-07 | Phase 3 | Complete |
 | BATCH-01 | Phase 4 | Complete |
 | BATCH-02 | Phase 4 | Complete |
@@ -122,15 +122,15 @@
 | API-02 | Phase 4 | Complete |
 | API-03 | Phase 4 | Complete |
 | API-04 | Phase 4 | Complete |
-| API-05 | Phase 4 | Complete |
+| API-05 | Phase 9 | Pending |
 | API-06 | Phase 4 | Complete |
-| UI-01 | Phase 5 | Complete |
-| UI-02 | Phase 5 | Complete |
-| UI-03 | Phase 5 | Complete |
-| UI-04 | Phase 5 | Complete |
-| UI-05 | Phase 5 | Complete |
+| UI-01 | Phase 8 | Pending |
+| UI-02 | Phase 8 | Pending |
+| UI-03 | Phase 8 | Pending |
+| UI-04 | Phase 8 | Pending |
+| UI-05 | Phase 8 | Pending |
 | MULTI-01 | Phase 6 | Complete |
-| MULTI-02 | Phase 6 | Complete |
+| MULTI-02 | Phase 9 | Pending |
 | MULTI-03 | Phase 6 | Complete |
 | MULTI-04 | Phase 6 | Complete |
 
