@@ -72,7 +72,13 @@ Plans:
   3. Raven Pro selection table (.txt) is exported alongside cleaned WAVs and can be loaded in Raven Pro without errors
   4. POST /api/upload → POST /api/process → GET /api/status/{job_id} → GET /api/result/{job_id} completes end-to-end without blocking the server — processing happens in BackgroundTasks
   5. GET /api/batch/summary returns aggregate metrics across all 212 processed calls
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — pipeline/scoring.py (compute_snr_db lifted from demo_spectrograms.py, compute_confidence formula) + requirements.txt (fastapi, uvicorn, python-multipart)
+- [ ] 04-02-PLAN.md — pipeline/batch_runner.py (run_batch, write_summary_csv, write_raven_selection_table) + tests/test_batch_runner.py
+- [ ] 04-03-PLAN.md — scripts/batch_process.py CLI entrypoint (--synthetic mode, progress feedback, output dir structure)
+- [ ] 04-04-PLAN.md — api/ package (main.py, jobs.py, models.py, all 5 route files) + tests/test_api.py
 
 ### Phase 5: React Frontend & Demo
 **Goal**: Judges can use the web demo to see before/after spectrograms with the harmonic comb mask overlay, toggle A/B audio, compare against LALAL.AI, and browse confidence scores across all 212 calls
@@ -103,6 +109,6 @@ Plans:
 | 1. Pipeline Foundation | 3/3 | Complete | 2026-04-11 |
 | 2. Harmonic Detection & Denoising | 2/2 | Complete | 2026-04-12 |
 | 3. Demo Spectrograms & Measurements | 1/1 | Complete   | 2026-04-12 |
-| 4. Batch Processing & API | 0/TBD | Not started | - |
+| 4. Batch Processing & API | 0/4 | Not started | - |
 | 5. React Frontend & Demo | 0/TBD | Not started | - |
 | 6. Multi-Speaker Separation | 0/TBD | Not started | - |
