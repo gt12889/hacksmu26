@@ -1,12 +1,74 @@
-"""GET /api/batch/summary — aggregate metrics across all jobs in JOB_REGISTRY."""
+"""GET /api/batch/summary and batch results/audio endpoints."""
 from __future__ import annotations
 
-from fastapi import APIRouter
+import os
+from pathlib import Path
+
+import pandas as pd
+from fastapi import APIRouter, HTTPException, Query
+from fastapi.responses import FileResponse, JSONResponse
 
 from api.jobs import JOB_REGISTRY
 from api.models import BatchSummaryResponse
 
 router = APIRouter()
+
+BATCH_OUTPUT_DIR = Path("data/outputs")
+
+# Allowed root directories for batch audio serving (resolved at import time)
+_REPO_ROOT = Path(__file__).resolve().parents[2]  # api/routes/batch.py -> api/ -> repo root
+_ALLOWED_ROOTS = [
+    (_REPO_ROOT / "data" / "outputs").resolve(),
+    (_REPO_ROOT / "cleaned").resolve(),
+]
+
+
+@router.get("/api/batch/results")
+async def batch_results() -> JSONResponse:
+    """Read all summary.csv files under data/outputs/ and merge into one result list.
+
+    Used by the React demo to browse the 212 pre-processed calls without re-running
+    the pipeline. Returns empty list if data/outputs/ does not exist.
+    """
+    results: list[dict] = []
+    if BATCH_OUTPUT_DIR.exists():
+        for summary_csv in sorted(BATCH_OUTPUT_DIR.glob("*/summary.csv")):
+            try:
+                df = pd.read_csv(summary_csv)
+            except Exception:
+                continue
+            run_dir = summary_csv.parent
+            for row in df.to_dict(orient="records"):
+                # Rewrite clean_wav_path to absolute path relative to run_dir if needed
+                wav = row.get("clean_wav_path", "")
+                if wav and not Path(str(wav)).is_absolute():
+                    row["clean_wav_path"] = str((run_dir / wav).resolve())
+                results.append(row)
+    return JSONResponse(
+        status_code=200,
+        content={"job_id": "batch-disk", "results": results},
+    )
+
+
+@router.get("/api/batch/audio")
+async def batch_audio(
+    path: str = Query(..., description="Absolute path to a clean WAV file"),
+) -> FileResponse:
+    """Serve a pre-processed clean WAV by absolute path.
+
+    Used by the React frontend to play audio for batch-disk rows (source.kind='batch').
+    Security: only files under data/outputs/ or cleaned/ are served; 403 otherwise.
+    """
+    resolved = Path(path).resolve()
+    allowed = any(
+        str(resolved).startswith(str(root) + os.sep) or resolved == root
+        for root in _ALLOWED_ROOTS
+    )
+    if not allowed:
+        raise HTTPException(status_code=403, detail="Path outside allowed directories")
+    if not resolved.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(str(resolved), media_type="audio/wav")
 
 
 @router.get("/api/batch/summary", response_model=BatchSummaryResponse)

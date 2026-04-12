@@ -250,6 +250,68 @@ def test_spectrogram_404_when_no_png_path():
 
 
 # ---------------------------------------------------------------------------
+# Batch results endpoint (GET /api/batch/results)
+# ---------------------------------------------------------------------------
+
+
+def test_batch_results_empty():
+    """GET /api/batch/results returns 200 with empty results list when no data/outputs exist."""
+    import api.routes.batch as batch_module
+    from pathlib import Path
+
+    original = batch_module.BATCH_OUTPUT_DIR
+    batch_module.BATCH_OUTPUT_DIR = Path("/nonexistent/does_not_exist")
+    try:
+        response = client.get("/api/batch/results")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["job_id"] == "batch-disk"
+        assert isinstance(data["results"], list)
+    finally:
+        batch_module.BATCH_OUTPUT_DIR = original
+
+
+def test_batch_results_with_fixture(tmp_path: Path):
+    """GET /api/batch/results returns rows from summary.csv under data/outputs/."""
+    import csv
+    import api.routes.batch as batch_module
+
+    # Create a fake run directory with summary.csv
+    run_dir = tmp_path / "run1"
+    run_dir.mkdir()
+    csv_path = run_dir / "summary.csv"
+    fieldnames = [
+        "filename", "start", "end", "f0_median_hz",
+        "snr_before_db", "snr_after_db", "confidence",
+        "noise_type", "status", "clean_wav_path",
+    ]
+    with csv_path.open("w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerow({
+            "filename": "test.wav", "start": 0.0, "end": 5.0,
+            "f0_median_hz": 25.0, "snr_before_db": 10.0, "snr_after_db": 20.0,
+            "confidence": 0.85, "noise_type": "generator", "status": "ok",
+            "clean_wav_path": "clean/test_clean.wav",
+        })
+
+    original = batch_module.BATCH_OUTPUT_DIR
+    batch_module.BATCH_OUTPUT_DIR = tmp_path
+    try:
+        response = client.get("/api/batch/results")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["job_id"] == "batch-disk"
+        assert len(data["results"]) == 1
+        result = data["results"][0]
+        assert result["filename"] == "test.wav"
+        # clean_wav_path should be rewritten to absolute
+        assert Path(result["clean_wav_path"]).is_absolute()
+    finally:
+        batch_module.BATCH_OUTPUT_DIR = original
+
+
+# ---------------------------------------------------------------------------
 # Batch summary endpoint
 # ---------------------------------------------------------------------------
 
