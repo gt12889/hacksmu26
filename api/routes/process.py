@@ -4,7 +4,7 @@ from __future__ import annotations
 import sys
 import traceback
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
@@ -93,7 +93,7 @@ async def trigger_process(
         "total": 0,
         "results": [],
         "error": None,
-        "created_at": datetime.utcnow().isoformat() + "Z",
+        "created_at": datetime.now(timezone.utc).isoformat(),
         "upload_path": upload_path,
         "output_dir": str(output_dir),
     }
