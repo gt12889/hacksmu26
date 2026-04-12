@@ -92,6 +92,39 @@ async def batch_audio(
     return FileResponse(str(resolved), media_type="audio/wav")
 
 
+@router.get("/api/batch/dashboard")
+async def batch_dashboard() -> JSONResponse:
+    """Return per-call comparison scores for all 4 denoiser approaches.
+
+    Reads data/outputs/batch/dashboard_scores.csv and returns as JSON.
+    Falls back to frontend/public/static/demo/dashboard_scores.csv if not found.
+    Returns {"rows": [...]} with 212 rows (one per annotated call).
+    """
+    candidates = [
+        _REPO_ROOT / "data" / "outputs" / "batch" / "dashboard_scores.csv",
+        _REPO_ROOT / "frontend" / "public" / "static" / "demo" / "dashboard_scores.csv",
+    ]
+    csv_path: Path | None = None
+    for candidate in candidates:
+        if candidate.exists():
+            csv_path = candidate
+            break
+
+    if csv_path is None:
+        raise HTTPException(
+            status_code=404,
+            detail="dashboard_scores.csv not found. Run scripts/rescore_dashboard.py first.",
+        )
+
+    try:
+        df = pd.read_csv(csv_path)
+        rows = df.to_dict(orient="records")
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to read dashboard CSV: {exc}")
+
+    return JSONResponse(status_code=200, content={"rows": rows})
+
+
 @router.get("/api/batch/summary", response_model=BatchSummaryResponse)
 async def batch_summary() -> BatchSummaryResponse:
     """Aggregate metrics across all jobs registered in JOB_REGISTRY."""

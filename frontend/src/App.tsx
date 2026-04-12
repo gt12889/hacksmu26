@@ -3,9 +3,9 @@ import type { DemoStatus, NoiseType, Metadata, StatusResponse } from './types'
 import { UploadPanel } from './components/UploadPanel'
 import { PipelineVisualizer } from './components/PipelineVisualizer'
 import { CallDetail } from './components/CallDetail'
-import { ConfidenceTable } from './components/ConfidenceTable'
-import { getBatchResults, batchAudioUrl, uploadAudioUrl, audioUrl } from './api/client'
-import type { CallResult } from './types/api'
+import { DashboardTable } from './components/DashboardTable'
+import { getDashboardRows, getBatchResults, batchAudioUrl, uploadAudioUrl, audioUrl } from './api/client'
+import type { CallResult, DashboardRow } from './types/api'
 import ElephantViewer from './ElephantViewer'
 import CurvedLoop from './components/CurvedLoop'
 
@@ -498,25 +498,35 @@ function UploadSection({
 
 // ─── Batch results section ────────────────────────────────────────────────────
 function BatchSection() {
-  const [results, setResults] = useState<CallResult[]>([])
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [dashRows, setDashRows] = useState<DashboardRow[]>([])
+  const [batchResults, setBatchResults] = useState<CallResult[]>([])
+  const [selectedCallIndex, setSelectedCallIndex] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
-    getBatchResults()
-      .then((r) => setResults(r.results))
+    // Load dashboard scores (4-approach comparison)
+    getDashboardRows()
+      .then((d) => setDashRows(d.rows))
       .catch(() => {})
       .finally(() => setLoading(false))
+
+    // Also load batch results for CallDetail audio playback
+    getBatchResults()
+      .then((r) => setBatchResults(r.results))
+      .catch(() => {})
   }, [])
 
-  const selected = selectedIndex !== null ? results[selectedIndex] : null
-  const rowCount = results.length
+  // Find the CallResult for the selected dashboard row (for audio playback)
+  const selectedBatchResult =
+    selectedCallIndex !== null ? batchResults[selectedCallIndex] ?? null : null
+
+  const rowCount = dashRows.length
 
   return (
     <section className="section-alt">
       <div className="section container">
-        {/* Collapsible header  clickable */}
+        {/* Collapsible header */}
         <button
           type="button"
           onClick={() => setExpanded(e => !e)}
@@ -536,7 +546,7 @@ function BatchSection() {
           <div style={{ flex: 1 }}>
             <p className="section-label" style={{ margin: 0 }}>Batch Analysis</p>
             <h2 className="section-title" style={{ margin: 0 }}>
-              Confidence Dashboard
+              Per-Call Comparison Across All 4 Denoisers
               {!loading && rowCount > 0 && (
                 <span style={{
                   marginLeft: '0.75rem',
@@ -552,8 +562,8 @@ function BatchSection() {
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '0.4rem', marginBottom: 0 }}>
               {expanded
-                ? 'Click any row to view its spectrogram, A/B audio, and comparison metrics.'
-                : `${rowCount || 212} processed calls sorted by confidence. Click to expand.`}
+                ? '212 real ElephantVoices rumbles. Four approaches applied to each. Harmonic dominance measured on the re-STFT of each cleaned output. Sortable by any approach; click a row to play DSP-cleaned audio.'
+                : `${rowCount || 212} calls -- four denoisers compared per call. Click to expand.`}
             </p>
           </div>
           <span
@@ -591,29 +601,29 @@ function BatchSection() {
             }}>
               {loading ? (
                 <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', padding: '1rem' }}>
-                  Loading batch results...
+                  Loading comparison data...
                 </p>
-              ) : results.length === 0 ? (
+              ) : dashRows.length === 0 ? (
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', padding: '1rem' }}>
-                  No batch results yet. Run <code>python scripts/batch_process.py</code> to populate.
+                  No dashboard data yet. Run <code>python scripts/rescore_dashboard.py</code> to populate.
                 </p>
               ) : (
-                <ConfidenceTable
-                  results={results}
-                  selectedIndex={selectedIndex}
-                  onSelect={setSelectedIndex}
+                <DashboardTable
+                  rows={dashRows}
+                  selectedIndex={selectedCallIndex}
+                  onSelect={setSelectedCallIndex}
                 />
               )}
             </div>
-            {selected && (
+            {selectedBatchResult && (
               <div className="call-detail-section" style={{ marginTop: '2rem' }}>
                 <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: '1rem', color: 'var(--brown)' }}>
-                  Call Detail: {selected.filename}
+                  Call Detail: {selectedBatchResult.filename}
                 </h3>
                 <CallDetail
-                  result={selected}
+                  result={selectedBatchResult}
                   noisyUrl={null}
-                  cleanUrl={batchAudioUrl(selected.clean_wav_path)}
+                  cleanUrl={batchAudioUrl(selectedBatchResult.clean_wav_path)}
                 />
               </div>
             )}

@@ -42,3 +42,21 @@ export interface BatchSummaryResponse {
   average_confidence: number | null
   average_snr_improvement_db: number | null
 }
+
+export interface DashboardRow {
+  filename: string
+  call_index: number
+  noise_type: string
+  f0_median_hz: number
+  duration_s: number
+  hd_baseline: number
+  hd_sklearn: number
+  hd_pytorch: number
+  hd_dsp: number
+  best_approach: 'baseline' | 'sklearn' | 'pytorch' | 'dsp'
+  best_hd: number
+}
+
+export interface DashboardResponse {
+  rows: DashboardRow[]
+}
