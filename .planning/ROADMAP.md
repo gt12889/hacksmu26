@@ -77,7 +77,7 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md — pipeline/scoring.py (compute_snr_db lifted from demo_spectrograms.py, compute_confidence formula) + requirements.txt (fastapi, uvicorn, python-multipart)
 - [x] 04-02-PLAN.md — pipeline/batch_runner.py (run_batch, write_summary_csv, write_raven_selection_table) + tests/test_batch_runner.py
-- [ ] 04-03-PLAN.md — scripts/batch_process.py CLI entrypoint (--synthetic mode, progress feedback, output dir structure)
+- [x] 04-03-PLAN.md — scripts/batch_process.py CLI entrypoint (--synthetic mode, progress feedback, output dir structure)
 - [ ] 04-04-PLAN.md — api/ package (main.py, jobs.py, models.py, all 5 route files) + tests/test_api.py
 
 ### Phase 5: React Frontend & Demo
