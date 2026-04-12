@@ -70,6 +70,6 @@
 | 7. Demo Audio & Proxy Fixes | v1.0 | 1/1 | Complete | 2026-04-12 |
 | 8. Frontend Component Integration | v1.0 | 1/1 | Complete | 2026-04-12 |
 | 9. Polish Remaining Gaps | v1.0 | 1/1 | Complete | 2026-04-12 |
-| 10. Real-Data Validation | v1.1 | 0/TBD | Not started | - |
-| 11. Pitch Artifacts | v1.1 | 0/TBD | Not started | - |
-| 12. Deployment Guide | v1.1 | 0/TBD | Not started | - |
+| 10. Real-Data Validation | v1.1 | 1/1 | Complete | 2026-04-12 |
+| 11. Pitch Artifacts | v1.1 | 1/1 | Complete | 2026-04-12 |
+| 12. Deployment Guide | v1.1 | 1/1 | Complete | 2026-04-12 |
