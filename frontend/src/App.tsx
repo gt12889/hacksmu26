@@ -245,13 +245,14 @@ function NotReadyPanel({ onGenerate }: { onGenerate: () => void }) {
 // ─── Science section ─────────────────────────────────────────────────────────
 function ScienceSection() {
   return (
-    <section className="section container">
+    <section className="section-alt">
+      <div className="section container">
       <div className="section-header">
         <p className="section-label">Methodology</p>
         <h2 className="section-title">The Science</h2>
       </div>
       <div className="science-grid">
-        <div className="science-card green">
+        <div className="science-card green-top">
           <span className="science-icon">〰</span>
           <h3 className="science-title">Harmonic Structure</h3>
           <p className="science-body">
@@ -282,7 +283,7 @@ function ScienceSection() {
           </div>
         </div>
 
-        <div className="science-card purple">
+        <div className="science-card brown-top">
           <span className="science-icon">✕</span>
           <h3 className="science-title">vs Generic AI</h3>
           <p className="science-body">
@@ -297,6 +298,7 @@ function ScienceSection() {
             Ours: domain-specific NSSH + comb
           </div>
         </div>
+      </div>
       </div>
     </section>
   )
@@ -430,17 +432,21 @@ export default function App() {
 
   return (
     <div>
+      {/* Top brown accent bar — matches elephantvoices.org */}
+      <div className="top-bar" />
+
       {/* Header */}
       <header className="header">
         <div className="header-inner">
           <div className="logo">
             <span className="logo-mark">🐘</span>
-            <span className="logo-text">
-              Elephant<span>Voices</span> Denoiser
-            </span>
+            <div>
+              <span className="logo-text">ElephantVoices Denoiser</span>
+              <span className="logo-sub">Harmonic Comb Masking · Infrasonic Bioacoustics</span>
+            </div>
           </div>
           <div className="header-right">
-            <span className="tagline">Harmonic Comb Masking · Infrasonic Bioacoustics</span>
+            <span className="tagline">HackSMU 2026 · Southern Methodist University</span>
             <span className="badge">HackSMU 2026</span>
           </div>
         </div>
@@ -448,34 +454,36 @@ export default function App() {
 
       {/* Hero */}
       <div className="hero">
-        <div className="hero-eyebrow fade-up fade-up-1">
-          ElephantVoices Field Recording Denoiser
-        </div>
-        <h1 className="hero-headline fade-up fade-up-2">
-          We don't just<br />
-          <span className="accent">remove noise.</span>
-        </h1>
-        <p className="hero-sub fade-up fade-up-3">
-          We exploit the <strong>mathematical structure of elephant vocalizations</strong> to
-          surgically extract calls even when they share the exact same frequency band as the noise.
-          44 field recordings. 212 annotated calls. Three noise types.{' '}
-          <strong>One domain-specific insight.</strong>
-        </p>
-        <div className="hero-actions fade-up fade-up-4">
-          {status === 'not_ready' && (
-            <button className="btn-primary" onClick={handleGenerate}>
-              <span>⚗</span> Run Pipeline
-            </button>
-          )}
-          {status === 'ready' && (
-            <button className="btn-secondary" onClick={handleGenerate}>
-              ↺ Re-generate
-            </button>
-          )}
-          <div className="stat-pills">
-            <div className="stat-pill"><strong>212</strong> calls processed</div>
-            <div className="stat-pill">SNR <strong>+5–8 dB</strong> improvement</div>
-            <div className="stat-pill"><strong>3</strong> noise types</div>
+        <div className="hero-inner">
+          <div className="hero-eyebrow fade-up fade-up-1">
+            ElephantVoices Field Recording Denoiser
+          </div>
+          <h1 className="hero-headline fade-up fade-up-2">
+            We don't just<br />
+            <span className="accent">remove noise.</span>
+          </h1>
+          <p className="hero-sub fade-up fade-up-3">
+            We exploit the <strong>mathematical structure of elephant vocalizations</strong> to
+            surgically extract calls even when they share the exact same frequency band as the noise.
+            44 field recordings. 212 annotated calls. Three noise types.{' '}
+            <strong>One domain-specific insight.</strong>
+          </p>
+          <div className="hero-actions fade-up fade-up-4">
+            {status === 'not_ready' && (
+              <button className="btn-primary" onClick={handleGenerate}>
+                ⚗ Run Pipeline
+              </button>
+            )}
+            {status === 'ready' && (
+              <button className="btn-secondary" onClick={handleGenerate}>
+                ↺ Re-generate
+              </button>
+            )}
+            <div className="stat-pills">
+              <div className="stat-pill"><strong>212</strong> calls processed</div>
+              <div className="stat-pill">SNR <strong>+5–8 dB</strong> improvement</div>
+              <div className="stat-pill"><strong>3</strong> noise types</div>
+            </div>
           </div>
         </div>
       </div>
