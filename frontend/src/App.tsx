@@ -965,18 +965,109 @@ function MLComparePage() {
       {/* Hero */}
       <div className="hero" style={{ minHeight: 'auto', padding: '3rem 2rem 2rem' }}>
         <div className="hero-inner">
-          <div className="hero-eyebrow fade-up fade-up-1">Scientific Comparison</div>
+          <div className="hero-eyebrow fade-up fade-up-1">EXTENDING ELEPHANTVOICES' APPROACH</div>
           <h1 className="hero-headline fade-up fade-up-2" style={{ fontSize: '2.5rem' }}>
-            Generic ML vs <span className="accent">Domain Priors</span>
+            START WHERE THEY ARE. <span className="accent">GO FURTHER.</span>
           </h1>
           <p className="hero-sub fade-up fade-up-3" style={{ maxWidth: '72ch' }}>
-            What happens when you throw a generic spectral-gating denoiser at an elephant rumble,
-            compared to our approach that knows elephants have a <strong>strict integer-multiple harmonic series</strong>?
-            Both run on the <strong>same real ElephantVoices recording</strong>. Same input, different priors,
-            different outputs.
+            ElephantVoices currently denoises field recordings with{' '}
+            <strong>spectrogram-based analysis and supervised ML classifiers</strong>, often in
+            collaboration with <strong>UC Berkeley Linguistics</strong>. We replicated that approach
+            on their exact data, then added an explicit harmonic prior on top.
           </p>
         </div>
       </div>
+
+      {/* Their approach → our extension */}
+      <section className="section container" style={{ paddingTop: '2rem', paddingBottom: '1.5rem' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 0.1fr 1fr',
+          gap: '1rem',
+          alignItems: 'stretch',
+        }}>
+          {/* Their current approach */}
+          <div style={{
+            padding: '1.5rem 1.75rem',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border)',
+            borderLeft: '4px solid var(--brown)',
+            borderRadius: '8px',
+          }}>
+            <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase' }}>
+              ELEPHANTVOICES TODAY
+            </div>
+            <h3 style={{ fontSize: '1.15rem', color: 'var(--brown)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '-0.01em' }}>
+              SPECTROGRAM + SUPERVISED ML
+            </h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.82rem', lineHeight: 1.7 }}>
+              <li style={{ marginBottom: '0.5rem' }}>
+                <strong style={{ color: 'var(--brown)' }}>›</strong> Visual spectrogram analysis isolates vocalizations from background noise
+              </li>
+              <li style={{ marginBottom: '0.5rem' }}>
+                <strong style={{ color: 'var(--brown)' }}>›</strong> Supervised ML classifiers tag call types (requires high-quality input)
+              </li>
+              <li style={{ marginBottom: '0.5rem' }}>
+                <strong style={{ color: 'var(--brown)' }}>›</strong> 10,400+ calls in the Elephant Calls Database, 250 in the Elephant Ethogram
+              </li>
+              <li style={{ marginBottom: 0 }}>
+                <strong style={{ color: 'var(--brown)' }}>›</strong> Denoising quality gates what enters the ECD
+              </li>
+            </ul>
+          </div>
+          {/* Arrow */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '2rem',
+            color: 'var(--brown)',
+          }}>
+            →
+          </div>
+          {/* Our extension */}
+          <div style={{
+            padding: '1.5rem 1.75rem',
+            background: 'rgba(0, 200, 100, 0.05)',
+            border: '1px solid rgba(0, 200, 100, 0.3)',
+            borderLeft: '4px solid #00c864',
+            borderRadius: '8px',
+          }}>
+            <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', color: '#00c864', marginBottom: '0.75rem', textTransform: 'uppercase' }}>
+              WHAT WE BUILT ON TOP
+            </div>
+            <h3 style={{ fontSize: '1.15rem', color: '#00c864', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '-0.01em' }}>
+              HARMONIC PRIOR + ML
+            </h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.82rem', lineHeight: 1.7 }}>
+              <li style={{ marginBottom: '0.5rem' }}>
+                <strong style={{ color: '#00c864' }}>+</strong> Trained their spectrogram-ML paradigm on 80 real rumbles (sklearn + PyTorch)
+              </li>
+              <li style={{ marginBottom: '0.5rem' }}>
+                <strong style={{ color: '#00c864' }}>+</strong> Added explicit subharmonic summation to detect f₀ in 8-25 Hz
+              </li>
+              <li style={{ marginBottom: '0.5rem' }}>
+                <strong style={{ color: '#00c864' }}>+</strong> Time-varying comb mask at k·f₀ encodes the harmonic prior mathematically
+              </li>
+              <li style={{ marginBottom: 0 }}>
+                <strong style={{ color: '#00c864' }}>+</strong> No training data required — works on any species with a harmonic series
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Context strip */}
+        <p style={{
+          marginTop: '1.5rem',
+          fontSize: '0.82rem',
+          color: 'var(--text-muted)',
+          textAlign: 'center',
+          fontStyle: 'italic',
+        }}>
+          Every approach below runs on the same three real ElephantVoices recordings. Same input,
+          different priors, different outputs.
+        </p>
+      </section>
 
       <div className="divider" />
 
