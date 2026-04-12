@@ -934,7 +934,136 @@ function DemoPage({
       <BatchSection />
       <div className="divider" />
       <MultiSpeakerSection />
+      <div className="divider" />
+      <DataSourcesSection />
     </>
+  )
+}
+
+// ─── Data Sources Section ────────────────────────────────────────────────────
+function DataSourcesSection() {
+  return (
+    <section className="section container">
+      <div className="section-header">
+        <p className="section-label">Data Sources</p>
+        <h2 className="section-title" style={{ textTransform: 'uppercase', letterSpacing: '-0.01em' }}>
+          REAL PRODUCTION DATASETS
+        </h2>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem', maxWidth: '70ch' }}>
+          The 44 recordings used for training and validation were provided by ElephantVoices.
+          The pipeline is designed to be deployed against the two public databases below, which
+          hold the bulk of their labeled acoustic data.
+        </p>
+      </div>
+
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: '1rem',
+        marginTop: '1.5rem',
+      }}>
+        <a
+          href="https://www.elephantvoices.org/elephant-calls-database.html"
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            display: 'block',
+            padding: '1.75rem 2rem',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border)',
+            borderLeft: '4px solid var(--brown)',
+            borderRadius: '8px',
+            textDecoration: 'none',
+            color: 'inherit',
+            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)'
+            e.currentTarget.style.boxShadow = 'var(--shadow-md, 0 4px 12px rgba(0,0,0,0.08))'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = ''
+            e.currentTarget.style.boxShadow = ''
+          }}
+        >
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
+            PRIMARY DATABASE
+          </div>
+          <h3 style={{ fontSize: '1.3rem', color: 'var(--brown)', marginBottom: '0.5rem', letterSpacing: '-0.01em' }}>
+            ELEPHANT CALLS DATABASE
+          </h3>
+          <div style={{ fontSize: '1.8rem', color: 'var(--brown)', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
+            10,400+ CALLS
+          </div>
+          <p style={{ fontSize: '0.82rem', color: 'var(--text)', lineHeight: 1.6, marginBottom: '0.75rem' }}>
+            The largest publicly accessible corpus of labeled elephant vocalizations. Browsable by
+            call type, context, and caller identity. Each entry includes a playable audio sample
+            and a short behavioural description.
+          </p>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--brown)', letterSpacing: '0.02em' }}>
+            elephantvoices.org/elephant-calls-database.html →
+          </div>
+        </a>
+
+        <a
+          href="https://www.elephantethogram.org/"
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            display: 'block',
+            padding: '1.75rem 2rem',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border)',
+            borderLeft: '4px solid var(--brown)',
+            borderRadius: '8px',
+            textDecoration: 'none',
+            color: 'inherit',
+            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)'
+            e.currentTarget.style.boxShadow = 'var(--shadow-md, 0 4px 12px rgba(0,0,0,0.08))'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = ''
+            e.currentTarget.style.boxShadow = ''
+          }}
+        >
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
+            BEHAVIOURAL ATLAS
+          </div>
+          <h3 style={{ fontSize: '1.3rem', color: 'var(--brown)', marginBottom: '0.5rem', letterSpacing: '-0.01em' }}>
+            THE ELEPHANT ETHOGRAM
+          </h3>
+          <div style={{ fontSize: '1.8rem', color: 'var(--brown)', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
+            250 FIELD RECORDINGS
+          </div>
+          <p style={{ fontSize: '0.82rem', color: 'var(--text)', lineHeight: 1.6, marginBottom: '0.75rem' }}>
+            A living behavioural atlas that pairs audio with video and written context. Entries
+            are grouped by behavioural category (Affiliative, Antagonistic, Self-directed, etc.),
+            each with inline playable recordings from the field.
+          </p>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--brown)', letterSpacing: '0.02em' }}>
+            elephantethogram.org →
+          </div>
+        </a>
+      </div>
+
+      <div style={{
+        marginTop: '1.25rem',
+        padding: '0.9rem 1.25rem',
+        background: 'var(--bg-warm)',
+        border: '1px solid var(--border)',
+        borderRadius: '6px',
+        fontSize: '0.78rem',
+        fontFamily: 'var(--font-mono)',
+        color: 'var(--text-muted)',
+        lineHeight: 1.6,
+      }}>
+        Both databases are curated by ElephantVoices (Dr. Joyce Poole and Petter Granli).
+        The pipeline shown on this site is deployable against either corpus without retraining.
+      </div>
+    </section>
   )
 }
 
