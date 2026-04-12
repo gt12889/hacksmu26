@@ -74,7 +74,7 @@
 - [x] **MULTI-01**: System detects multiple f0 tracks when elephants vocalize simultaneously
 - [x] **MULTI-02**: System identifies crossing harmonics to distinguish different callers
 - [x] **MULTI-03**: System outputs separate cleaned WAV per detected caller
-- [ ] **MULTI-04**: Generates multi-speaker spectrogram figure showing separated f0 tracks in different colors
+- [x] **MULTI-04**: Generates multi-speaker spectrogram figure showing separated f0 tracks in different colors
 
 ## Out of Scope
 
@@ -132,7 +132,7 @@
 | MULTI-01 | Phase 6 | Complete |
 | MULTI-02 | Phase 6 | Complete |
 | MULTI-03 | Phase 6 | Complete |
-| MULTI-04 | Phase 6 | Pending |
+| MULTI-04 | Phase 6 | Complete |
 
 **Coverage:**
 - v1 requirements: 48 total

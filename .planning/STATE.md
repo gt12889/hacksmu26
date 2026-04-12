@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-multi-speaker-separation/06-01-PLAN.md
-last_updated: "2026-04-12T04:51:46.470Z"
+stopped_at: Completed 06-multi-speaker-separation 06-02-PLAN.md
+last_updated: "2026-04-12T04:56:44.231Z"
 progress:
   total_phases: 6
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 16
-  completed_plans: 15
+  completed_plans: 16
 ---
 
 # Project State
@@ -61,6 +61,7 @@ Plan: 2 of 2
 | Phase 05-react-frontend-demo P03 | 2 | 3 tasks | 3 files |
 | Phase 05-react-frontend-demo P04 | 85 | 2 tasks | 6 files |
 | Phase 06-multi-speaker-separation P01 | 52 | 2 tasks | 3 files |
+| Phase 06-multi-speaker-separation P02 | 25 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -111,6 +112,8 @@ Recent decisions affecting current work:
 - [Phase 06-multi-speaker-separation]: Use raw magnitude for SHS in multi-speaker mode: HPSS suppresses weaker of two simultaneous harmonic sources
 - [Phase 06-multi-speaker-separation]: F0_JUMP_TOLERANCE_HZ=5.0 (not 4.0): needed for track recovery when 14 Hz candidate absent from top-2
 - [Phase 06-multi-speaker-separation]: Fixed 0.5 Hz SHS step in detect_f0_shs_topk: coarse hz_per_bin/2 step cannot resolve sources 4 Hz apart
+- [Phase 06-multi-speaker-separation]: Bypass is_multi_speaker gate for synthetic demo — gate unreliable on pure harmonic synthetics; always proceeds with separation and prints gate result informatively
+- [Phase 06-multi-speaker-separation]: TRACK_COLORS red/blue (#FF4444/#4488FF) for maximum contrast against magma spectrogram at 300 dpi
 
 ### Pending Todos
 
@@ -124,6 +127,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-12T04:51:46.467Z
-Stopped at: Completed 06-multi-speaker-separation/06-01-PLAN.md
+Last session: 2026-04-12T04:56:44.228Z
+Stopped at: Completed 06-multi-speaker-separation 06-02-PLAN.md
 Resume file: None

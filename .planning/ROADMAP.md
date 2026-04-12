@@ -11,7 +11,7 @@ Six phases from raw field recordings to judge-ready demo. Phases 1-2 build the v
 - [x] **Phase 3: Demo Spectrograms & Measurements** - Publication-quality before/after figures with f0 contours, harmonic markers, and SNR annotations for pitch (completed 2026-04-12)
 - [x] **Phase 4: Batch Processing & API** - Scale to all 212 calls with confidence scoring and FastAPI layer (completed 2026-04-12)
 - [x] **Phase 5: React Frontend & Demo** - Spectrogram visualization, A/B audio toggle, LALAL.AI comparison, confidence dashboard (completed 2026-04-12)
-- [ ] **Phase 6: Multi-Speaker Separation** - Detect and separate overlapping elephant calls using crossing harmonic analysis
+- [x] **Phase 6: Multi-Speaker Separation** - Detect and separate overlapping elephant calls using crossing harmonic analysis (completed 2026-04-12)
 
 ## Phase Details
 
@@ -110,7 +110,7 @@ Plans:
 
 Plans:
 - [x] 06-01-PLAN.md — pipeline/multi_speaker.py + tests/test_multi_speaker.py (TDD: detect_f0_shs_topk, link_f0_tracks, separate_speakers, is_multi_speaker, is_harmonic_overlap)
-- [ ] 06-02-PLAN.md — scripts/demo_multi_speaker.py (MULTI-04 figure: spectrogram + two colored f0 tracks + per-caller WAV export)
+- [x] 06-02-PLAN.md — scripts/demo_multi_speaker.py (MULTI-04 figure: spectrogram + two colored f0 tracks + per-caller WAV export)
 
 ## Progress
 
@@ -121,4 +121,4 @@ Plans:
 | 3. Demo Spectrograms & Measurements | 1/1 | Complete   | 2026-04-12 |
 | 4. Batch Processing & API | 4/4 | Complete   | 2026-04-12 |
 | 5. React Frontend & Demo | 4/4 | Complete   | 2026-04-12 |
-| 6. Multi-Speaker Separation | 1/2 | In Progress|  |
+| 6. Multi-Speaker Separation | 2/2 | Complete   | 2026-04-12 |
