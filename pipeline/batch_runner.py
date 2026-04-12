@@ -22,7 +22,7 @@ from tqdm import tqdm
 from pipeline.harmonic_processor import process_call
 from pipeline.ingestor import extract_noise_gaps, load_call_segment
 from pipeline.noise_classifier import classify_noise_type
-from pipeline.scoring import compute_confidence, compute_snr_db
+from pipeline.scoring import compute_confidence, compute_harmonic_integrity, compute_snr_db
 from pipeline.spectrogram import compute_stft
 
 # Import make_demo_figure for spectrogram PNG generation (API-05).
@@ -85,6 +85,7 @@ def run_batch(
                     "f0_median_hz": 0.0,
                     "snr_before_db": 0.0,
                     "snr_after_db": 0.0,
+                    "harmonic_integrity": 0.0,
                     "confidence": 0.0,
                     "noise_type": "unknown",
                     "status": "skipped",
@@ -142,6 +143,16 @@ def run_batch(
             np.sum((ctx["comb_mask"] > 0) & (ctx["masked_magnitude"] > 0))
         )
 
+        # --- Harmonic integrity score (0-100%) ---
+        # Before: how much of the harmonic band is occupied by sharp harmonic peaks
+        harmonic_integrity_before = compute_harmonic_integrity(
+            ctx["magnitude"], ctx["f0_contour"], ctx["freq_bins"]
+        )
+        # After: same metric on the cleaned audio (re-STFT)
+        harmonic_integrity_after = compute_harmonic_integrity(
+            ctx_clean["magnitude"], ctx["f0_contour"], ctx_clean["freq_bins"]
+        )
+
         # --- Confidence score ---
         conf = compute_confidence(
             ctx["f0_contour"],
@@ -188,6 +199,8 @@ def run_batch(
             "f0_median_hz": f0_median,
             "snr_before_db": snr_before,
             "snr_after_db": snr_after,
+            "harmonic_integrity": harmonic_integrity_after,
+            "harmonic_integrity_before": harmonic_integrity_before,
             "confidence": conf,
             "noise_type": noise_type_dict["type"],
             "status": "ok",
