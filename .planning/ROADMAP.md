@@ -7,7 +7,7 @@ Four phases from raw field recordings to judge-ready demo. Phase 1 builds the va
 ## Phases
 
 - [x] **Phase 1: Pipeline Foundation** - Ingest, segment, and compute high-res spectrograms from field recordings (completed 2026-04-11)
-- [ ] **Phase 2: Harmonic Detection & Denoising** - Detect elephant f0, build comb mask, apply residual cleanup — proven on real calls
+- [x] **Phase 2: Harmonic Detection & Denoising** - Detect elephant f0, build comb mask, apply residual cleanup — proven on real calls (completed 2026-04-12)
 - [ ] **Phase 3: Demo Spectrograms & Measurements** - Publication-quality before/after figures with f0 contours, harmonic markers, and SNR annotations for pitch
 - [ ] **Phase 4: Multi-Speaker Separation** - Detect and separate overlapping elephant calls using crossing harmonic analysis
 
@@ -43,7 +43,7 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md — pipeline/harmonic_processor.py (hpss_enhance, detect_f0_shs, build_comb_mask, apply_comb_mask, apply_noisereduce, process_call) + noisereduce in requirements.txt
-- [ ] 02-02-PLAN.md — tests/test_harmonic_processor.py (full pytest suite) + scripts/process_call.py (CLI demo tool)
+- [x] 02-02-PLAN.md — tests/test_harmonic_processor.py (full pytest suite) + scripts/process_call.py (CLI demo tool)
 
 ### Phase 3: Demo Spectrograms & Measurements
 **Goal**: One representative call per noise type (generator, car, plane) is processed through the full pipeline and presented as publication-quality before/after spectrograms with f0 contour overlays, harmonic spacing markers, SNR annotations, and exported cleaned audio — ready to show judges
@@ -73,6 +73,6 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Pipeline Foundation | 3/3 | Complete | 2026-04-11 |
-| 2. Harmonic Detection & Denoising | 1/2 | In Progress|  |
+| 2. Harmonic Detection & Denoising | 2/2 | Complete   | 2026-04-12 |
 | 3. Demo Spectrograms & Measurements | 0/TBD | Not started | - |
 | 4. Multi-Speaker Separation | 0/TBD | Not started | - |

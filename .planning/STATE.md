@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-harmonic-detection-denoising 02-01-PLAN.md
-last_updated: "2026-04-12T01:06:02.655Z"
+stopped_at: Completed 02-harmonic-detection-denoising 02-02-PLAN.md
+last_updated: "2026-04-12T01:10:51.612Z"
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -50,6 +50,7 @@ Plan: 2 of 2
 | Phase 01-pipeline-foundation P02 | 3 | 2 tasks | 4 files |
 | Phase 01-pipeline-foundation P03 | 2 | 2 tasks | 3 files |
 | Phase 02-harmonic-detection-denoising P01 | 4 minutes | 2 tasks | 3 files |
+| Phase 02-harmonic-detection-denoising P02 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,8 @@ Recent decisions affecting current work:
 - [Phase 01-pipeline-foundation]: CLI scripts use sys.path.insert(0, repo_root) to import pipeline.* without installing as package
 - [Phase 02-harmonic-detection-denoising]: apply_noisereduce generator+no-clip fallback: RuntimeWarning + non-stationary (not ValueError raise)
 - [Phase 02-harmonic-detection-denoising]: detect_f0_shs uses vectorized NSSH loop (not per-frame Python loop) for <1s/call performance
+- [Phase 02-harmonic-detection-denoising]: test_harmonic_processor.py delivered in Plan 01 TDD RED phase; Plan 02 verified 30/30 pass
+- [Phase 02-harmonic-detection-denoising]: CLI process_call.py: --noise-type override for testing; auto-detects via classify_noise_type() when omitted
 
 ### Pending Todos
 
@@ -85,6 +88,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-12T01:06:02.653Z
-Stopped at: Completed 02-harmonic-detection-denoising 02-01-PLAN.md
+Last session: 2026-04-12T01:10:51.609Z
+Stopped at: Completed 02-harmonic-detection-denoising 02-02-PLAN.md
 Resume file: None
