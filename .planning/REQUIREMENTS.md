@@ -44,6 +44,31 @@
 - [ ] **DEMO-06**: Generates side-by-side 3-panel figure per noise type: original | comb mask overlay | cleaned result
 - [ ] **DEMO-07**: Exports cleaned WAV files alongside figures for audio playback during pitch
 
+### Batch Processing
+
+- [ ] **BATCH-01**: System processes all 212 calls through full pipeline without manual intervention
+- [ ] **BATCH-02**: System computes per-call confidence score (0-100%) based on: harmonics survived, SNR improvement, harmonic integrity
+- [ ] **BATCH-03**: System exports each cleaned call as standalone WAV at native sample rate
+- [ ] **BATCH-04**: System generates summary CSV with metrics per call (filename, f0, SNR_before, SNR_after, confidence, noise_type)
+- [ ] **BATCH-05**: System exports in Raven Pro compatible format (WAV + selection table .txt)
+
+### Web API
+
+- [ ] **API-01**: POST /api/upload accepts audio file and stores it
+- [ ] **API-02**: POST /api/process triggers pipeline on uploaded file, returns job ID
+- [ ] **API-03**: GET /api/status/{job_id} returns processing status and progress
+- [ ] **API-04**: GET /api/result/{job_id} returns cleaned audio + spectrogram data
+- [ ] **API-05**: GET /api/batch/summary returns batch processing summary
+- [ ] **API-06**: API uses BackgroundTasks for async processing (no synchronous blocking)
+
+### Web Frontend
+
+- [ ] **UI-01**: Before/after spectrogram display with harmonic comb mask overlay in distinct color
+- [ ] **UI-02**: Audio playback with A/B toggle between noisy and cleaned at same timestamp
+- [ ] **UI-03**: Side-by-side comparison panel: Original | LALAL.AI | Our result with SNR metrics
+- [ ] **UI-04**: Confidence dashboard with sortable/filterable table of all processed calls
+- [ ] **UI-05**: Click any row in dashboard to view spectrogram and play audio
+
 ### Multi-Speaker Separation
 
 - [ ] **MULTI-01**: System detects multiple f0 tracks when elephants vocalize simultaneously
@@ -56,14 +81,9 @@
 | Feature | Reason |
 |---------|--------|
 | ML model training (U-Net, GAN) | Not feasible on 44 recordings in 24 hours |
-| FastAPI / REST API | Pivot: judges want spectrograms, not a platform |
-| React web frontend / dashboard | Pivot: notebook-style demo with publication figures is more impactful |
-| Batch processing all 212 calls | 3 representative calls (one per noise type) is the right demo |
-| Confidence dashboard / sorting | Overbuilt for a hackathon pitch |
-| LALAL.AI comparison panel | Can mention verbally; not worth building UI for |
-| Raven Pro export | Nice-to-have but not demo-critical |
-| Real-time field deployment | Hackathon demo only |
+| Real-time field deployment | Hackathon demo only, not production system |
 | Cloud deployment / multi-tenancy | Local demo for hackathon |
+| Real-time streaming processing | Wrong use case for research workflow |
 
 ## Traceability
 
@@ -93,16 +113,32 @@
 | DEMO-05 | Phase 3 | Pending |
 | DEMO-06 | Phase 3 | Pending |
 | DEMO-07 | Phase 3 | Pending |
-| MULTI-01 | Phase 4 | Pending |
-| MULTI-02 | Phase 4 | Pending |
-| MULTI-03 | Phase 4 | Pending |
-| MULTI-04 | Phase 4 | Pending |
+| BATCH-01 | Phase 4 | Pending |
+| BATCH-02 | Phase 4 | Pending |
+| BATCH-03 | Phase 4 | Pending |
+| BATCH-04 | Phase 4 | Pending |
+| BATCH-05 | Phase 4 | Pending |
+| API-01 | Phase 4 | Pending |
+| API-02 | Phase 4 | Pending |
+| API-03 | Phase 4 | Pending |
+| API-04 | Phase 4 | Pending |
+| API-05 | Phase 4 | Pending |
+| API-06 | Phase 4 | Pending |
+| UI-01 | Phase 5 | Pending |
+| UI-02 | Phase 5 | Pending |
+| UI-03 | Phase 5 | Pending |
+| UI-04 | Phase 5 | Pending |
+| UI-05 | Phase 5 | Pending |
+| MULTI-01 | Phase 6 | Pending |
+| MULTI-02 | Phase 6 | Pending |
+| MULTI-03 | Phase 6 | Pending |
+| MULTI-04 | Phase 6 | Pending |
 
 **Coverage:**
-- v1 requirements: 30 total
-- Mapped to phases: 30
+- v1 requirements: 48 total
+- Mapped to phases: 48
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-04-11*
-*Last updated: 2026-04-11 after pivot to focused demo direction*
+*Last updated: 2026-04-12 after restoring web app requirements*
