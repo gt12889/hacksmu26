@@ -19,3 +19,8 @@ pytest>=8.0
 # Linting (dev)
 black>=24.0
 ruff>=0.4
+
+# Web API
+fastapi>=0.115
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
