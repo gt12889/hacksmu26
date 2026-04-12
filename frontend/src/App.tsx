@@ -493,6 +493,7 @@ function BatchSection() {
   const [results, setResults] = useState<CallResult[]>([])
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
+  const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
     getBatchResults()
@@ -502,45 +503,112 @@ function BatchSection() {
   }, [])
 
   const selected = selectedIndex !== null ? results[selectedIndex] : null
+  const rowCount = results.length
 
   return (
     <section className="section-alt">
       <div className="section container">
-        <div className="section-header">
-          <p className="section-label">Batch Analysis</p>
-          <h2 className="section-title">Confidence Dashboard</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-            All 212 processed calls sorted by confidence. Click any row to view its
-            spectrogram, A/B audio, and comparison metrics.
-          </p>
-        </div>
-        <div className="confidence-section">
-          {loading ? (
-            <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>
-              Loading batch results...
+        {/* Collapsible header — clickable */}
+        <button
+          type="button"
+          onClick={() => setExpanded(e => !e)}
+          style={{
+            width: '100%',
+            background: 'transparent',
+            border: 'none',
+            padding: '0.5rem 0',
+            cursor: 'pointer',
+            textAlign: 'left',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem',
+          }}
+          aria-expanded={expanded}
+        >
+          <div style={{ flex: 1 }}>
+            <p className="section-label" style={{ margin: 0 }}>Batch Analysis</p>
+            <h2 className="section-title" style={{ margin: 0 }}>
+              Confidence Dashboard
+              {!loading && rowCount > 0 && (
+                <span style={{
+                  marginLeft: '0.75rem',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.7rem',
+                  fontWeight: 400,
+                  color: 'var(--text-muted)',
+                  letterSpacing: '0.05em',
+                }}>
+                  · {rowCount} calls
+                </span>
+              )}
+            </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '0.4rem', marginBottom: 0 }}>
+              {expanded
+                ? 'Click any row to view its spectrogram, A/B audio, and comparison metrics.'
+                : `${rowCount || 212} processed calls sorted by confidence. Click to expand.`}
             </p>
-          ) : results.length === 0 ? (
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-              No batch results yet. Run <code>python scripts/batch_process.py</code> to populate.
-            </p>
-          ) : (
-            <ConfidenceTable
-              results={results}
-              selectedIndex={selectedIndex}
-              onSelect={setSelectedIndex}
-            />
-          )}
-        </div>
-        {selected && (
-          <div className="call-detail-section" style={{ marginTop: '2rem' }}>
-            <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: '1rem', color: 'var(--brown)' }}>
-              Call Detail: {selected.filename}
-            </h3>
-            <CallDetail
-              result={selected}
-              noisyUrl={null}
-              cleanUrl={batchAudioUrl(selected.clean_wav_path)}
-            />
+          </div>
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '2.25rem',
+              height: '2.25rem',
+              borderRadius: '50%',
+              background: 'var(--bg-warm)',
+              border: '1px solid var(--border)',
+              color: 'var(--brown)',
+              fontSize: '1rem',
+              fontFamily: 'var(--font-mono)',
+              transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.3s ease',
+              flexShrink: 0,
+            }}
+            aria-hidden="true"
+          >
+            ▾
+          </span>
+        </button>
+
+        {/* Collapsible body */}
+        {expanded && (
+          <div style={{ marginTop: '1.25rem' }}>
+            <div className="confidence-section" style={{
+              maxHeight: '60vh',
+              overflowY: 'auto',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius, 8px)',
+              background: 'var(--bg-card, #fff)',
+            }}>
+              {loading ? (
+                <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', padding: '1rem' }}>
+                  Loading batch results...
+                </p>
+              ) : results.length === 0 ? (
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', padding: '1rem' }}>
+                  No batch results yet. Run <code>python scripts/batch_process.py</code> to populate.
+                </p>
+              ) : (
+                <ConfidenceTable
+                  results={results}
+                  selectedIndex={selectedIndex}
+                  onSelect={setSelectedIndex}
+                />
+              )}
+            </div>
+            {selected && (
+              <div className="call-detail-section" style={{ marginTop: '2rem' }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: '1rem', color: 'var(--brown)' }}>
+                  Call Detail: {selected.filename}
+                </h3>
+                <CallDetail
+                  result={selected}
+                  noisyUrl={null}
+                  cleanUrl={batchAudioUrl(selected.clean_wav_path)}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>
