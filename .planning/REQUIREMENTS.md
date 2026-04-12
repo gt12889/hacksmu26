@@ -71,9 +71,9 @@
 
 ### Multi-Speaker Separation
 
-- [ ] **MULTI-01**: System detects multiple f0 tracks when elephants vocalize simultaneously
-- [ ] **MULTI-02**: System identifies crossing harmonics to distinguish different callers
-- [ ] **MULTI-03**: System outputs separate cleaned WAV per detected caller
+- [x] **MULTI-01**: System detects multiple f0 tracks when elephants vocalize simultaneously
+- [x] **MULTI-02**: System identifies crossing harmonics to distinguish different callers
+- [x] **MULTI-03**: System outputs separate cleaned WAV per detected caller
 - [ ] **MULTI-04**: Generates multi-speaker spectrogram figure showing separated f0 tracks in different colors
 
 ## Out of Scope
@@ -129,9 +129,9 @@
 | UI-03 | Phase 5 | Complete |
 | UI-04 | Phase 5 | Complete |
 | UI-05 | Phase 5 | Complete |
-| MULTI-01 | Phase 6 | Pending |
-| MULTI-02 | Phase 6 | Pending |
-| MULTI-03 | Phase 6 | Pending |
+| MULTI-01 | Phase 6 | Complete |
+| MULTI-02 | Phase 6 | Complete |
+| MULTI-03 | Phase 6 | Complete |
 | MULTI-04 | Phase 6 | Pending |
 
 **Coverage:**
