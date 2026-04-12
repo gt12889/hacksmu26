@@ -1035,23 +1035,23 @@ function MLComparePage() {
             borderRadius: '8px',
           }}>
             <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', color: 'var(--green)', marginBottom: '0.75rem', textTransform: 'uppercase' }}>
-              WHAT WE BUILT ON TOP
+              WHAT WE BUILT
             </div>
             <h3 style={{ fontSize: '1.15rem', color: 'var(--green)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '-0.01em' }}>
-              HARMONIC PRIOR + ML
+              FOUR DENOISERS, ONE BENCHMARK
             </h3>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.82rem', lineHeight: 1.7 }}>
               <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: 'var(--green)' }}>+</strong> Trained their spectrogram-ML paradigm on 80 real rumbles (sklearn + PyTorch)
+                <strong style={{ color: 'var(--orange)' }}>1.</strong> Baseline: <strong>noisereduce</strong> stationary spectral gating (the industry default)
               </li>
               <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: 'var(--green)' }}>+</strong> Added explicit subharmonic summation to detect f₀ in 8-25 Hz
+                <strong style={{ color: 'var(--blue)' }}>2.</strong> ML: <strong>sklearn MLPRegressor</strong> (128·64) trained on 80 real rumbles
               </li>
               <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: 'var(--green)' }}>+</strong> Time-varying comb mask at k·f₀ encodes the harmonic prior mathematically
+                <strong style={{ color: 'var(--purple)' }}>3.</strong> Deep ML: <strong>PyTorch 1D U-Net</strong> (230k params, early-stopped on val loss)
               </li>
               <li style={{ marginBottom: 0 }}>
-                <strong style={{ color: 'var(--green)' }}>+</strong> No training data required  works on any species with a harmonic series
+                <strong style={{ color: 'var(--green)' }}>4.</strong> Mathematical DSP: <strong>HPSS + SHS + comb mask</strong>, explicit prior, zero training
               </li>
             </ul>
           </div>
@@ -1140,15 +1140,14 @@ function MLComparePage() {
             borderRadius: '8px',
           }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
-              Our approach
+              Mathematical DSP Pipeline
             </div>
             <div style={{ fontWeight: 700, color: 'var(--green)', fontSize: '1.05rem', marginBottom: '0.5rem' }}>
               HPSS + SHS + Comb + noisereduce
             </div>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
-              Domain-specific classical DSP. Detects elephant f₀ via subharmonic summation,
-              builds a narrow comb mask at k·f₀  encodes the harmonic prior explicitly.
-              Zero training data required.
+              Explicit harmonic prior, no training. Detects elephant f₀ via subharmonic summation,
+              builds a narrow comb mask at k·f₀, encodes the math directly. Zero training data required.
             </p>
           </div>
         </div>
@@ -1218,7 +1217,7 @@ function MLComparePage() {
                     </div>
                   )}
                   <div>
-                    <span style={{ color: 'var(--text-muted)' }}>Ours: </span>
+                    <span style={{ color: 'var(--text-muted)' }}>DSP: </span>
                     <strong style={{ color: 'var(--green)' }}>{(m.ours.harmonic_dominance * 100).toFixed(1)}%</strong>
                   </div>
                   <div>
@@ -1248,7 +1247,7 @@ function MLComparePage() {
                   marginBottom: 0,
                 }}>
                   Baseline preserves <strong style={{ color: 'var(--orange)' }}>~{m.engine_hz_estimate.toFixed(1)} Hz engine noise</strong>.
-                  Our approach preserves only elephant harmonics at <strong style={{ color: 'var(--green)' }}>k·f₀ = k·{m.f0_median_hz.toFixed(1)} Hz</strong>.
+                  The DSP pipeline preserves only elephant harmonics at <strong style={{ color: 'var(--green)' }}>k·f₀ = k·{m.f0_median_hz.toFixed(1)} Hz</strong>.
                 </p>
               )}
             </div>
@@ -1285,7 +1284,7 @@ function MLComparePage() {
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--orange)' }}>Baseline</th>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--blue)' }}>ML (sklearn)</th>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--purple)' }}>ML (PyTorch)</th>
-                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--green)' }}>Ours</th>
+                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--green)' }}>DSP</th>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Δ vs Baseline</th>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Winner</th>
               </tr>
@@ -1300,8 +1299,8 @@ function MLComparePage() {
                 const ml = m.ml_finetuned ? m.ml_finetuned.harmonic_dominance * 100 : null
                 const tc = m.ml_pytorch ? m.ml_pytorch.harmonic_dominance * 100 : null
                 const best = Math.max(baseline, ours, ml ?? 0, tc ?? 0)
-                const winnerLabel = best === ours ? 'Ours' : best === (tc ?? -1) ? 'PyTorch' : best === (ml ?? -1) ? 'sklearn' : 'Baseline'
-                const winnerColor = winnerLabel === 'Ours' ? 'var(--green)' : winnerLabel === 'PyTorch' ? 'var(--purple)' : winnerLabel === 'sklearn' ? 'var(--blue)' : 'var(--orange)'
+                const winnerLabel = best === ours ? 'DSP' : best === (tc ?? -1) ? 'PyTorch' : best === (ml ?? -1) ? 'sklearn' : 'Baseline'
+                const winnerColor = winnerLabel === 'DSP' ? 'var(--green)' : winnerLabel === 'PyTorch' ? 'var(--purple)' : winnerLabel === 'sklearn' ? 'var(--blue)' : 'var(--orange)'
                 return (
                   <tr key={nt} style={{ borderBottom: '1px solid var(--border)' }}>
                     <td style={{ padding: '0.85rem 1rem' }}>
@@ -1358,16 +1357,16 @@ function MLComparePage() {
             <strong style={{ color: 'var(--blue)' }}>sklearn MLP</strong>, and a{' '}
             <strong style={{ color: 'var(--purple)' }}>PyTorch 1D convolutional U-Net</strong>  all trained on the same
             80 real elephant rumbles (16k frames). Both ML models outperform the baseline.
-            They may match our explicit approach on car and plane noise. But this is the{' '}
+            They may match the DSP pipeline on car and plane noise. But this is the{' '}
             <strong>pitch point</strong>, not a defeat:
           </p>
           <ul style={{ fontSize: '0.88rem', color: 'var(--text)', lineHeight: 1.7, paddingLeft: '1.25rem', marginBottom: '0.75rem' }}>
             <li>
-              Our classical approach <strong style={{ color: 'var(--green)' }}>wins on generator noise</strong>  the hardest case
+              The mathematical DSP pipeline <strong style={{ color: 'var(--green)' }}>wins on generator noise</strong>  the hardest case
               where engine harmonics directly overlap elephant harmonics and the explicit mathematical prior matters most.
             </li>
             <li>
-              Our approach needs <strong>zero training data</strong>. It works on any species with a harmonic series
+              The DSP pipeline needs <strong>zero training data</strong>. It works on any species with a harmonic series
               (whales, dolphins, birds) by tuning 3 parameters (f₀ range, harmonic count, comb bandwidth).
             </li>
             <li>
@@ -1375,9 +1374,9 @@ function MLComparePage() {
               with 10 recordings  or a newly discovered species with zero.
             </li>
             <li>
-              Both the sklearn MLP and PyTorch U-Net <strong style={{ color: 'var(--purple)' }}>imitate</strong> our comb mask 
-              trained with our algorithm's output as the target. They cannot exceed the ceiling set by the explicit
-              approach they were distilled from.
+              Both the sklearn MLP and PyTorch U-Net <strong style={{ color: 'var(--purple)' }}>imitate</strong> the comb mask
+              trained with the DSP pipeline's output as the target. They cannot exceed the ceiling set by the explicit
+              math they were distilled from.
             </li>
           </ul>
           <p style={{ fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.65, fontWeight: 700, marginBottom: 0 }}>
@@ -1400,11 +1399,11 @@ function MLComparePage() {
             The takeaway
           </h3>
           <p style={{ fontSize: '0.95rem', color: 'var(--text)', maxWidth: '72ch', margin: '0 auto' }}>
-            Generic spectral gating keeps any strong harmonic structure  including engine noise.
-            Both sklearn and PyTorch learn to approximate the right answer, but require labeled data
-            and still fall short on generator noise  the hardest case. Our explicit approach knows
-            elephant rumbles live on a strict k·f₀ series anchored at 10–25 Hz, and builds a
-            surgical mask around exactly those bins.
+            We built four denoisers. Generic spectral gating keeps any strong harmonic structure,
+            including engine noise. Both sklearn and PyTorch learn to approximate the right answer,
+            but require labeled data and still fall short on generator noise, the hardest case.
+            The mathematical DSP pipeline knows elephant rumbles live on a strict k·f₀ series
+            anchored at 10–25 Hz, and builds a surgical mask around exactly those bins.
           </p>
           <p style={{
             fontSize: '0.95rem',
