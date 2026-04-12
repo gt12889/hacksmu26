@@ -39,7 +39,11 @@ Plans:
   2. The harmonic comb mask visibly preserves elephant harmonic contours in the cleaned spectrogram while attenuating noise between harmonics
   3. Cleaned audio output is audibly cleaner than the input (rumble present, mechanical noise reduced) on a listening test
   4. Noise cleanup strategy differs between generator recordings (stationary profile) and car/plane recordings (non-stationary), and selection is automatic
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — pipeline/harmonic_processor.py (hpss_enhance, detect_f0_shs, build_comb_mask, apply_comb_mask, apply_noisereduce, process_call) + noisereduce in requirements.txt
+- [ ] 02-02-PLAN.md — tests/test_harmonic_processor.py (full pytest suite) + scripts/process_call.py (CLI demo tool)
 
 ### Phase 3: Demo Spectrograms & Measurements
 **Goal**: One representative call per noise type (generator, car, plane) is processed through the full pipeline and presented as publication-quality before/after spectrograms with f0 contour overlays, harmonic spacing markers, SNR annotations, and exported cleaned audio — ready to show judges
@@ -69,6 +73,6 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Pipeline Foundation | 3/3 | Complete | 2026-04-11 |
-| 2. Harmonic Detection & Denoising | 0/TBD | Not started | - |
+| 2. Harmonic Detection & Denoising | 0/2 | Not started | - |
 | 3. Demo Spectrograms & Measurements | 0/TBD | Not started | - |
 | 4. Multi-Speaker Separation | 0/TBD | Not started | - |
