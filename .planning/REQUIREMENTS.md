@@ -36,13 +36,13 @@
 
 ### Demo Spectrograms & Acoustic Measurements
 
-- [ ] **DEMO-01**: Script processes one representative call per noise type (generator, car, plane) through full pipeline
-- [ ] **DEMO-02**: Generates publication-quality before/after spectrogram figures (matplotlib, 300dpi) with labeled axes, colorbar, title per noise type
-- [ ] **DEMO-03**: Overlays detected f0 contour on cleaned spectrogram as a traced line
-- [ ] **DEMO-04**: Annotates harmonic spacing markers (f0, 2f0, 3f0...) on spectrogram with labeled arrows/lines
-- [ ] **DEMO-05**: Displays SNR improvement (dB), call duration, and detected f0 range as text annotations on each figure
-- [ ] **DEMO-06**: Generates side-by-side 3-panel figure per noise type: original | comb mask overlay | cleaned result
-- [ ] **DEMO-07**: Exports cleaned WAV files alongside figures for audio playback during pitch
+- [x] **DEMO-01**: Script processes one representative call per noise type (generator, car, plane) through full pipeline
+- [x] **DEMO-02**: Generates publication-quality before/after spectrogram figures (matplotlib, 300dpi) with labeled axes, colorbar, title per noise type
+- [x] **DEMO-03**: Overlays detected f0 contour on cleaned spectrogram as a traced line
+- [x] **DEMO-04**: Annotates harmonic spacing markers (f0, 2f0, 3f0...) on spectrogram with labeled arrows/lines
+- [x] **DEMO-05**: Displays SNR improvement (dB), call duration, and detected f0 range as text annotations on each figure
+- [x] **DEMO-06**: Generates side-by-side 3-panel figure per noise type: original | comb mask overlay | cleaned result
+- [x] **DEMO-07**: Exports cleaned WAV files alongside figures for audio playback during pitch
 
 ### Batch Processing
 
@@ -106,13 +106,13 @@
 | CLEAN-01 | Phase 2 | Complete |
 | CLEAN-02 | Phase 2 | Complete |
 | CLEAN-03 | Phase 2 | Complete |
-| DEMO-01 | Phase 3 | Pending |
-| DEMO-02 | Phase 3 | Pending |
-| DEMO-03 | Phase 3 | Pending |
-| DEMO-04 | Phase 3 | Pending |
-| DEMO-05 | Phase 3 | Pending |
-| DEMO-06 | Phase 3 | Pending |
-| DEMO-07 | Phase 3 | Pending |
+| DEMO-01 | Phase 3 | Complete |
+| DEMO-02 | Phase 3 | Complete |
+| DEMO-03 | Phase 3 | Complete |
+| DEMO-04 | Phase 3 | Complete |
+| DEMO-05 | Phase 3 | Complete |
+| DEMO-06 | Phase 3 | Complete |
+| DEMO-07 | Phase 3 | Complete |
 | BATCH-01 | Phase 4 | Pending |
 | BATCH-02 | Phase 4 | Pending |
 | BATCH-03 | Phase 4 | Pending |

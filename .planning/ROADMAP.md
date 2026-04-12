@@ -8,7 +8,7 @@ Six phases from raw field recordings to judge-ready demo. Phases 1-2 build the v
 
 - [x] **Phase 1: Pipeline Foundation** - Ingest, segment, and compute high-res spectrograms from field recordings (completed 2026-04-11)
 - [x] **Phase 2: Harmonic Detection & Denoising** - Detect elephant f0, build comb mask, apply residual cleanup — proven on real calls (completed 2026-04-12)
-- [ ] **Phase 3: Demo Spectrograms & Measurements** - Publication-quality before/after figures with f0 contours, harmonic markers, and SNR annotations for pitch
+- [x] **Phase 3: Demo Spectrograms & Measurements** - Publication-quality before/after figures with f0 contours, harmonic markers, and SNR annotations for pitch (completed 2026-04-12)
 - [ ] **Phase 4: Batch Processing & API** - Scale to all 212 calls with confidence scoring and FastAPI layer
 - [ ] **Phase 5: React Frontend & Demo** - Spectrogram visualization, A/B audio toggle, LALAL.AI comparison, confidence dashboard
 - [ ] **Phase 6: Multi-Speaker Separation** - Detect and separate overlapping elephant calls using crossing harmonic analysis
@@ -60,7 +60,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 03-01-PLAN.md — scripts/demo_spectrograms.py (3-panel figures, f0/harmonic overlays, SNR annotations, WAV export, --synthetic flag) + tests/test_demo_spectrograms.py
+- [x] 03-01-PLAN.md — scripts/demo_spectrograms.py (3-panel figures, f0/harmonic overlays, SNR annotations, WAV export, --synthetic flag) + tests/test_demo_spectrograms.py
 
 ### Phase 4: Batch Processing & API
 **Goal**: All 212 calls are processed through the full pipeline in one command, with per-call confidence scores and Raven Pro exports, served via a FastAPI layer that accepts uploads and returns results asynchronously
@@ -102,7 +102,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Pipeline Foundation | 3/3 | Complete | 2026-04-11 |
 | 2. Harmonic Detection & Denoising | 2/2 | Complete | 2026-04-12 |
-| 3. Demo Spectrograms & Measurements | 0/1 | Not started | - |
+| 3. Demo Spectrograms & Measurements | 1/1 | Complete   | 2026-04-12 |
 | 4. Batch Processing & API | 0/TBD | Not started | - |
 | 5. React Frontend & Demo | 0/TBD | Not started | - |
 | 6. Multi-Speaker Separation | 0/TBD | Not started | - |
