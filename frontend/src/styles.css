@@ -1,0 +1,7 @@
+:root { color-scheme: dark; }
+body { margin: 0; font-family: system-ui, sans-serif; background: #0f0f14; color: #e8e8ec; }
+.app { max-width: 1200px; margin: 0 auto; padding: 24px; }
+table { border-collapse: collapse; width: 100%; }
+th, td { padding: 6px 10px; border-bottom: 1px solid #2a2a33; text-align: left; }
+th { cursor: pointer; user-select: none; background: #16161d; }
+tr:hover { background: #1a1a22; }
