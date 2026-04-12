@@ -94,7 +94,7 @@ Plans:
 Plans:
 - [x] 05-01-PLAN.md — Backend endpoints: GET /api/batch/results + GET /api/upload/{file_id}/audio
 - [x] 05-02-PLAN.md — Frontend scaffold: Vite + React + TS + wavesurfer deps, types, api client, useJobStatus hook
-- [ ] 05-03-PLAN.md — SpectrogramView + CombOverlay + ABPlayer components (UI-01, UI-02)
+- [x] 05-03-PLAN.md — SpectrogramView + CombOverlay + ABPlayer components (UI-01, UI-02)
 - [ ] 05-04-PLAN.md — UploadPanel + ConfidenceTable + CallDetail + ComparisonPanel + App wiring + verification checkpoint (UI-03, UI-04, UI-05)
 
 ### Phase 6: Multi-Speaker Separation
