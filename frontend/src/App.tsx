@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import type { DemoStatus, NoiseType, Metadata, StatusResponse } from './types'
 import { UploadPanel } from './components/UploadPanel'
+import { PipelineVisualizer } from './components/PipelineVisualizer'
 import { CallDetail } from './components/CallDetail'
 import { ConfidenceTable } from './components/ConfidenceTable'
 import { getBatchResults, batchAudioUrl, uploadAudioUrl, audioUrl } from './api/client'
@@ -405,6 +406,24 @@ interface ActiveResult {
   result: CallResult
   noisyUrl: string | null
   cleanUrl: string | null
+}
+
+// ─── Pipeline Visualizer Section ─────────────────────────────────────────────
+function PipelineVisualizerSection() {
+  return (
+    <section className="section container">
+      <div className="section-header">
+        <p className="section-label">Interactive Pipeline</p>
+        <h2 className="section-title">Animated Pipeline Visualizer</h2>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem', maxWidth: '60ch', marginLeft: 'auto', marginRight: 'auto' }}>
+          Upload any WAV file and watch the full 7-stage denoising pipeline animate in real time —
+          STFT, noise classification, HPSS, SHS f0 detection, comb masking, ISTFT reconstruction,
+          and residual spectral gating.
+        </p>
+      </div>
+      <PipelineVisualizer />
+    </section>
+  )
 }
 
 // ─── Upload section ───────────────────────────────────────────────────────────
@@ -833,6 +852,8 @@ function DemoPage({
         )}
       </section>
 
+      <div className="divider" />
+      <PipelineVisualizerSection />
       <div className="divider" />
       <UploadSection active={activeUpload} onActive={setActiveUpload} />
       <div className="divider" />
