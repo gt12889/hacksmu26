@@ -13,7 +13,7 @@ FLATNESS_BROADBAND_THRESHOLD: float = 0.4
 
 
 # Phase 6: Multi-speaker separation thresholds
-F0_JUMP_TOLERANCE_HZ: float = 4.0   # max Hz jump between frames in greedy linker
+F0_JUMP_TOLERANCE_HZ: float = 5.0   # max Hz jump between frames in greedy linker
 MIN_TRACK_FRAMES: int = 10           # frames required to treat a track as real
 MIN_SCORE_RATIO: float = 0.4         # score[1]/score[0] threshold for 2-caller detection
 
