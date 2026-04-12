@@ -1,0 +1,38 @@
+{
+  "generator": {
+    "snr_before": 20.2,
+    "snr_after": 20.1,
+    "snr_improvement": -0.1,
+    "f0_min": 13.9,
+    "f0_max": 22.6,
+    "f0_median": 19.7,
+    "duration": 2.9,
+    "source_file": "090224-09_generator_01.wav",
+    "call_window": "50.6s-53.5s",
+    "real_data": true
+  },
+  "car": {
+    "snr_before": 20.5,
+    "snr_after": 19.5,
+    "snr_improvement": -1.0,
+    "f0_min": 8.0,
+    "f0_max": 22.6,
+    "f0_median": 16.8,
+    "duration": 2.8,
+    "source_file": "04-040920-02_vehicle_1.wav",
+    "call_window": "30.6s-33.4s",
+    "real_data": true
+  },
+  "plane": {
+    "snr_before": 23.4,
+    "snr_after": 22.3,
+    "snr_improvement": -1.1,
+    "f0_min": 10.9,
+    "f0_max": 22.6,
+    "f0_median": 16.8,
+    "duration": 4.0,
+    "source_file": "1989-06_airplane_01.wav",
+    "call_window": "54.7s-58.7s",
+    "real_data": true
+  }
+}

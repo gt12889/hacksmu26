@@ -5,7 +5,9 @@ __pycache__/
 .venv/
 
 # Generated demo outputs (produced by scripts/demo_spectrograms.py)
-data/outputs/
+data/outputs/*
+# ...except the canonical demo assets that the frontend serves
+!data/outputs/demo/
 
 # OS
 .DS_Store
