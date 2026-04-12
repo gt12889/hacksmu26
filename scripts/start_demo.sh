@@ -16,8 +16,8 @@ if ! python -c "import fastapi" 2>/dev/null; then
 fi
 
 # Start FastAPI backend in background
-echo "Starting FastAPI backend on http://localhost:8000 ..."
-uvicorn api.main:app --reload --port 8000 &
+echo "Starting FastAPI backend on http://localhost:8001 (matches Vite /api proxy) ..."
+uvicorn api.main:app --reload --port 8001 &
 BACKEND_PID=$!
 echo "Backend PID: $BACKEND_PID"
 
@@ -30,6 +30,6 @@ else
     echo "Frontend dependencies not installed. Run:"
     echo "  cd frontend && npm install && npm run dev"
     echo ""
-    echo "Backend is running. API available at http://localhost:8000"
+    echo "Backend is running. API available at http://localhost:8001"
     wait $BACKEND_PID
 fi
