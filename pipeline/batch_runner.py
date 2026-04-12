@@ -25,6 +25,14 @@ from pipeline.noise_classifier import classify_noise_type
 from pipeline.scoring import compute_confidence, compute_snr_db
 from pipeline.spectrogram import compute_stft
 
+# Import make_demo_figure for spectrogram PNG generation (API-05).
+# If this import causes issues at load time (e.g. matplotlib not installed),
+# run_batch catches the exception and sets png_path="" gracefully.
+try:
+    from scripts.demo_spectrograms import make_demo_figure as _make_demo_figure
+except Exception:  # pragma: no cover
+    _make_demo_figure = None  # type: ignore[assignment]
+
 
 def run_batch(
     annotations: pd.DataFrame,
@@ -81,6 +89,7 @@ def run_batch(
                     "noise_type": "unknown",
                     "status": "skipped",
                     "clean_wav_path": "",
+                    "png_path": "",
                 }
             )
             completed += 1
@@ -151,6 +160,26 @@ def run_batch(
         clean_wav_path = output_dir / f"{call_id}_clean.wav"
         sf.write(str(clean_wav_path), audio_out, sr, subtype="PCM_16")
 
+        # --- Generate spectrogram PNG for API endpoint (API-05) ---
+        # Uses a unique noise_type prefix per call so multiple calls with the same
+        # noise_type don't overwrite each other: {noise_type}_{call_id}_demo.png
+        png_path_obj = None
+        if _make_demo_figure is not None:
+            try:
+                import warnings as _warnings
+                with _warnings.catch_warnings():
+                    _warnings.simplefilter("ignore")
+                    unique_noise_label = f"{noise_type_dict['type']}_{call_id}"
+                    png_out, _, _ = _make_demo_figure(
+                        unique_noise_label,
+                        ctx,
+                        y,
+                        output_dir / "spectrograms",
+                    )
+                png_path_obj = png_out
+            except Exception:
+                pass  # PNG generation is best-effort; never crash the batch
+
         # --- Build result dict (use _hz and _db suffixed keys) ---
         result = {
             "filename": row.filename,
@@ -163,6 +192,7 @@ def run_batch(
             "noise_type": noise_type_dict["type"],
             "status": "ok",
             "clean_wav_path": str(clean_wav_path),
+            "png_path": str(png_path_obj) if png_path_obj is not None else "",
         }
         results.append(result)
 
