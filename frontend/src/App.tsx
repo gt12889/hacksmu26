@@ -580,12 +580,14 @@ function MultiSpeakerSection() {
 }
 
 // ─── Simple hash router ──────────────────────────────────────────────────────
-type Route = 'home' | 'demo'
+type Route = 'home' | 'demo' | 'ml'
 
 function useHashRoute(): [Route, (r: Route) => void] {
   const parse = (): Route => {
     const h = window.location.hash.replace(/^#\/?/, '')
-    return h === 'demo' ? 'demo' : 'home'
+    if (h === 'demo') return 'demo'
+    if (h === 'ml') return 'ml'
+    return 'home'
   }
   const [route, setRoute] = useState<Route>(parse())
   useEffect(() => {
@@ -653,6 +655,23 @@ function AppHeader({ route, navigate }: { route: Route; navigate: (r: Route) => 
                 }}
               >
                 Demo
+              </a>
+              <a
+                href="#/ml"
+                onClick={(e) => { e.preventDefault(); navigate('ml') }}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: route === 'ml' ? 'var(--orange)' : 'var(--text-muted)',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  borderBottom: route === 'ml' ? '2px solid var(--orange)' : '2px solid transparent',
+                  paddingBottom: '2px',
+                }}
+              >
+                ML vs Ours
               </a>
             </nav>
             <span className="tagline">HackSMU 2026 · Southern Methodist University</span>
@@ -824,6 +843,211 @@ function DemoPage({
   )
 }
 
+// ─── ML Comparison Page ──────────────────────────────────────────────────────
+type MLMetrics = {
+  [key in NoiseType]?: {
+    baseline: { harmonic_dominance: number; approach: string }
+    ours: { harmonic_dominance: number; approach: string }
+    improvement_pct: number
+    f0_median_hz: number
+    engine_hz_estimate: number
+  }
+}
+
+function MLComparePage() {
+  const [metrics, setMetrics] = useState<MLMetrics | null>(null)
+
+  useEffect(() => {
+    fetch('/static/demo/ml_comparison_metrics.json')
+      .then(r => r.ok ? r.json() : null)
+      .then(setMetrics)
+      .catch(() => {})
+  }, [])
+
+  return (
+    <>
+      {/* Hero */}
+      <div className="hero" style={{ minHeight: 'auto', padding: '3rem 2rem 2rem' }}>
+        <div className="hero-inner">
+          <div className="hero-eyebrow fade-up fade-up-1">Scientific Comparison</div>
+          <h1 className="hero-headline fade-up fade-up-2" style={{ fontSize: '2.5rem' }}>
+            Generic ML vs <span className="accent">Domain Priors</span>
+          </h1>
+          <p className="hero-sub fade-up fade-up-3" style={{ maxWidth: '72ch' }}>
+            What happens when you throw a generic spectral-gating denoiser at an elephant rumble,
+            compared to our approach that knows elephants have a <strong>strict integer-multiple harmonic series</strong>?
+            Both run on the <strong>same real ElephantVoices recording</strong>. Same input, different priors,
+            different outputs.
+          </p>
+        </div>
+      </div>
+
+      <div className="divider" />
+
+      {/* The pitch bar */}
+      <section className="section container">
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '1rem',
+          marginBottom: '2rem',
+        }}>
+          <div style={{
+            padding: '1.5rem',
+            background: 'rgba(255, 124, 42, 0.08)',
+            border: '1px solid rgba(255, 124, 42, 0.3)',
+            borderRadius: '8px',
+          }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+              The ML-style approach
+            </div>
+            <div style={{ fontWeight: 700, color: 'var(--orange)', fontSize: '1.1rem', marginBottom: '0.5rem' }}>
+              noisereduce (stationary)
+            </div>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
+              Generic spectral-gating. Zero domain knowledge. This is what 99% of bioacoustic
+              projects do — and it's what most "AI denoisers" actually are under the hood.
+            </p>
+          </div>
+          <div style={{
+            padding: '1.5rem',
+            background: 'rgba(0, 200, 100, 0.08)',
+            border: '1px solid rgba(0, 200, 100, 0.3)',
+            borderRadius: '8px',
+          }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+              Our approach
+            </div>
+            <div style={{ fontWeight: 700, color: '#00c864', fontSize: '1.1rem', marginBottom: '0.5rem' }}>
+              HPSS + SHS + Comb + noisereduce
+            </div>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
+              Domain-specific. Detects elephant f₀ via subharmonic summation, then builds a
+              narrow comb mask at k·f₀ to preserve only elephant harmonics.
+            </p>
+          </div>
+          <div style={{
+            padding: '1.5rem',
+            background: 'rgba(59, 130, 246, 0.08)',
+            border: '1px solid rgba(59, 130, 246, 0.3)',
+            borderRadius: '8px',
+          }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+              Metric
+            </div>
+            <div style={{ fontWeight: 700, color: 'var(--blue)', fontSize: '1.1rem', marginBottom: '0.5rem' }}>
+              Harmonic Dominance
+            </div>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
+              Fraction of energy in the 0-500 Hz band that sits on k·f₀ peaks. Higher = more
+              elephant, less junk. Measured on the re-STFT of each approach's cleaned output.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison rows */}
+      {(['generator', 'car', 'plane'] as NoiseType[]).map((nt) => {
+        const cfg = NOISE_CONFIG[nt]
+        const m = metrics?.[nt]
+        return (
+          <section key={nt} className="section container" style={{ paddingTop: '1rem' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              marginBottom: '1rem',
+            }}>
+              <span
+                className="noise-badge"
+                style={{
+                  color: cfg.color,
+                  background: cfg.dimColor,
+                  border: `1px solid ${cfg.borderColor}`,
+                }}
+              >
+                <span>{cfg.icon}</span>
+                {cfg.label}
+              </span>
+              {m && (
+                <div style={{ display: 'flex', gap: '1.5rem', marginLeft: 'auto', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
+                  <div>
+                    <span style={{ color: 'var(--text-muted)' }}>Baseline: </span>
+                    <strong style={{ color: 'var(--orange)' }}>{(m.baseline.harmonic_dominance * 100).toFixed(1)}%</strong>
+                  </div>
+                  <div>
+                    <span style={{ color: 'var(--text-muted)' }}>Ours: </span>
+                    <strong style={{ color: '#00c864' }}>{(m.ours.harmonic_dominance * 100).toFixed(1)}%</strong>
+                  </div>
+                  <div>
+                    <span style={{ color: 'var(--text-muted)' }}>Δ: </span>
+                    <strong style={{ color: '#00c864' }}>+{m.improvement_pct}%</strong>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '8px',
+              padding: '1rem',
+            }}>
+              <img
+                src={`/static/demo/ml_comparison_${nt}.png`}
+                alt={`${nt} ML comparison`}
+                style={{ width: '100%', display: 'block', borderRadius: '4px' }}
+              />
+              {m && (
+                <p style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.72rem',
+                  color: 'var(--text-muted)',
+                  marginTop: '0.75rem',
+                  marginBottom: 0,
+                }}>
+                  Baseline preserves <strong style={{ color: 'var(--orange)' }}>~{m.engine_hz_estimate.toFixed(1)} Hz engine noise</strong>.
+                  Our approach preserves only elephant harmonics at <strong style={{ color: '#00c864' }}>k·f₀ = k·{m.f0_median_hz.toFixed(1)} Hz</strong>.
+                </p>
+              )}
+            </div>
+          </section>
+        )
+      })}
+
+      {/* Summary */}
+      <section className="section container" style={{ marginTop: '2rem' }}>
+        <div style={{
+          padding: '2rem',
+          background: 'rgba(0, 200, 100, 0.05)',
+          border: '1px solid rgba(0, 200, 100, 0.2)',
+          borderRadius: '8px',
+          textAlign: 'center',
+        }}>
+          <h3 style={{ fontFamily: 'var(--font-display)', color: '#00c864', marginBottom: '0.75rem' }}>
+            The takeaway
+          </h3>
+          <p style={{ fontSize: '0.95rem', color: 'var(--text)', maxWidth: '72ch', margin: '0 auto' }}>
+            Generic spectral gating is the default because it's easy. But it has no idea
+            what an elephant sounds like, and it keeps any strong harmonic structure — including
+            engine noise. Our approach knows that elephant rumbles live on a strict k·f₀ series
+            anchored at 10-25 Hz, so we build a mask around exactly those bins and throw everything
+            else away.
+          </p>
+          <p style={{
+            fontSize: '0.95rem',
+            color: 'var(--text)',
+            maxWidth: '72ch',
+            margin: '1rem auto 0',
+            fontWeight: 700,
+          }}>
+            Same input. Same compute. Different priors. Measurably cleaner output.
+          </p>
+        </div>
+      </section>
+    </>
+  )
+}
+
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [status, setStatus] = useState<DemoStatus>('checking')
@@ -897,6 +1121,7 @@ export default function App() {
       <AppHeader route={route} navigate={navigate} />
 
       {route === 'home' && <HomePage navigate={navigate} />}
+      {route === 'ml' && <MLComparePage />}
       {route === 'demo' && (
         <DemoPage
           status={status}

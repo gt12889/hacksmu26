@@ -50,6 +50,14 @@ def parse_annotations(csv_path: str | Path) -> pd.DataFrame:
     # Normalize: lowercase and strip whitespace from column names
     df.columns = df.columns.str.lower().str.strip()
 
+    # Accept ElephantVoices master spreadsheet column names as aliases
+    column_aliases = {
+        "sound_file": "filename",
+        "start_time": "start",
+        "end_time": "end",
+    }
+    df = df.rename(columns={k: v for k, v in column_aliases.items() if k in df.columns})
+
     missing = REQUIRED_COLS - set(df.columns)
     if missing:
         raise ValueError(
