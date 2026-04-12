@@ -156,7 +156,10 @@ Plans:
   1. GET /api/result/{job_id}/spectrogram/{call_index} either returns a PNG or is cleanly removed
   2. link_f0_tracks filters out tracks shorter than MIN_TRACK_FRAMES
   3. test_multi_speaker.py adds a test for the short-track filter
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 09-01-PLAN.md — Generate spectrogram PNGs in batch_runner (API-05) + MIN_TRACK_FRAMES short-track filter + test (MULTI-02)
 
 ## Progress
 
@@ -170,4 +173,4 @@ Plans:
 | 6. Multi-Speaker Separation | 2/2 | Complete   | 2026-04-12 |
 | 7. Demo Audio & Proxy Fixes | 1/1 | Complete   | 2026-04-12 |
 | 8. Frontend Component Integration | 1/1 | Complete   | 2026-04-12 |
-| 9. Polish Remaining Gaps | 0/TBD | Not started | - |
+| 9. Polish Remaining Gaps | 0/1 | Not started | - |
