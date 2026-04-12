@@ -8,6 +8,18 @@ A domain-specific audio denoising system for ElephantVoices that extracts elepha
 
 **Shipped:** v1.0 (2026-04-12) — 9 phases, 19 plans, 174 tests passing, ~3400 LOC Python + ~1200 LOC TypeScript
 
+## Current Milestone: v1.1 Real-Data Validation & Pitch Polish
+
+**Goal:** Validate the v1.0 pipeline on actual ElephantVoices field recordings and produce polished pitch artifacts ready for judge presentation.
+
+**Target features:**
+- End-to-end run on real recordings (not just synthetic)
+- Empirical tuning of f0 detection thresholds
+- Pitch deck / slides with before/after spectrograms
+- README with GIFs and quickstart
+- Demo rehearsal script
+- Deployment guide for judges to run locally
+
 ## Core Value
 
 Denoise elephant vocalizations by exploiting their harmonic integer-multiple structure — the one technique that separates us from generic AI denoising tools that fail on infrasonic bioacoustics.
@@ -33,7 +45,11 @@ Denoise elephant vocalizations by exploiting their harmonic integer-multiple str
 
 ### Active
 
-(None yet — ready for v1.1 planning)
+- [ ] Run full pipeline on real ElephantVoices field recordings
+- [ ] Tune f0 detection octave-check threshold on real data
+- [ ] Generate before/after figures from real calls for pitch deck
+- [ ] Write README with quickstart, GIFs, and deployment guide
+- [ ] Prepare demo rehearsal script and pitch talking points
 
 ### Out of Scope
 
@@ -86,4 +102,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-12 after v1.0 milestone*
+*Last updated: 2026-04-12 — v1.1 milestone started (Real-Data Validation & Pitch Polish)*
