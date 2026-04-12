@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 07-demo-audio-proxy-fixes 07-01-PLAN.md
-last_updated: "2026-04-12T14:54:02.828Z"
+stopped_at: "Completed 08-frontend-component-integration 08-01-PLAN.md (checkpoint: awaiting visual browser verify)"
+last_updated: "2026-04-12T15:02:24.860Z"
 progress:
   total_phases: 9
-  completed_phases: 7
-  total_plans: 17
-  completed_plans: 17
+  completed_phases: 8
+  total_plans: 18
+  completed_plans: 18
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-11)
 
 **Core value:** Denoise elephant vocalizations by exploiting their harmonic integer-multiple structure — surgical extraction where generic AI tools fail on infrasonic content
-**Current focus:** Phase 07 — Demo Audio & Proxy Fixes
+**Current focus:** Phase 08 — Frontend Component Integration
 
 ## Current Position
 
-Phase: 08
-Plan: Not started
+Phase: 08 (Frontend Component Integration) — EXECUTING
+Plan: 1 of 1
 
 ## Performance Metrics
 
@@ -63,6 +63,7 @@ Plan: Not started
 | Phase 06-multi-speaker-separation P01 | 52 | 2 tasks | 3 files |
 | Phase 06-multi-speaker-separation P02 | 25 | 1 tasks | 1 files |
 | Phase 07-demo-audio-proxy-fixes P01 | 5 | 3 tasks | 3 files |
+| Phase 08 P01 | 173 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -118,6 +119,7 @@ Recent decisions affecting current work:
 - [Phase 07-demo-audio-proxy-fixes]: Import compute_snr_db from pipeline.scoring — single canonical implementation, no duplicates
 - [Phase 07-demo-audio-proxy-fixes]: make_demo_figure returns 3-tuple (png, clean_wav, original_wav) — enables frontend A/B toggle
 - [Phase 07-demo-audio-proxy-fixes]: Both Vite proxy rules target port 8000 — FastAPI is a single process, split ports were a configuration bug
+- [Phase 08]: noisyUrl for uploads = uploadAudioUrl(fileId); cleanUrl = audioUrl(jobId, 0); batch rows use batchAudioUrl(clean_wav_path) with noisyUrl=null
 
 ### Pending Todos
 
@@ -131,6 +133,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-12T14:53:37.104Z
-Stopped at: Completed 07-demo-audio-proxy-fixes 07-01-PLAN.md
+Last session: 2026-04-12T15:02:24.858Z
+Stopped at: Completed 08-frontend-component-integration 08-01-PLAN.md (checkpoint: awaiting visual browser verify)
 Resume file: None

@@ -13,7 +13,7 @@ Six phases from raw field recordings to judge-ready demo. Phases 1-2 build the v
 - [x] **Phase 5: React Frontend & Demo** - Spectrogram visualization, A/B audio toggle, LALAL.AI comparison, confidence dashboard (completed 2026-04-12)
 - [x] **Phase 6: Multi-Speaker Separation** - Detect and separate overlapping elephant calls using crossing harmonic analysis (completed 2026-04-12)
 - [x] **Phase 7: Demo Audio & Proxy Fixes** - Gap closure: add _original.wav export, fix Vite proxy port, dedupe compute_snr_db (completed 2026-04-12)
-- [ ] **Phase 8: Frontend Component Integration** - Gap closure: rewrite App.tsx to integrate upload/result components alongside static demo
+- [x] **Phase 8: Frontend Component Integration** - Gap closure: rewrite App.tsx to integrate upload/result components alongside static demo (completed 2026-04-12)
 - [ ] **Phase 9: Polish Remaining Gaps** - Gap closure: API-05 spectrogram endpoint decision, MULTI-02 short-track filter
 
 ## Phase Details
@@ -142,7 +142,10 @@ Plans:
   4. ConfidenceTable loads from /api/batch/results and is sortable/filterable
   5. ComparisonPanel shows Original | LALAL.AI | Our Result with SNR metrics
   6. Clicking a confidence table row opens its CallDetail inline
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [x] 08-01-PLAN.md — Rewrite App.tsx to add UploadSection + BatchSection below static demo, add CSS for new sections
 
 ### Phase 9: Polish Remaining Gaps
 **Goal**: Resolve the two smallest audit gaps — decide API-05 spectrogram endpoint (generate PNG in batch_runner OR remove route), implement MULTI-02 short-track filter via MIN_TRACK_FRAMES
@@ -166,5 +169,5 @@ Plans:
 | 5. React Frontend & Demo | 4/4 | Complete   | 2026-04-12 |
 | 6. Multi-Speaker Separation | 2/2 | Complete   | 2026-04-12 |
 | 7. Demo Audio & Proxy Fixes | 1/1 | Complete   | 2026-04-12 |
-| 8. Frontend Component Integration | 0/TBD | Not started | - |
+| 8. Frontend Component Integration | 1/1 | Complete   | 2026-04-12 |
 | 9. Polish Remaining Gaps | 0/TBD | Not started | - |
