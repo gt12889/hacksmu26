@@ -1,0 +1,11 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+
+# Generated demo outputs (produced by scripts/demo_spectrograms.py)
+data/outputs/
+
+# OS
+.DS_Store
