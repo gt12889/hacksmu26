@@ -5,6 +5,8 @@ Provides:
   - compute_snr_db: SNR in dB (harmonic band vs out-of-band noise power)
   - compute_confidence: 0-100 confidence score combining SNR improvement,
     harmonic integrity, and f0 stability
+  - compute_harmonic_integrity: 0-100% score measuring how cleanly the
+    detected harmonic peaks survived denoising relative to background energy
 """
 from __future__ import annotations
 
@@ -46,6 +48,95 @@ def compute_snr_db(
     signal_power = float(np.mean(magnitude[harmonic_mask, :] ** 2))
     noise_power = float(np.mean(magnitude[~harmonic_mask, :] ** 2)) if (~harmonic_mask).any() else 1e-10
     return float(10 * np.log10(signal_power / (noise_power + 1e-10)))
+
+
+def compute_harmonic_integrity(
+    magnitude: np.ndarray,   # shape (n_freq_bins, n_frames)
+    f0_contour: np.ndarray,  # shape (n_frames,) — per-frame f0 in Hz
+    freq_bins: np.ndarray,   # shape (n_freq_bins,) — Hz per bin
+    bandwidth_hz: float = 5.0,
+    max_harmonic_hz: float = 1000.0,
+) -> float:
+    """
+    Compute harmonic integrity score (0-100%).
+
+    Measures how much of the detected harmonic structure (k*f0 energy peaks)
+    dominates the total spectral energy in the harmonic band.  A high score
+    means the harmonics are clean sharp peaks; a low score means residual noise
+    has smeared energy across the harmonic band.
+
+    Algorithm (per frame):
+      1. For each frame, identify the harmonic-band frequency range
+         (DC up to max_harmonic_hz or the highest k*f0 harmonic).
+      2. Within that band compute two sums over linear power (magnitude**2):
+         - peak_power:  bins within ±bandwidth_hz of any k*f0 harmonic
+         - band_power:  all bins from DC up to the band ceiling
+      3. harmonic_dominance = peak_power / band_power   (0 to 1)
+      4. Average harmonic_dominance across frames (skipping frames with f0=0).
+      5. Return 100 * mean_dominance.
+
+    A pure sine-wave harmonic stack scores ~100%; broadband white noise scores
+    close to 0% (band_power >> peak_power).  Real cleaned rumbles land 40-90%.
+
+    Args:
+        magnitude:        Magnitude spectrogram, shape (n_freq_bins, n_frames)
+        f0_contour:       Per-frame f0 estimates in Hz, shape (n_frames,)
+        freq_bins:        Frequency value per bin in Hz, shape (n_freq_bins,)
+        bandwidth_hz:     Half-bandwidth around each harmonic for peak capture
+        max_harmonic_hz:  Upper frequency ceiling for harmonic band
+
+    Returns:
+        Harmonic integrity score as float in [0.0, 100.0].
+        Returns 0.0 if no valid f0 frames are found.
+    """
+    n_freq_bins, n_frames = magnitude.shape
+    dominance_per_frame: list[float] = []
+
+    for t in range(n_frames):
+        f0 = float(f0_contour[t])
+        if f0 <= 0.0:
+            continue
+
+        # Ceiling: the highest harmonic still <= max_harmonic_hz
+        # (also constrained by the Nyquist edge of freq_bins)
+        nyquist = float(freq_bins[-1])
+        ceiling_hz = min(max_harmonic_hz, nyquist)
+        if f0 > ceiling_hz:
+            continue  # fundamental itself is out of band
+
+        # Build two boolean masks over freq_bins for this frame
+        peak_mask = np.zeros(n_freq_bins, dtype=bool)
+        band_mask = freq_bins <= ceiling_hz
+
+        k = 1
+        while True:
+            harmonic_hz = k * f0
+            if harmonic_hz > ceiling_hz:
+                break
+            peak_mask |= (
+                (freq_bins >= harmonic_hz - bandwidth_hz)
+                & (freq_bins <= harmonic_hz + bandwidth_hz)
+            )
+            k += 1
+
+        # Intersect peak_mask with band to avoid counting out-of-band energy
+        peak_mask &= band_mask
+
+        if not band_mask.any():
+            continue
+
+        power = magnitude[:, t] ** 2
+        band_power = float(np.sum(power[band_mask]))
+        if band_power < 1e-30:
+            continue  # silent frame — skip
+
+        peak_power = float(np.sum(power[peak_mask]))
+        dominance_per_frame.append(peak_power / band_power)
+
+    if not dominance_per_frame:
+        return 0.0
+
+    return float(100.0 * np.mean(dominance_per_frame))
 
 
 def compute_confidence(
