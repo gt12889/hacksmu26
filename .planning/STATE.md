@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-demo-spectrograms-measurements 03-01-PLAN.md
-last_updated: "2026-04-12T02:16:06.585Z"
+stopped_at: Completed 04-batch-processing-api 04-01-PLAN.md
+last_updated: "2026-04-12T03:17:03.146Z"
 progress:
   total_phases: 6
   completed_phases: 3
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 10
+  completed_plans: 7
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-11)
 
 **Core value:** Denoise elephant vocalizations by exploiting their harmonic integer-multiple structure — surgical extraction where generic AI tools fail on infrasonic content
-**Current focus:** Phase 03 — Demo Spectrograms & Measurements
+**Current focus:** Phase 04 — Batch Processing & API
 
 ## Current Position
 
-Phase: 4
-Plan: Not started
+Phase: 04 (Batch Processing & API) — EXECUTING
+Plan: 2 of 4
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Plan: Not started
 | Phase 02-harmonic-detection-denoising P01 | 4 minutes | 2 tasks | 3 files |
 | Phase 02-harmonic-detection-denoising P02 | 2 | 2 tasks | 2 files |
 | Phase 03-demo-spectrograms-measurements P01 | 4 | 2 tasks | 3 files |
+| Phase 04-batch-processing-api P01 | 2 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -79,6 +80,8 @@ Recent decisions affecting current work:
 - [Phase 03-demo-spectrograms-measurements]: DISPLAY_FREQ_MAX_HZ=500: slices 4097-bin STFT to 93 display bins so all elephant harmonic content is visible (not compressed into bottom 0.5% of figure)
 - [Phase 03-demo-spectrograms-measurements]: constrained_layout=True on figure creation (never tight_layout) — avoids matplotlib 3.10 colorbar layout warnings
 - [Phase 03-demo-spectrograms-measurements]: SNR computed on linear magnitude**2 power (not dB-scale) — standard acoustic measurement convention
+- [Phase 04-batch-processing-api]: compute_snr_db lifted verbatim from scripts/demo_spectrograms.py — unifies demo and batch scoring implementations
+- [Phase 04-batch-processing-api]: compute_confidence takes f0_contour array directly (not ctx dict) — decouples from caller structure
 
 ### Pending Todos
 
@@ -92,6 +95,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-12T02:12:05.570Z
-Stopped at: Completed 03-demo-spectrograms-measurements 03-01-PLAN.md
+Last session: 2026-04-12T03:17:03.143Z
+Stopped at: Completed 04-batch-processing-api 04-01-PLAN.md
 Resume file: None
