@@ -57,7 +57,10 @@ Plans:
   3. f0 contour is traced as a line on the cleaned spectrogram, with harmonic multiples (2f0, 3f0...) marked
   4. SNR improvement (dB), call duration, and f0 range are annotated as text on each figure
   5. Three cleaned WAV files are exported alongside the figures for audio playback during pitch
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 03-01-PLAN.md — scripts/demo_spectrograms.py (3-panel figures, f0/harmonic overlays, SNR annotations, WAV export, --synthetic flag) + tests/test_demo_spectrograms.py
 
 ### Phase 4: Batch Processing & API
 **Goal**: All 212 calls are processed through the full pipeline in one command, with per-call confidence scores and Raven Pro exports, served via a FastAPI layer that accepts uploads and returns results asynchronously
@@ -99,7 +102,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Pipeline Foundation | 3/3 | Complete | 2026-04-11 |
 | 2. Harmonic Detection & Denoising | 2/2 | Complete | 2026-04-12 |
-| 3. Demo Spectrograms & Measurements | 0/TBD | Not started | - |
+| 3. Demo Spectrograms & Measurements | 0/1 | Not started | - |
 | 4. Batch Processing & API | 0/TBD | Not started | - |
 | 5. React Frontend & Demo | 0/TBD | Not started | - |
 | 6. Multi-Speaker Separation | 0/TBD | Not started | - |
