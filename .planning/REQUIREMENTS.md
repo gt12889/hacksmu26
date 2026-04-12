@@ -54,12 +54,12 @@
 
 ### Web API
 
-- [ ] **API-01**: POST /api/upload accepts audio file and stores it
-- [ ] **API-02**: POST /api/process triggers pipeline on uploaded file, returns job ID
-- [ ] **API-03**: GET /api/status/{job_id} returns processing status and progress
-- [ ] **API-04**: GET /api/result/{job_id} returns cleaned audio + spectrogram data
-- [ ] **API-05**: GET /api/batch/summary returns batch processing summary
-- [ ] **API-06**: API uses BackgroundTasks for async processing (no synchronous blocking)
+- [x] **API-01**: POST /api/upload accepts audio file and stores it
+- [x] **API-02**: POST /api/process triggers pipeline on uploaded file, returns job ID
+- [x] **API-03**: GET /api/status/{job_id} returns processing status and progress
+- [x] **API-04**: GET /api/result/{job_id} returns cleaned audio + spectrogram data
+- [x] **API-05**: GET /api/batch/summary returns batch processing summary
+- [x] **API-06**: API uses BackgroundTasks for async processing (no synchronous blocking)
 
 ### Web Frontend
 
@@ -118,12 +118,12 @@
 | BATCH-03 | Phase 4 | Complete |
 | BATCH-04 | Phase 4 | Complete |
 | BATCH-05 | Phase 4 | Complete |
-| API-01 | Phase 4 | Pending |
-| API-02 | Phase 4 | Pending |
-| API-03 | Phase 4 | Pending |
-| API-04 | Phase 4 | Pending |
-| API-05 | Phase 4 | Pending |
-| API-06 | Phase 4 | Pending |
+| API-01 | Phase 4 | Complete |
+| API-02 | Phase 4 | Complete |
+| API-03 | Phase 4 | Complete |
+| API-04 | Phase 4 | Complete |
+| API-05 | Phase 4 | Complete |
+| API-06 | Phase 4 | Complete |
 | UI-01 | Phase 5 | Pending |
 | UI-02 | Phase 5 | Pending |
 | UI-03 | Phase 5 | Pending |

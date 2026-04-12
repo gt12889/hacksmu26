@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-batch-processing-api-03-PLAN.md
-last_updated: "2026-04-12T03:27:32.239Z"
+stopped_at: Completed 04-04-PLAN.md
+last_updated: "2026-04-12T03:29:11.435Z"
 progress:
   total_phases: 6
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State
@@ -55,6 +55,7 @@ Plan: 4 of 4
 | Phase 04-batch-processing-api P01 | 2 | 2 tasks | 3 files |
 | Phase 04-batch-processing-api P02 | 4 minutes | 1 tasks | 2 files |
 | Phase 04-batch-processing-api P03 | 2 | 1 tasks | 1 files |
+| Phase 04-batch-processing-api P04 | 5 minutes | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,9 @@ Recent decisions affecting current work:
 - [Phase 04-batch-processing-api]: WAV export normalizes before sf.write to prevent PCM_16 clipping from noisereduce output
 - [Phase 04-batch-processing-api]: Raven TSV floats formatted as f'{value:.6f}' — locale-safe, no comma-decimal ambiguity
 - [Phase 04-batch-processing-api]: Synthetic WAVs include 5-second noise tail so extract_noise_gaps() finds real noise profile (prevents zero-size array crash in noisereduce)
+- [Phase 04-batch-processing-api]: UPLOAD_REGISTRY singleton in api/uploads.py — routes import shared ref, never re-instantiate
+- [Phase 04-batch-processing-api]: Spectrogram endpoint 404 by design — batch_runner produces no PNG in Phase 4
+- [Phase 04-batch-processing-api]: _run_job builds 1-row DataFrame from soundfile.info().duration; recordings_dir=Path(upload_path).parent
 
 ### Pending Todos
 
@@ -102,6 +106,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-12T03:27:32.236Z
-Stopped at: Completed 04-batch-processing-api-03-PLAN.md
+Last session: 2026-04-12T03:29:11.433Z
+Stopped at: Completed 04-04-PLAN.md
 Resume file: None

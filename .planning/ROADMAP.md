@@ -9,7 +9,7 @@ Six phases from raw field recordings to judge-ready demo. Phases 1-2 build the v
 - [x] **Phase 1: Pipeline Foundation** - Ingest, segment, and compute high-res spectrograms from field recordings (completed 2026-04-11)
 - [x] **Phase 2: Harmonic Detection & Denoising** - Detect elephant f0, build comb mask, apply residual cleanup — proven on real calls (completed 2026-04-12)
 - [x] **Phase 3: Demo Spectrograms & Measurements** - Publication-quality before/after figures with f0 contours, harmonic markers, and SNR annotations for pitch (completed 2026-04-12)
-- [ ] **Phase 4: Batch Processing & API** - Scale to all 212 calls with confidence scoring and FastAPI layer
+- [x] **Phase 4: Batch Processing & API** - Scale to all 212 calls with confidence scoring and FastAPI layer (completed 2026-04-12)
 - [ ] **Phase 5: React Frontend & Demo** - Spectrogram visualization, A/B audio toggle, LALAL.AI comparison, confidence dashboard
 - [ ] **Phase 6: Multi-Speaker Separation** - Detect and separate overlapping elephant calls using crossing harmonic analysis
 
@@ -78,7 +78,7 @@ Plans:
 - [x] 04-01-PLAN.md — pipeline/scoring.py (compute_snr_db lifted from demo_spectrograms.py, compute_confidence formula) + requirements.txt (fastapi, uvicorn, python-multipart)
 - [x] 04-02-PLAN.md — pipeline/batch_runner.py (run_batch, write_summary_csv, write_raven_selection_table) + tests/test_batch_runner.py
 - [x] 04-03-PLAN.md — scripts/batch_process.py CLI entrypoint (--synthetic mode, progress feedback, output dir structure)
-- [ ] 04-04-PLAN.md — api/ package (main.py, jobs.py, models.py, all 5 route files) + tests/test_api.py
+- [x] 04-04-PLAN.md — api/ package (main.py, jobs.py, models.py, all 5 route files) + tests/test_api.py
 
 ### Phase 5: React Frontend & Demo
 **Goal**: Judges can use the web demo to see before/after spectrograms with the harmonic comb mask overlay, toggle A/B audio, compare against LALAL.AI, and browse confidence scores across all 212 calls
@@ -109,6 +109,6 @@ Plans:
 | 1. Pipeline Foundation | 3/3 | Complete | 2026-04-11 |
 | 2. Harmonic Detection & Denoising | 2/2 | Complete | 2026-04-12 |
 | 3. Demo Spectrograms & Measurements | 1/1 | Complete   | 2026-04-12 |
-| 4. Batch Processing & API | 2/4 | In Progress|  |
+| 4. Batch Processing & API | 4/4 | Complete   | 2026-04-12 |
 | 5. React Frontend & Demo | 0/TBD | Not started | - |
 | 6. Multi-Speaker Separation | 0/TBD | Not started | - |
