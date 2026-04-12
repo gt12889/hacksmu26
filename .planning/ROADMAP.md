@@ -159,7 +159,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 09-01-PLAN.md — Generate spectrogram PNGs in batch_runner (API-05) + MIN_TRACK_FRAMES short-track filter + test (MULTI-02)
+- [x] 09-01-PLAN.md — Generate spectrogram PNGs in batch_runner (API-05) + MIN_TRACK_FRAMES short-track filter + test (MULTI-02)
 
 ## Progress
 

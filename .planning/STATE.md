@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: "Completed 08-frontend-component-integration 08-01-PLAN.md (checkpoint: awaiting visual browser verify)"
-last_updated: "2026-04-12T15:02:24.860Z"
+stopped_at: Completed 09-polish-remaining-gaps/09-01-PLAN.md
+last_updated: "2026-04-12T15:12:03.633Z"
 progress:
   total_phases: 9
-  completed_phases: 8
-  total_plans: 18
-  completed_plans: 18
+  completed_phases: 9
+  total_plans: 19
+  completed_plans: 19
 ---
 
 # Project State
@@ -19,11 +19,11 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-11)
 
 **Core value:** Denoise elephant vocalizations by exploiting their harmonic integer-multiple structure — surgical extraction where generic AI tools fail on infrasonic content
-**Current focus:** Phase 08 — Frontend Component Integration
+**Current focus:** Phase 09 — Polish Remaining Gaps
 
 ## Current Position
 
-Phase: 08 (Frontend Component Integration) — EXECUTING
+Phase: 09 (Polish Remaining Gaps) — EXECUTING
 Plan: 1 of 1
 
 ## Performance Metrics
@@ -64,6 +64,7 @@ Plan: 1 of 1
 | Phase 06-multi-speaker-separation P02 | 25 | 1 tasks | 1 files |
 | Phase 07-demo-audio-proxy-fixes P01 | 5 | 3 tasks | 3 files |
 | Phase 08 P01 | 173 | 2 tasks | 4 files |
+| Phase 09-polish-remaining-gaps P01 | 15 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -120,6 +121,8 @@ Recent decisions affecting current work:
 - [Phase 07-demo-audio-proxy-fixes]: make_demo_figure returns 3-tuple (png, clean_wav, original_wav) — enables frontend A/B toggle
 - [Phase 07-demo-audio-proxy-fixes]: Both Vite proxy rules target port 8000 — FastAPI is a single process, split ports were a configuration bug
 - [Phase 08]: noisyUrl for uploads = uploadAudioUrl(fileId); cleanUrl = audioUrl(jobId, 0); batch rows use batchAudioUrl(clean_wav_path) with noisyUrl=null
+- [Phase 09-polish-remaining-gaps]: PNG generation in run_batch is best-effort (try/except) so batch never crashes for plot failures
+- [Phase 09-polish-remaining-gaps]: Short-track filter zeros tracks (not removes) to preserve output shape (n_tracks, n_frames)
 
 ### Pending Todos
 
@@ -133,6 +136,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-12T15:02:24.858Z
-Stopped at: Completed 08-frontend-component-integration 08-01-PLAN.md (checkpoint: awaiting visual browser verify)
+Last session: 2026-04-12T15:12:03.630Z
+Stopped at: Completed 09-polish-remaining-gaps/09-01-PLAN.md
 Resume file: None
