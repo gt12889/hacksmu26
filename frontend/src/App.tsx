@@ -371,7 +371,7 @@ function ComparisonSection() {
           </ul>
         </div>
         <div className="compare-card ours">
-          <h3 className="compare-title">ElephantVoices Denoiser</h3>
+          <h3 className="compare-title">ElePhone</h3>
           <ul className="compare-list">
             <li><span className="check">✓</span> n_fft=8192 → 5.4 Hz / bin  resolves individual elephant harmonics</li>
             <li><span className="check">✓</span> NSSH detects f0 even when the fundamental is fully masked by noise</li>
@@ -714,7 +714,7 @@ function AppHeader({ route, navigate }: { route: Route; navigate: (r: Route) => 
           >
             <span className="logo-mark">🐘</span>
             <div>
-              <span className="logo-text">ElephantVoices Denoiser</span>
+              <span className="logo-text">ElePhone</span>
               <span className="logo-sub">Harmonic Comb Masking · Infrasonic Bioacoustics</span>
             </div>
           </a>
@@ -790,7 +790,7 @@ function HomePage({ navigate }: { navigate: (r: Route) => void }) {
         <div className="hero-inner hero-split">
           <div className="hero-text">
             <div className="hero-eyebrow fade-up fade-up-1">
-              HACKSMU 2026 · ELEPHANTVOICES
+              HACKSMU 2026 · ELEPHONE
             </div>
             <h1 className="hero-headline fade-up fade-up-2">
               DENOISE<br />
@@ -828,7 +828,7 @@ function HomePage({ navigate }: { navigate: (r: Route) => void }) {
         borderBottom: '2px solid var(--brown)',
       }}>
         <CurvedLoop
-          marqueeText="🐘 ELEPHANTVOICES · RUMBLE · HARMONIC COMB · SUBHARMONIC SUMMATION · "
+          marqueeText="🐘 ELEPHONE · ELEPHANT RUMBLE · HARMONIC COMB · SUBHARMONIC SUMMATION · "
           speed={1.5}
           curveAmount={180}
           direction="left"
@@ -1332,87 +1332,75 @@ function MLComparePage() {
         </div>
       </section>
 
-      {/* Honest result  the interesting finding */}
+      {/* Findings */}
       <section className="section container" style={{ marginTop: '1.5rem' }}>
         <div style={{
-          padding: '1.5rem 1.75rem',
-          background: 'rgba(59, 130, 246, 0.05)',
-          border: '1px solid rgba(59, 130, 246, 0.25)',
-          borderLeft: '4px solid var(--blue)',
+          padding: '1.75rem 2rem',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border)',
           borderRadius: '8px',
         }}>
           <div style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: '0.7rem',
-            color: 'var(--blue)',
+            fontSize: '0.68rem',
+            color: 'var(--text-muted)',
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            marginBottom: '0.6rem',
-            fontWeight: 700,
+            marginBottom: '0.75rem',
           }}>
-            ⚡ Honest result
+            Findings
           </div>
-          <p style={{ fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.65, marginBottom: '0.75rem' }}>
-            We ran three ML approaches  generic spectral gating, a fine-tuned{' '}
-            <strong style={{ color: 'var(--blue)' }}>sklearn MLP</strong>, and a{' '}
-            <strong style={{ color: 'var(--purple)' }}>PyTorch 1D convolutional U-Net</strong>  all trained on the same
-            80 real elephant rumbles (16k frames). Both ML models outperform the baseline.
-            They may match the DSP pipeline on car and plane noise. But this is the{' '}
-            <strong>pitch point</strong>, not a defeat:
+          <p style={{ fontSize: '0.9rem', color: 'var(--text)', lineHeight: 1.65, marginBottom: '0.75rem' }}>
+            Both ML models (sklearn MLP, PyTorch 1D U-Net) trained on 80 labeled rumbles
+            (~16,000 frames) outperform stationary spectral gating. On car and plane noise they
+            are statistically indistinguishable from the DSP pipeline. On generator noise the
+            DSP pipeline recovers measurably more harmonic energy, because engine and elephant
+            harmonic series coincide in frequency and the comb mask encodes that constraint
+            exactly.
           </p>
-          <ul style={{ fontSize: '0.88rem', color: 'var(--text)', lineHeight: 1.7, paddingLeft: '1.25rem', marginBottom: '0.75rem' }}>
+          <ul style={{ fontSize: '0.88rem', color: 'var(--text)', lineHeight: 1.7, paddingLeft: '1.25rem', margin: 0 }}>
             <li>
-              The mathematical DSP pipeline <strong style={{ color: 'var(--green)' }}>wins on generator noise</strong>  the hardest case
-              where engine harmonics directly overlap elephant harmonics and the explicit mathematical prior matters most.
+              The DSP pipeline requires no labeled data. Parameters (f₀ search range,
+              harmonic count, comb bandwidth) generalize to any species with a harmonic call
+              structure.
             </li>
             <li>
-              The DSP pipeline needs <strong>zero training data</strong>. It works on any species with a harmonic series
-              (whales, dolphins, birds) by tuning 3 parameters (f₀ range, harmonic count, comb bandwidth).
+              The ML models were trained with the comb mask as the supervision target.
+              Their accuracy is bounded above by the algorithm they distill.
             </li>
             <li>
-              Both ML models need <strong>80 labeled rumbles per species</strong>. Try that on an endangered species
-              with 10 recordings  or a newly discovered species with zero.
-            </li>
-            <li>
-              Both the sklearn MLP and PyTorch U-Net <strong style={{ color: 'var(--purple)' }}>imitate</strong> the comb mask
-              trained with the DSP pipeline's output as the target. They cannot exceed the ceiling set by the explicit
-              math they were distilled from.
+              Generalization beyond the training distribution (novel species, sparse labels)
+              is an open question for both ML models. The DSP pipeline has no training
+              distribution to leave.
             </li>
           </ul>
-          <p style={{ fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.65, fontWeight: 700, marginBottom: 0 }}>
-            Domain priors give you the ceiling for free. Both ML approaches give you an expensive approximation
-            that only approaches it with enough labeled data  and still can't beat the math on the hardest noise.
-          </p>
         </div>
       </section>
 
-      {/* Final takeaway */}
-      <section className="section container" style={{ marginTop: '1.5rem' }}>
+      {/* Conclusion */}
+      <section className="section container" style={{ marginTop: '1.5rem', marginBottom: '3rem' }}>
         <div style={{
-          padding: '2rem',
-          background: 'var(--green-dim)',
-          border: '1px solid rgba(74, 124, 63, 0.3)',
+          padding: '1.75rem 2rem',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border)',
           borderRadius: '8px',
-          textAlign: 'center',
         }}>
-          <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--green)', marginBottom: '0.75rem' }}>
-            The takeaway
-          </h3>
-          <p style={{ fontSize: '0.95rem', color: 'var(--text)', maxWidth: '72ch', margin: '0 auto' }}>
-            We built four denoisers. Generic spectral gating keeps any strong harmonic structure,
-            including engine noise. Both sklearn and PyTorch learn to approximate the right answer,
-            but require labeled data and still fall short on generator noise, the hardest case.
-            The mathematical DSP pipeline knows elephant rumbles live on a strict k·f₀ series
-            anchored at 10–25 Hz, and builds a surgical mask around exactly those bins.
-          </p>
-          <p style={{
-            fontSize: '0.95rem',
-            color: 'var(--text)',
-            maxWidth: '72ch',
-            margin: '1rem auto 0',
-            fontWeight: 700,
+          <div style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.68rem',
+            color: 'var(--text-muted)',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            marginBottom: '0.75rem',
           }}>
-            Same input. Same compute. Different priors. Measurably cleaner output.
+            Conclusion
+          </div>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text)', lineHeight: 1.65, margin: 0 }}>
+            Four denoisers were evaluated on identical inputs drawn from real field
+            recordings. Performance converges on broadband noise; domain-specific priors
+            diverge from learned approximations on noise that shares the target signal's
+            harmonic structure. The harmonic comb approach offers a data-free baseline that
+            scales to new species without retraining.
           </p>
         </div>
       </section>
@@ -1525,7 +1513,7 @@ export default function App() {
           <div className="footer-left">
             Built at <strong>HackSMU 2026</strong> · Southern Methodist University ·{' '}
             <span style={{ color: 'var(--green)', fontFamily: 'var(--font-mono)', fontSize: '0.72rem' }}>
-              🐘 ElephantVoices Denoiser
+              🐘 ElePhone
             </span>
           </div>
           <div className="footer-links">
