@@ -106,7 +106,11 @@ Plans:
   2. Crossing harmonics are correctly identified (harmonics from different callers cross; same-caller harmonics never cross)
   3. Separate cleaned WAV files are exported per detected caller
   4. A multi-speaker spectrogram figure shows separated f0 tracks in different colors
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — pipeline/multi_speaker.py + tests/test_multi_speaker.py (TDD: detect_f0_shs_topk, link_f0_tracks, separate_speakers, is_multi_speaker, is_harmonic_overlap)
+- [ ] 06-02-PLAN.md — scripts/demo_multi_speaker.py (MULTI-04 figure: spectrogram + two colored f0 tracks + per-caller WAV export)
 
 ## Progress
 
@@ -117,4 +121,4 @@ Plans:
 | 3. Demo Spectrograms & Measurements | 1/1 | Complete   | 2026-04-12 |
 | 4. Batch Processing & API | 4/4 | Complete   | 2026-04-12 |
 | 5. React Frontend & Demo | 4/4 | Complete   | 2026-04-12 |
-| 6. Multi-Speaker Separation | 0/TBD | Not started | - |
+| 6. Multi-Speaker Separation | 0/2 | Not started | - |
