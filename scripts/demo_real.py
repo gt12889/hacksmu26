@@ -28,6 +28,8 @@ from pipeline.config import HOP_LENGTH
 from pipeline.noise_classifier import classify_noise_type
 from pipeline.harmonic_processor import process_call
 from pipeline.ingestor import extract_noise_gaps
+from pipeline.scoring import compute_harmonic_integrity
+from pipeline.spectrogram import compute_stft
 from scripts.demo_spectrograms import make_demo_figure
 
 
@@ -110,6 +112,16 @@ def process_real_call(
 
     f0 = ctx["f0_contour"]
     valid = f0[f0 > 0]
+
+    # Harmonic integrity: before (raw) and after (cleaned)
+    integrity_before = compute_harmonic_integrity(
+        ctx["magnitude"], ctx["f0_contour"], ctx["freq_bins"]
+    )
+    ctx_clean = compute_stft(ctx["audio_clean"], sr)
+    integrity_after = compute_harmonic_integrity(
+        ctx_clean["magnitude"], ctx["f0_contour"], ctx_clean["freq_bins"]
+    )
+
     return {
         "noise_type": noise_type,
         "filename": filename,
@@ -122,6 +134,8 @@ def process_real_call(
         "f0_max_hz": float(valid.max()) if len(valid) > 0 else 0.0,
         "valid_frames": int(len(valid)),
         "total_frames": int(len(f0)),
+        "harmonic_integrity_before": integrity_before,
+        "harmonic_integrity_after": integrity_after,
         "figure_paths": [str(p) for p in figure_paths],
     }
 
@@ -158,9 +172,11 @@ def main() -> int:
         try:
             r = process_real_call(nt, info["filename"], info["start"], info["end"], args.output_dir)
             results.append(r)
-            print(f"  ✓ f0 median={r['f0_median_hz']:.1f}Hz range=[{r['f0_min_hz']:.1f}, {r['f0_max_hz']:.1f}]  "
+            print(f"  f0 median={r['f0_median_hz']:.1f}Hz range=[{r['f0_min_hz']:.1f}, {r['f0_max_hz']:.1f}]  "
                   f"detected_as={r['detected_as']}  valid_frames={r['valid_frames']}/{r['total_frames']}")
-            print(f"  ✓ Files: {', '.join(Path(p).name for p in r['figure_paths'])}")
+            print(f"  harmonic_integrity: {r['harmonic_integrity_before']:.1f}% -> {r['harmonic_integrity_after']:.1f}%"
+                  f"  (delta: {r['harmonic_integrity_after'] - r['harmonic_integrity_before']:+.1f}%)")
+            print(f"  Files: {', '.join(Path(p).name for p in r['figure_paths'])}")
         except Exception as e:
             print(f"  ✗ FAILED: {e}")
             import traceback
