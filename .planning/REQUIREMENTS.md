@@ -34,50 +34,36 @@
 - [ ] **CLEAN-02**: System uses stationary noisereduce with noise profile for generator-type recordings
 - [ ] **CLEAN-03**: System selects cleanup strategy based on noise type classification
 
-### Batch Processing
+### Demo Spectrograms & Acoustic Measurements
 
-- [ ] **BATCH-01**: System processes all 212 calls through full pipeline without manual intervention
-- [ ] **BATCH-02**: System computes per-call confidence score (0-100%) based on: harmonics survived, SNR improvement, harmonic integrity
-- [ ] **BATCH-03**: System exports each cleaned call as standalone WAV at native sample rate
-- [ ] **BATCH-04**: System generates summary CSV with metrics per call (filename, f0, SNR_before, SNR_after, confidence, noise_type)
-- [ ] **BATCH-05**: System exports in Raven Pro compatible format (WAV + selection table .txt)
-
-### Web API
-
-- [ ] **API-01**: POST /api/upload accepts audio file and stores it
-- [ ] **API-02**: POST /api/process triggers pipeline on uploaded file, returns job ID
-- [ ] **API-03**: GET /api/status/{job_id} returns processing status and progress
-- [ ] **API-04**: GET /api/result/{job_id} returns cleaned audio + spectrogram data
-- [ ] **API-05**: GET /api/batch/summary returns batch processing summary
-- [ ] **API-06**: API uses BackgroundTasks for async processing (no synchronous blocking)
-
-### Web Frontend
-
-- [ ] **UI-01**: Before/after spectrogram display with harmonic comb mask overlay in distinct color
-- [ ] **UI-02**: Audio playback with A/B toggle between noisy and cleaned at same timestamp
-- [ ] **UI-03**: Side-by-side comparison panel: Original | LALAL.AI | Our result with SNR metrics
-- [ ] **UI-04**: Confidence dashboard with sortable/filterable table of all processed calls
-- [ ] **UI-05**: Click any row in dashboard to view spectrogram and play audio
-
-## v2 Requirements (Stretch)
+- [ ] **DEMO-01**: Script processes one representative call per noise type (generator, car, plane) through full pipeline
+- [ ] **DEMO-02**: Generates publication-quality before/after spectrogram figures (matplotlib, 300dpi) with labeled axes, colorbar, title per noise type
+- [ ] **DEMO-03**: Overlays detected f0 contour on cleaned spectrogram as a traced line
+- [ ] **DEMO-04**: Annotates harmonic spacing markers (f0, 2f0, 3f0...) on spectrogram with labeled arrows/lines
+- [ ] **DEMO-05**: Displays SNR improvement (dB), call duration, and detected f0 range as text annotations on each figure
+- [ ] **DEMO-06**: Generates side-by-side 3-panel figure per noise type: original | comb mask overlay | cleaned result
+- [ ] **DEMO-07**: Exports cleaned WAV files alongside figures for audio playback during pitch
 
 ### Multi-Speaker Separation
 
-- **MULTI-01**: System detects multiple f0 tracks when elephants vocalize simultaneously
-- **MULTI-02**: System identifies crossing harmonics to distinguish different callers
-- **MULTI-03**: System outputs separate cleaned WAV per detected caller
+- [ ] **MULTI-01**: System detects multiple f0 tracks when elephants vocalize simultaneously
+- [ ] **MULTI-02**: System identifies crossing harmonics to distinguish different callers
+- [ ] **MULTI-03**: System outputs separate cleaned WAV per detected caller
+- [ ] **MULTI-04**: Generates multi-speaker spectrogram figure showing separated f0 tracks in different colors
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
 | ML model training (U-Net, GAN) | Not feasible on 44 recordings in 24 hours |
-| Real-time field deployment | Hackathon demo only, not production system |
-| Mobile app | Web demo sufficient for judges |
+| FastAPI / REST API | Pivot: judges want spectrograms, not a platform |
+| React web frontend / dashboard | Pivot: notebook-style demo with publication figures is more impactful |
+| Batch processing all 212 calls | 3 representative calls (one per noise type) is the right demo |
+| Confidence dashboard / sorting | Overbuilt for a hackathon pitch |
+| LALAL.AI comparison panel | Can mention verbally; not worth building UI for |
+| Raven Pro export | Nice-to-have but not demo-critical |
+| Real-time field deployment | Hackathon demo only |
 | Cloud deployment / multi-tenancy | Local demo for hackathon |
-| Real-time streaming processing | Wrong use case for research workflow |
-| Automated recording acquisition | Data already in hand |
-| WebSocket-based job updates | Poll-based is 2hrs faster to build, works fine |
 
 ## Traceability
 
@@ -100,28 +86,23 @@
 | CLEAN-01 | Phase 2 | Pending |
 | CLEAN-02 | Phase 2 | Pending |
 | CLEAN-03 | Phase 2 | Pending |
-| BATCH-01 | Phase 3 | Pending |
-| BATCH-02 | Phase 3 | Pending |
-| BATCH-03 | Phase 3 | Pending |
-| BATCH-04 | Phase 3 | Pending |
-| BATCH-05 | Phase 3 | Pending |
-| API-01 | Phase 3 | Pending |
-| API-02 | Phase 3 | Pending |
-| API-03 | Phase 3 | Pending |
-| API-04 | Phase 3 | Pending |
-| API-05 | Phase 3 | Pending |
-| API-06 | Phase 3 | Pending |
-| UI-01 | Phase 4 | Pending |
-| UI-02 | Phase 4 | Pending |
-| UI-03 | Phase 4 | Pending |
-| UI-04 | Phase 4 | Pending |
-| UI-05 | Phase 4 | Pending |
+| DEMO-01 | Phase 3 | Pending |
+| DEMO-02 | Phase 3 | Pending |
+| DEMO-03 | Phase 3 | Pending |
+| DEMO-04 | Phase 3 | Pending |
+| DEMO-05 | Phase 3 | Pending |
+| DEMO-06 | Phase 3 | Pending |
+| DEMO-07 | Phase 3 | Pending |
+| MULTI-01 | Phase 4 | Pending |
+| MULTI-02 | Phase 4 | Pending |
+| MULTI-03 | Phase 4 | Pending |
+| MULTI-04 | Phase 4 | Pending |
 
 **Coverage:**
-- v1 requirements: 33 total
-- Mapped to phases: 33
+- v1 requirements: 30 total
+- Mapped to phases: 30
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-04-11*
-*Last updated: 2026-04-11 after initial definition*
+*Last updated: 2026-04-11 after pivot to focused demo direction*

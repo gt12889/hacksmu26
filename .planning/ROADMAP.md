@@ -2,14 +2,14 @@
 
 ## Overview
 
-Four phases from raw field recordings to judge-ready demo. Phase 1 builds the validated data ingestion and spectral analysis foundation. Phase 2 implements the core differentiator — harmonic comb masking — and proves it works on real calls. Phase 3 scales to all 212 calls and wraps the pipeline in a FastAPI layer. Phase 4 delivers the React frontend that makes the science visible to judges.
+Four phases from raw field recordings to judge-ready demo. Phase 1 builds the validated data ingestion and spectral analysis foundation. Phase 2 implements the core differentiator — harmonic comb masking — and proves it works on real calls. Phase 3 generates publication-quality before/after spectrograms with acoustic measurements for the pitch. Phase 4 tackles multi-speaker separation for overlapping elephant calls.
 
 ## Phases
 
 - [x] **Phase 1: Pipeline Foundation** - Ingest, segment, and compute high-res spectrograms from field recordings (completed 2026-04-11)
 - [ ] **Phase 2: Harmonic Detection & Denoising** - Detect elephant f0, build comb mask, apply residual cleanup — proven on real calls
-- [ ] **Phase 3: Batch Processing & API** - Scale to all 212 calls with confidence scoring and FastAPI layer
-- [ ] **Phase 4: React Frontend & Demo** - Spectrogram visualization, A/B audio toggle, LALAL.AI comparison, confidence dashboard
+- [ ] **Phase 3: Demo Spectrograms & Measurements** - Publication-quality before/after figures with f0 contours, harmonic markers, and SNR annotations for pitch
+- [ ] **Phase 4: Multi-Speaker Separation** - Detect and separate overlapping elephant calls using crossing harmonic analysis
 
 ## Phase Details
 
@@ -41,34 +41,34 @@ Plans:
   4. Noise cleanup strategy differs between generator recordings (stationary profile) and car/plane recordings (non-stationary), and selection is automatic
 **Plans**: TBD
 
-### Phase 3: Batch Processing & API
-**Goal**: All 212 calls are processed through the full pipeline in one command, with per-call confidence scores and Raven Pro exports, served via a FastAPI layer that accepts uploads and returns results asynchronously
+### Phase 3: Demo Spectrograms & Measurements
+**Goal**: One representative call per noise type (generator, car, plane) is processed through the full pipeline and presented as publication-quality before/after spectrograms with f0 contour overlays, harmonic spacing markers, SNR annotations, and exported cleaned audio — ready to show judges
 **Depends on**: Phase 2
-**Requirements**: BATCH-01, BATCH-02, BATCH-03, BATCH-04, BATCH-05, API-01, API-02, API-03, API-04, API-05, API-06
+**Requirements**: DEMO-01, DEMO-02, DEMO-03, DEMO-04, DEMO-05, DEMO-06, DEMO-07
 **Success Criteria** (what must be TRUE):
-  1. A single batch command processes all 212 calls without crashing or requiring intervention, outputting 212 cleaned WAVs at native sample rate
-  2. The summary CSV contains one row per call with filename, f0, SNR_before, SNR_after, confidence score (0-100%), and noise type
-  3. Raven Pro selection table (.txt) is exported alongside cleaned WAVs and can be loaded in Raven Pro without errors
-  4. POST /api/upload → POST /api/process → GET /api/status/{job_id} → GET /api/result/{job_id} completes end-to-end without blocking the server — processing happens in BackgroundTasks
-  5. GET /api/batch/summary returns aggregate metrics across all 212 processed calls
+  1. Running the demo script produces 3 sets of figures (one per noise type) with no manual intervention
+  2. Each figure shows before/after spectrograms side-by-side with the comb mask as a visible overlay panel
+  3. f0 contour is traced as a line on the cleaned spectrogram, with harmonic multiples (2f0, 3f0...) marked
+  4. SNR improvement (dB), call duration, and f0 range are annotated as text on each figure
+  5. Three cleaned WAV files are exported alongside the figures for audio playback during pitch
 **Plans**: TBD
 
-### Phase 4: React Frontend & Demo
-**Goal**: Judges can use the web demo to see before/after spectrograms with the harmonic comb mask overlay, toggle A/B audio, compare against LALAL.AI, and browse confidence scores across all 212 calls
-**Depends on**: Phase 3
-**Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05
+### Phase 4: Multi-Speaker Separation
+**Goal**: When multiple elephants vocalize simultaneously, the system detects separate f0 tracks, identifies crossing harmonics, and outputs individual cleaned tracks per caller — demonstrated on at least one overlapping call
+**Depends on**: Phase 2
+**Requirements**: MULTI-01, MULTI-02, MULTI-03, MULTI-04
 **Success Criteria** (what must be TRUE):
-  1. The spectrogram panel shows the noisy input and cleaned output side-by-side with the harmonic comb mask rendered in a distinct color as an overlay
-  2. The A/B audio toggle switches playback between noisy and cleaned audio at the same timestamp with a single button click
-  3. The three-panel comparison (Original | LALAL.AI | Our result) shows SNR metrics beneath each panel — demonstrating our domain-specific advantage
-  4. The confidence dashboard table is sortable and filterable; clicking any row loads that call's spectrogram and audio into the main view
+  1. On a recording with known overlapping calls, the system detects 2+ distinct f0 tracks
+  2. Crossing harmonics are correctly identified (harmonics from different callers cross; same-caller harmonics never cross)
+  3. Separate cleaned WAV files are exported per detected caller
+  4. A multi-speaker spectrogram figure shows separated f0 tracks in different colors
 **Plans**: TBD
 
 ## Progress
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Pipeline Foundation | 3/3 | Complete   | 2026-04-11 |
+| 1. Pipeline Foundation | 3/3 | Complete | 2026-04-11 |
 | 2. Harmonic Detection & Denoising | 0/TBD | Not started | - |
-| 3. Batch Processing & API | 0/TBD | Not started | - |
-| 4. React Frontend & Demo | 0/TBD | Not started | - |
+| 3. Demo Spectrograms & Measurements | 0/TBD | Not started | - |
+| 4. Multi-Speaker Separation | 0/TBD | Not started | - |

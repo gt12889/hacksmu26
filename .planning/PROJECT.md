@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A domain-specific audio denoising system for ElephantVoices that extracts elephant vocalizations from field recordings contaminated by mechanical noise (generators, cars, planes). Built for HackSMU 2026, it exploits the strict harmonic structure of elephant rumbles to surgically isolate calls even when they share the exact same frequency band as the noise. Delivered as a Python pipeline + FastAPI + React web demo.
+A domain-specific audio denoising system for ElephantVoices that extracts elephant vocalizations from field recordings contaminated by mechanical noise (generators, cars, planes). Built for HackSMU 2026, it exploits the strict harmonic structure of elephant rumbles to surgically isolate calls even when they share the exact same frequency band as the noise. Delivered as a Python pipeline with publication-quality spectrogram figures and acoustic measurements for a focused pitch demo.
 
 ## Core Value
 
@@ -12,33 +12,30 @@ Denoise elephant vocalizations by exploiting their harmonic integer-multiple str
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Parse spreadsheet timestamps and auto-segment calls — Phase 1
+- ✓ Classify noise type per recording (generator, car, plane) — Phase 1
+- ✓ Compute high-resolution spectrograms with n_fft=8192+ — Phase 1
+- ✓ Preserve phase for artifact-free ISTFT reconstruction — Phase 1
 
 ### Active
 
-- [ ] Parse spreadsheet timestamps and auto-segment 212 calls from 44 recordings
-- [ ] Classify noise type per recording (generator, car, plane) to adapt strategy
-- [ ] Compute high-resolution spectrograms with n_fft=8192+ for infrasonic frequency resolution
 - [ ] Apply HPSS with Zeppelzauer spectro-temporal enhancement to separate harmonic content
 - [ ] Detect elephant f0 via subharmonic summation (exploiting stronger 2nd harmonic)
 - [ ] Build time-varying harmonic comb masks at integer multiples of detected f0
 - [ ] Apply residual noise cleanup via noisereduce spectral gating
-- [ ] Batch process all 212 calls with per-call confidence scoring (0-100%)
-- [ ] Export cleaned calls as standalone WAVs compatible with Raven Pro
-- [ ] Serve results via FastAPI with upload/process/result endpoints
-- [ ] Visualize before/after spectrograms with harmonic comb mask overlay
-- [ ] Audio playback with A/B toggle between noisy and cleaned versions
-- [ ] Side-by-side comparison against LALAL.AI to demonstrate domain-specific advantage
-- [ ] Separate overlapping multi-elephant calls into individual caller tracks (stretch)
-- [ ] Dashboard with sortable/filterable confidence scores across all 212 calls
+- [ ] Generate publication-quality before/after spectrograms (one per noise type) with f0 contour overlays, harmonic spacing markers, and SNR annotations
+- [ ] Export cleaned WAVs alongside figures for audio playback during pitch
+- [ ] Detect and separate overlapping multi-elephant calls into individual caller tracks
 
 ### Out of Scope
 
 - ML model training (U-Net, GAN) — not feasible on 44 recordings in 24 hours
+- FastAPI / REST API — pivot: judges want spectrograms, not a platform
+- React web frontend / dashboard — notebook-style demo with publication figures is more impactful
+- Batch processing all 212 calls — 3 representative calls (one per noise type) is the right demo
+- Confidence dashboard / sorting — overbuilt for a hackathon pitch
 - Real-time field deployment or mobile app — hackathon demo only
 - Cloud deployment or multi-tenancy — local demo for judges
-- Automated recording acquisition — data already in hand
-- Modification of original recordings — always output new files
 
 ## Context
 
@@ -53,9 +50,10 @@ Denoise elephant vocalizations by exploiting their harmonic integer-multiple str
 
 - **Timeline:** 24 hours (HackSMU hackathon)
 - **Team:** 2-3 people working in parallel
-- **Tech stack:** Python (librosa, noisereduce, scipy, numpy, pandas) + FastAPI + React (Vite + TypeScript)
+- **Tech stack:** Python (librosa, noisereduce, scipy, numpy, pandas, matplotlib) — no web framework needed
 - **FFT resolution:** Must use n_fft=8192+ (most teams use 1024 → garbage below 50Hz)
-- **Data:** 44 recordings, 212 calls — pipeline must handle all without manual intervention
+- **Demo format:** 3 representative calls (one per noise type) with publication-quality spectrograms, not a web platform
+- **Pitch style:** "Here are three spectrograms, before and after, one per noise type" — not "here's our platform"
 
 ## Key Decisions
 
@@ -64,8 +62,10 @@ Denoise elephant vocalizations by exploiting their harmonic integer-multiple str
 | Harmonic comb masking over generic ML | Exploits domain-specific structure, no training data needed, works in 24hrs | — Pending |
 | Subharmonic summation for f0 detection | 2nd harmonic stronger than fundamental; detecting f0 from harmonics is more robust | — Pending |
 | n_fft=8192 over default 1024 | Need ~5Hz frequency resolution for infrasonic fundamentals at 10-20Hz | — Pending |
-| Python + FastAPI + React | Team familiarity, rich DSP ecosystem (librosa), fast web demo | — Pending |
+| Python + FastAPI + React | Team familiarity, rich DSP ecosystem (librosa), fast web demo | ⚠️ Revisit — pivoted to notebook-style demo |
 | LALAL.AI as baseline, not primary tool | Trained on speech/music, fails on infrasonic; useful as comparison foil | — Pending |
+| Pivot from web platform to publication spectrograms | Judges want to see 3 before/after spectrograms with acoustic measurements, not a dashboard. Demo = science, not software. | ✓ Good |
+| Multi-speaker separation promoted to v1 | Directly addresses ElephantVoices' hardest unsolved problem; more impactful than batch processing 212 calls | ✓ Good |
 
 ## Evolution
 
@@ -85,4 +85,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-11 after initialization*
+*Last updated: 2026-04-11 after pivot to focused demo direction*
