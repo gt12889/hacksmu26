@@ -17,7 +17,7 @@ const NOISE_CONFIG = {
     dimColor: 'var(--orange-dim)',
     borderColor: 'rgba(255, 124, 42, 0.3)',
     icon: '⚡',
-    description: 'Constant 30 Hz tonal hum — engine fundamentals overlap directly with elephant f0 range.',
+    description: 'Constant 30 Hz tonal hum  engine fundamentals overlap directly with elephant f0 range.',
     detail: 'Generator noise produces a steady harmonic series at ~30 Hz. Because elephant rumbles also have fundamentals at 10–25 Hz, the 2nd harmonic of a generator (60 Hz) lands squarely on elephant 4f0. Generic tools trained on speech mistakenly preserve the engine tone. Our stationary noisereduce profile mode eliminates it cleanly.',
   },
   car: {
@@ -26,7 +26,7 @@ const NOISE_CONFIG = {
     dimColor: 'var(--blue-dim)',
     borderColor: 'rgba(59, 130, 246, 0.3)',
     icon: '🚗',
-    description: 'Transient broadband burst — engine startup and idle spread energy across the full infrasonic band.',
+    description: 'Transient broadband burst  engine startup and idle spread energy across the full infrasonic band.',
     detail: 'Car engine noise is non-stationary: it sweeps rapidly as RPM changes, contaminating wide frequency bands in short bursts. We use adaptive non-stationary spectral gating after comb masking to clean the residual. The comb mask already removed most car harmonics that overlapped elephant content.',
   },
   plane: {
@@ -35,7 +35,7 @@ const NOISE_CONFIG = {
     dimColor: 'var(--purple-dim)',
     borderColor: 'rgba(107, 63, 160, 0.3)',
     icon: '✈️',
-    description: 'Slow-sweep harmonic drone — aircraft flyover sweeps through the entire elephant frequency range.',
+    description: 'Slow-sweep harmonic drone  aircraft flyover sweeps through the entire elephant frequency range.',
     detail: 'Aircraft noise is the hardest case: the engine drone slowly sweeps from below elephant f0 through its harmonic range and out the other side. Our time-varying comb mask tracks elephant f0 frame-by-frame, so even as plane noise sweeps through, the mask stays locked on elephant harmonics and rejects everything else.',
   },
 } as const
@@ -142,7 +142,7 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
         )}
         <img
           src={`/static/demo/${noiseType}_demo.png`}
-          alt={`${noiseType} noise — before/after spectrogram`}
+          alt={`${noiseType} noise  before/after spectrogram`}
           style={{
             display: 'block',
             opacity: imgLoaded ? 1 : 0,
@@ -160,7 +160,7 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
           <span className="metric-value">
             {metrics?.harmonic_dominance_baseline !== undefined
               ? `${metrics.harmonic_dominance_baseline.toFixed(1)}%`
-              : '—'}
+              : ''}
           </span>
         </div>
         <div className="metric">
@@ -168,7 +168,7 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
           <span className="metric-value positive">
             {metrics?.harmonic_dominance_ours !== undefined
               ? `${metrics.harmonic_dominance_ours.toFixed(1)}%`
-              : '—'}
+              : ''}
           </span>
         </div>
         <div className="metric">
@@ -176,25 +176,25 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
           <span className="metric-value positive">
             {metrics?.harmonic_dominance_delta !== undefined
               ? `${metrics.harmonic_dominance_delta >= 0 ? '+' : ''}${metrics.harmonic_dominance_delta.toFixed(1)}%`
-              : '—'}
+              : ''}
           </span>
         </div>
         <div className="metric">
           <span className="metric-label">f₀ Range</span>
           <span className="metric-value cyan" style={{ fontSize: '0.72rem' }}>
-            {metrics ? `${metrics.f0_min.toFixed(0)}–${metrics.f0_max.toFixed(0)} Hz` : '—'}
+            {metrics ? `${metrics.f0_min.toFixed(0)}–${metrics.f0_max.toFixed(0)} Hz` : ''}
           </span>
         </div>
         <div className="metric">
           <span className="metric-label">f₀ Median</span>
           <span className="metric-value cyan">
-            {metrics ? `${metrics.f0_median.toFixed(1)} Hz` : '—'}
+            {metrics ? `${metrics.f0_median.toFixed(1)} Hz` : ''}
           </span>
         </div>
         <div className="metric">
           <span className="metric-label">Duration</span>
           <span className="metric-value">
-            {metrics ? `${metrics.duration.toFixed(1)}s` : '—'}
+            {metrics ? `${metrics.duration.toFixed(1)}s` : ''}
           </span>
         </div>
       </div>
@@ -275,7 +275,7 @@ function NotReadyPanel({ onGenerate }: { onGenerate: () => void }) {
     <div className="not-ready-panel">
       <h3>Demo Not Yet Generated</h3>
       <p>
-        Click below to run the full denoising pipeline on synthetic test audio —
+        Click below to run the full denoising pipeline on synthetic test audio 
         generator, car, and aircraft noise types.
         Processing takes ~30–90 seconds.
       </p>
@@ -305,7 +305,7 @@ function ScienceSection() {
           <p className="science-body">
             Elephant rumbles produce energy at <strong>exact integer multiples</strong> of a
             fundamental frequency (f0 = 8–25 Hz, harmonics up to 1 kHz).
-            Critically, the <strong>2nd harmonic is stronger than the fundamental</strong> — so
+            Critically, the <strong>2nd harmonic is stronger than the fundamental</strong>  so
             we detect f0 via subharmonic summation (NSSH), not direct peak picking.
           </p>
           <div className="science-formula">
@@ -320,7 +320,7 @@ function ScienceSection() {
           <p className="science-body">
             A <strong>time-varying soft comb filter</strong> is built at each detected f0 frame.
             It passes only frequencies at kf0 (±5 Hz bandwidth), rejecting everything else.
-            Engine noise at 30 Hz, 60 Hz, 90 Hz — <strong>eliminated</strong>, even when it
+            Engine noise at 30 Hz, 60 Hz, 90 Hz  <strong>eliminated</strong>, even when it
             directly overlaps elephant harmonics.
           </p>
           <div className="science-formula">
@@ -336,7 +336,7 @@ function ScienceSection() {
           <p className="science-body">
             LALAL.AI and media.io are trained on <strong>speech and music (100–8000 Hz)</strong>.
             They have no concept of infrasonic content. Our method exploits the
-            <strong> mathematical structure unique to elephant vocalizations</strong> —
+            <strong> mathematical structure unique to elephant vocalizations</strong> 
             30% higher precision/recall than spectrogram cross-correlation at low SNR.
           </p>
           <div className="science-formula">
@@ -363,7 +363,7 @@ function ComparisonSection() {
         <div className="compare-card">
           <h3 className="compare-title">LALAL.AI / Generic AI Tools</h3>
           <ul className="compare-list">
-            <li><span className="cross">✗</span> Trained on speech (300–3400 Hz) and music — no infrasonic knowledge</li>
+            <li><span className="cross">✗</span> Trained on speech (300–3400 Hz) and music  no infrasonic knowledge</li>
             <li><span className="cross">✗</span> Cannot resolve 5 Hz frequency differences at 44.1 kHz with n_fft=1024</li>
             <li><span className="cross">✗</span> Treats engine harmonics at 30/60/90 Hz as "signal to preserve"</li>
             <li><span className="cross">✗</span> No awareness of elephant harmonic structure</li>
@@ -373,11 +373,11 @@ function ComparisonSection() {
         <div className="compare-card ours">
           <h3 className="compare-title">ElephantVoices Denoiser</h3>
           <ul className="compare-list">
-            <li><span className="check">✓</span> n_fft=8192 → 5.4 Hz / bin — resolves individual elephant harmonics</li>
+            <li><span className="check">✓</span> n_fft=8192 → 5.4 Hz / bin  resolves individual elephant harmonics</li>
             <li><span className="check">✓</span> NSSH detects f0 even when the fundamental is fully masked by noise</li>
             <li><span className="check">✓</span> Time-varying comb mask tracks f0 glides across each call</li>
             <li><span className="check">✓</span> Noise type adaptive: stationary profile for generators, non-stationary for car/plane</li>
-            <li><span className="check">✓</span> Per-call confidence scores — 212 calls ranked for researcher prioritization</li>
+            <li><span className="check">✓</span> Per-call confidence scores  212 calls ranked for researcher prioritization</li>
           </ul>
         </div>
       </div>
@@ -427,7 +427,7 @@ function PipelineVisualizerSection() {
         <p className="section-label">Interactive Pipeline</p>
         <h2 className="section-title">Animated Pipeline Visualizer</h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem', maxWidth: '60ch', marginLeft: 'auto', marginRight: 'auto' }}>
-          Upload any WAV file and watch the full 7-stage denoising pipeline animate in real time —
+          Upload any WAV file and watch the full 7-stage denoising pipeline animate in real time 
           STFT, noise classification, HPSS, SHS f0 detection, comb masking, ISTFT reconstruction,
           and residual spectral gating.
         </p>
@@ -473,7 +473,7 @@ function UploadSection({
         <p className="section-label">Upload Your Recording</p>
         <h2 className="section-title">Process a Field Recording</h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Upload a WAV file — the pipeline will denoise it using harmonic comb masking
+          Upload a WAV file  the pipeline will denoise it using harmonic comb masking
           and return spectrograms, SNR metrics, and A/B audio.
         </p>
       </div>
@@ -516,7 +516,7 @@ function BatchSection() {
   return (
     <section className="section-alt">
       <div className="section container">
-        {/* Collapsible header — clickable */}
+        {/* Collapsible header  clickable */}
         <button
           type="button"
           onClick={() => setExpanded(e => !e)}
@@ -632,7 +632,7 @@ function MultiSpeakerSection() {
         <p className="section-label">Stretch Goal</p>
         <h2 className="section-title">Multi-Speaker Separation</h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem', maxWidth: '70ch' }}>
-          When two elephants vocalize simultaneously, their harmonic series are independent —
+          When two elephants vocalize simultaneously, their harmonic series are independent 
           their trajectories may cross in the time-frequency plane. We detect multiple f<sub>0</sub>{' '}
           tracks via top-K subharmonic summation, then link them across time with a greedy
           pitch-continuity algorithm. Validated on a synthetic 14 Hz + 18 Hz two-caller mixture.
@@ -785,7 +785,7 @@ function AppHeader({ route, navigate }: { route: Route; navigate: (r: Route) => 
 function HomePage({ navigate }: { navigate: (r: Route) => void }) {
   return (
     <>
-      {/* Hero — industrial, minimal */}
+      {/* Hero  industrial, minimal */}
       <div className="hero">
         <div className="hero-inner hero-split">
           <div className="hero-text">
@@ -879,7 +879,7 @@ function DemoPage({
           <h2 className="section-title">Three Noise Types</h2>
           {status === 'ready' && (
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-              3-panel spectrograms: Original · Comb Mask · Cleaned — y-axis 0–500 Hz
+              3-panel spectrograms: Original · Comb Mask · Cleaned  y-axis 0–500 Hz
             </p>
           )}
         </div>
@@ -1051,7 +1051,7 @@ function MLComparePage() {
                 <strong style={{ color: 'var(--green)' }}>+</strong> Time-varying comb mask at k·f₀ encodes the harmonic prior mathematically
               </li>
               <li style={{ marginBottom: 0 }}>
-                <strong style={{ color: 'var(--green)' }}>+</strong> No training data required — works on any species with a harmonic series
+                <strong style={{ color: 'var(--green)' }}>+</strong> No training data required  works on any species with a harmonic series
               </li>
             </ul>
           </div>
@@ -1072,7 +1072,7 @@ function MLComparePage() {
 
       <div className="divider" />
 
-      {/* The pitch bar — 4 approaches */}
+      {/* The pitch bar  4 approaches */}
       <section className="section container">
         <div style={{
           display: 'grid',
@@ -1094,7 +1094,7 @@ function MLComparePage() {
             </div>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
               Generic spectral-gating. Zero domain knowledge. What 99% of bioacoustic
-              projects use. Preserves any strong harmonic structure — including engines.
+              projects use. Preserves any strong harmonic structure  including engines.
             </p>
           </div>
           <div style={{
@@ -1147,7 +1147,7 @@ function MLComparePage() {
             </div>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
               Domain-specific classical DSP. Detects elephant f₀ via subharmonic summation,
-              builds a narrow comb mask at k·f₀ — encodes the harmonic prior explicitly.
+              builds a narrow comb mask at k·f₀  encodes the harmonic prior explicitly.
               Zero training data required.
             </p>
           </div>
@@ -1311,10 +1311,10 @@ function MLComparePage() {
                       {baseline.toFixed(1)}%
                     </td>
                     <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: 'var(--blue)' }}>
-                      {ml !== null ? `${ml.toFixed(1)}%` : '—'}
+                      {ml !== null ? `${ml.toFixed(1)}%` : ''}
                     </td>
                     <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: 'var(--purple)' }}>
-                      {tc !== null ? `${tc.toFixed(1)}%` : '—'}
+                      {tc !== null ? `${tc.toFixed(1)}%` : ''}
                     </td>
                     <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: 'var(--green)', fontWeight: 700 }}>
                       {ours.toFixed(1)}%
@@ -1333,7 +1333,7 @@ function MLComparePage() {
         </div>
       </section>
 
-      {/* Honest result — the interesting finding */}
+      {/* Honest result  the interesting finding */}
       <section className="section container" style={{ marginTop: '1.5rem' }}>
         <div style={{
           padding: '1.5rem 1.75rem',
@@ -1354,16 +1354,16 @@ function MLComparePage() {
             ⚡ Honest result
           </div>
           <p style={{ fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.65, marginBottom: '0.75rem' }}>
-            We ran three ML approaches — generic spectral gating, a fine-tuned{' '}
+            We ran three ML approaches  generic spectral gating, a fine-tuned{' '}
             <strong style={{ color: 'var(--blue)' }}>sklearn MLP</strong>, and a{' '}
-            <strong style={{ color: 'var(--purple)' }}>PyTorch 1D convolutional U-Net</strong> — all trained on the same
+            <strong style={{ color: 'var(--purple)' }}>PyTorch 1D convolutional U-Net</strong>  all trained on the same
             80 real elephant rumbles (16k frames). Both ML models outperform the baseline.
             They may match our explicit approach on car and plane noise. But this is the{' '}
             <strong>pitch point</strong>, not a defeat:
           </p>
           <ul style={{ fontSize: '0.88rem', color: 'var(--text)', lineHeight: 1.7, paddingLeft: '1.25rem', marginBottom: '0.75rem' }}>
             <li>
-              Our classical approach <strong style={{ color: 'var(--green)' }}>wins on generator noise</strong> — the hardest case
+              Our classical approach <strong style={{ color: 'var(--green)' }}>wins on generator noise</strong>  the hardest case
               where engine harmonics directly overlap elephant harmonics and the explicit mathematical prior matters most.
             </li>
             <li>
@@ -1372,17 +1372,17 @@ function MLComparePage() {
             </li>
             <li>
               Both ML models need <strong>80 labeled rumbles per species</strong>. Try that on an endangered species
-              with 10 recordings — or a newly discovered species with zero.
+              with 10 recordings  or a newly discovered species with zero.
             </li>
             <li>
-              Both the sklearn MLP and PyTorch U-Net <strong style={{ color: 'var(--purple)' }}>imitate</strong> our comb mask —
+              Both the sklearn MLP and PyTorch U-Net <strong style={{ color: 'var(--purple)' }}>imitate</strong> our comb mask 
               trained with our algorithm's output as the target. They cannot exceed the ceiling set by the explicit
               approach they were distilled from.
             </li>
           </ul>
           <p style={{ fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.65, fontWeight: 700, marginBottom: 0 }}>
             Domain priors give you the ceiling for free. Both ML approaches give you an expensive approximation
-            that only approaches it with enough labeled data — and still can't beat the math on the hardest noise.
+            that only approaches it with enough labeled data  and still can't beat the math on the hardest noise.
           </p>
         </div>
       </section>
@@ -1400,9 +1400,9 @@ function MLComparePage() {
             The takeaway
           </h3>
           <p style={{ fontSize: '0.95rem', color: 'var(--text)', maxWidth: '72ch', margin: '0 auto' }}>
-            Generic spectral gating keeps any strong harmonic structure — including engine noise.
+            Generic spectral gating keeps any strong harmonic structure  including engine noise.
             Both sklearn and PyTorch learn to approximate the right answer, but require labeled data
-            and still fall short on generator noise — the hardest case. Our explicit approach knows
+            and still fall short on generator noise  the hardest case. Our explicit approach knows
             elephant rumbles live on a strict k·f₀ series anchored at 10–25 Hz, and builds a
             surgical mask around exactly those bins.
           </p>
@@ -1471,7 +1471,7 @@ export default function App() {
         return
       }
     } catch {}
-    // No backend — check if static demo assets exist
+    // No backend  check if static demo assets exist
     try {
       const res = await fetch('/static/demo/metadata.json')
       if (res.ok) {

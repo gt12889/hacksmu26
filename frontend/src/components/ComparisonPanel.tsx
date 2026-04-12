@@ -23,7 +23,7 @@ export function ComparisonPanel({ result }: ComparisonPanelProps) {
       <Column
         title="LALAL.AI"
         snr={null}
-        note="Generic ML denoiser — fails on infrasonic content. Trained on speech/music, not elephant rumbles."
+        note="Generic ML denoiser  fails on infrasonic content. Trained on speech/music, not elephant rumbles."
         placeholder
       />
       <Column

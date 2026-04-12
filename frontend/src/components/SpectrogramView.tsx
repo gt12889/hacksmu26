@@ -23,7 +23,7 @@ export function SpectrogramView({
 }: SpectrogramViewProps) {
   const [containerWidth, setContainerWidth] = useState(800)
 
-  // CRITICAL: memoize plugins array — recreating on every render re-initializes wavesurfer,
+  // CRITICAL: memoize plugins array  recreating on every render re-initializes wavesurfer,
   // causing an infinite render loop and canvas flicker. See 05-RESEARCH.md Pitfall 2.
   const plugins = useMemo(
     () => [

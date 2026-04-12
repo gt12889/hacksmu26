@@ -1,5 +1,5 @@
 /**
- * PipelineVisualizer — animated 7-stage pipeline demo for judges.
+ * PipelineVisualizer  animated 7-stage pipeline demo for judges.
  *
  * Accepts a WAV file drop/upload, sends it to POST /api/pipeline/visualize,
  * then animates through each pipeline stage using the stage.duration_ms timing.
@@ -165,7 +165,7 @@ function DropZone({ onFile, disabled }: { onFile: (f: File) => void; disabled: b
         Drop a WAV file here
       </p>
       <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-        or click to browse — .wav accepted
+        or click to browse  .wav accepted
       </p>
     </div>
   )
@@ -453,7 +453,7 @@ function StageView({
         }}>
           <span style={{ color: 'cyan' }}>■ Harmonic</span>
           <span style={{ color: 'var(--orange)' }}>■ Percussive</span>
-          <span>— combined view shown</span>
+          <span> combined view shown</span>
         </div>
       )}
 
@@ -772,7 +772,7 @@ export function PipelineVisualizer() {
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div style={{ width: '100%' }}>
-      {/* Drop zone — only show when not yet loaded */}
+      {/* Drop zone  only show when not yet loaded */}
       {!result && !loading && (
         <DropZone onFile={handleFile} disabled={loading} />
       )}
