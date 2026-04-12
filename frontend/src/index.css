@@ -659,3 +659,117 @@ code, .mono { font-family: var(--font-mono); }
 ::-webkit-scrollbar-track { background: var(--bg-warm); }
 ::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--brown); }
+
+/* ─── Upload section ─────────────────────────────────────────────────────── */
+.upload-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.upload-section input[type="file"] {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-right: 1rem;
+}
+
+.upload-section button {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--brown-border);
+  background: var(--brown-dim);
+  color: var(--brown);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.upload-section button:hover:not(:disabled) {
+  background: rgba(93, 66, 4, 0.14);
+  border-color: var(--brown-light);
+}
+
+.upload-section button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ─── Call detail section (shared by upload result and batch row detail) ─── */
+.call-detail-section {
+  background: var(--bg-warm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 2rem;
+  margin-top: 1.5rem;
+}
+
+/* ─── Confidence table section ───────────────────────────────────────────── */
+.confidence-section {
+  overflow-x: auto;
+}
+
+.confidence-section input[type="text"],
+.confidence-section input[placeholder] {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text);
+  outline: none;
+  width: 320px;
+  max-width: 100%;
+}
+
+.confidence-section input:focus {
+  border-color: var(--brown);
+  box-shadow: 0 0 0 2px var(--brown-dim);
+}
+
+.confidence-section table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin-top: 0.75rem;
+}
+
+.confidence-section th {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border-dark);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.confidence-section th:hover {
+  color: var(--brown);
+}
+
+.confidence-section td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.confidence-section tr:hover td {
+  background: var(--bg-warm);
+}
+
+.confidence-section tr[style*="background"] td,
+.confidence-section tbody tr:has(td):focus-visible td {
+  background: rgba(93, 66, 4, 0.06);
+}
