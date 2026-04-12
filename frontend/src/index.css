@@ -28,9 +28,9 @@
   --purple:       #6b3fa0;
   --purple-dim:   rgba(107, 63, 160, 0.1);
 
-  --font-display: 'Lora', Georgia, serif;
-  --font-body:    'Source Sans 3', Arial, sans-serif;
-  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+  --font-display: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    Helvetica, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:    Helvetica, 'Helvetica Neue', Arial, sans-serif;
 
   --radius:       6px;
   --radius-sm:    4px;
@@ -45,8 +45,15 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
+/* Global override: Helvetica Bold everywhere */
+* {
+  font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif !important;
+  font-weight: 700 !important;
+}
+
 body {
-  font-family: var(--font-body);
+  font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
