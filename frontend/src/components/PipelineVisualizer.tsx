@@ -154,7 +154,7 @@ function DropZone({ onFile, disabled }: { onFile: (f: File) => void; disabled: b
         onChange={handleChange}
         disabled={disabled}
       />
-      <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🎵</div>
+      <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}></div>
       <p style={{
         fontFamily: 'var(--font-display)',
         fontSize: '1rem',
@@ -413,7 +413,7 @@ function StageView({
                   marginBottom: '0.4rem',
                   fontWeight: 700,
                 }}>
-                  ⚙ Running stage {stageIndex + 1}/{totalStages}
+                   Running stage {stageIndex + 1}/{totalStages}
                 </div>
                 {loadingMessage}
               </div>
@@ -635,7 +635,7 @@ function StepTracker({
               flexShrink: 0,
               fontFamily: 'var(--font-mono)',
             }}>
-              {done ? '✓' : i + 1}
+              {done ? '' : i + 1}
             </span>
             <span style={{
               fontFamily: 'var(--font-mono)',

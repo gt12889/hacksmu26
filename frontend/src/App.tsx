@@ -16,7 +16,7 @@ const NOISE_CONFIG = {
     color: 'var(--orange)',
     dimColor: 'var(--orange-dim)',
     borderColor: 'rgba(255, 124, 42, 0.3)',
-    icon: '⚡',
+    icon: '',
     description: 'Constant 30 Hz tonal hum  engine fundamentals overlap directly with elephant f0 range.',
     detail: 'Generator noise produces a steady harmonic series at ~30 Hz. Because elephant rumbles also have fundamentals at 10–25 Hz, the 2nd harmonic of a generator (60 Hz) lands squarely on elephant 4f0. Generic tools trained on speech mistakenly preserve the engine tone. Our stationary noisereduce profile mode eliminates it cleanly.',
   },
@@ -25,7 +25,7 @@ const NOISE_CONFIG = {
     color: 'var(--blue)',
     dimColor: 'var(--blue-dim)',
     borderColor: 'rgba(59, 130, 246, 0.3)',
-    icon: '🚗',
+    icon: '',
     description: 'Transient broadband burst  engine startup and idle spread energy across the full infrasonic band.',
     detail: 'Car engine noise is non-stationary: it sweeps rapidly as RPM changes, contaminating wide frequency bands in short bursts. We use adaptive non-stationary spectral gating after comb masking to clean the residual. The comb mask already removed most car harmonics that overlapped elephant content.',
   },
@@ -34,8 +34,8 @@ const NOISE_CONFIG = {
     color: 'var(--purple)',
     dimColor: 'var(--purple-dim)',
     borderColor: 'rgba(107, 63, 160, 0.3)',
-    icon: '✈️',
-    description: 'Slow-sweep harmonic drone  aircraft flyover sweeps through the entire elephant frequency range.',
+    icon: '',
+    description: 'Slow-sweep harmonic drone, aircraft flyover sweeps through the entire elephant frequency range.',
     detail: 'Aircraft noise is the hardest case: the engine drone slowly sweeps from below elephant f0 through its harmonic range and out the other side. Our time-varying comb mask tracks elephant f0 frame-by-frame, so even as plane noise sweeps through, the mask stays locked on elephant harmonics and rejects everything else.',
   },
 } as const
@@ -280,7 +280,7 @@ function NotReadyPanel({ onGenerate }: { onGenerate: () => void }) {
         Processing takes ~30–90 seconds.
       </p>
       <button className="btn-primary" onClick={onGenerate}>
-        <span>⚗</span> Generate Demo
+        <span></span> Generate Demo
       </button>
       <p style={{ marginTop: '1.5rem', fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
         Uses synthetic harmonic test audio (f0 = 14 Hz, 6s per call)
@@ -331,7 +331,7 @@ function ScienceSection() {
         </div>
 
         <div className="science-card brown-top">
-          <span className="science-icon">✕</span>
+          <span className="science-icon"></span>
           <h3 className="science-title">vs Generic AI</h3>
           <p className="science-body">
             LALAL.AI and media.io are trained on <strong>speech and music (100–8000 Hz)</strong>.
@@ -363,21 +363,21 @@ function ComparisonSection() {
         <div className="compare-card">
           <h3 className="compare-title">LALAL.AI / Generic AI Tools</h3>
           <ul className="compare-list">
-            <li><span className="cross">✗</span> Trained on speech (300–3400 Hz) and music  no infrasonic knowledge</li>
-            <li><span className="cross">✗</span> Cannot resolve 5 Hz frequency differences at 44.1 kHz with n_fft=1024</li>
-            <li><span className="cross">✗</span> Treats engine harmonics at 30/60/90 Hz as "signal to preserve"</li>
-            <li><span className="cross">✗</span> No awareness of elephant harmonic structure</li>
-            <li><span className="cross">✗</span> Outputs are either over-suppressed (artifacts) or under-suppressed (noise retained)</li>
+            <li><span className="cross"></span> Trained on speech (300–3400 Hz) and music  no infrasonic knowledge</li>
+            <li><span className="cross"></span> Cannot resolve 5 Hz frequency differences at 44.1 kHz with n_fft=1024</li>
+            <li><span className="cross"></span> Treats engine harmonics at 30/60/90 Hz as "signal to preserve"</li>
+            <li><span className="cross"></span> No awareness of elephant harmonic structure</li>
+            <li><span className="cross"></span> Outputs are either over-suppressed (artifacts) or under-suppressed (noise retained)</li>
           </ul>
         </div>
         <div className="compare-card ours">
           <h3 className="compare-title">ElePhone</h3>
           <ul className="compare-list">
-            <li><span className="check">✓</span> n_fft=8192 → 5.4 Hz / bin  resolves individual elephant harmonics</li>
-            <li><span className="check">✓</span> NSSH detects f0 even when the fundamental is fully masked by noise</li>
-            <li><span className="check">✓</span> Time-varying comb mask tracks f0 glides across each call</li>
-            <li><span className="check">✓</span> Noise type adaptive: stationary profile for generators, non-stationary for car/plane</li>
-            <li><span className="check">✓</span> Per-call confidence scores  212 calls ranked for researcher prioritization</li>
+            <li><span className="check"></span> n_fft=8192 → 5.4 Hz / bin  resolves individual elephant harmonics</li>
+            <li><span className="check"></span> NSSH detects f0 even when the fundamental is fully masked by noise</li>
+            <li><span className="check"></span> Time-varying comb mask tracks f0 glides across each call</li>
+            <li><span className="check"></span> Noise type adaptive: stationary profile for generators, non-stationary for car/plane</li>
+            <li><span className="check"></span> Per-call confidence scores  212 calls ranked for researcher prioritization</li>
           </ul>
         </div>
       </div>
@@ -894,7 +894,7 @@ function DemoPage({
               Demo assets not yet generated.
             </p>
             <button className="btn-primary" onClick={handleGenerate}>
-              ⚗ Generate Demo Now
+               Generate Demo Now
             </button>
           </div>
         )}
