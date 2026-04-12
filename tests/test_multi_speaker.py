@@ -366,6 +366,56 @@ class TestSingleCallerSuppression:
         )
 
 
+# ─── link_f0_tracks: short-track filter ───────────────────────────────────────
+
+class TestLinkF0TracksShortFilter:
+    """MULTI-02: short tracks below MIN_TRACK_FRAMES are zeroed out by link_f0_tracks."""
+
+    @pytest.fixture
+    def top_k_pair(self, mixture_ctx):
+        from pipeline.multi_speaker import detect_f0_shs_topk
+        return detect_f0_shs_topk(mixture_ctx, k=2)
+
+    def test_all_zero_track_is_filtered(self):
+        """A track with zero valid frames must be zeroed out."""
+        from pipeline.multi_speaker import link_f0_tracks
+        from pipeline.config import MIN_TRACK_FRAMES
+        n_frames = MIN_TRACK_FRAMES * 3
+        # top_k_f0s row 0 = always 14.0, row 1 = all zeros (no valid candidate)
+        top_k_f0s = np.zeros((2, n_frames))
+        top_k_f0s[0, :] = 14.0
+        top_k_scores = np.ones((2, n_frames))
+        top_k_scores[1, :] = 0.0  # second candidate has no score
+        tracks = link_f0_tracks(top_k_f0s, top_k_scores)
+        # The track that was all-zero input must be zeroed out by the filter
+        # (it has 0 valid frames because the linker holds last value = 0.0)
+        valid_counts = [(tracks[i] > 0).sum() for i in range(tracks.shape[0])]
+        assert any(c == 0 for c in valid_counts), (
+            f"Expected at least one zeroed-out track, got valid_counts={valid_counts}"
+        )
+
+    def test_normal_tracks_survive_filter(self, top_k_pair):
+        """Tracks from a 5-second mixture have >> MIN_TRACK_FRAMES valid frames — must survive."""
+        from pipeline.multi_speaker import link_f0_tracks
+        from pipeline.config import MIN_TRACK_FRAMES
+        top_k_f0s, top_k_scores = top_k_pair
+        tracks = link_f0_tracks(top_k_f0s, top_k_scores)
+        for i in range(tracks.shape[0]):
+            valid_count = int((tracks[i] > 0).sum())
+            assert valid_count >= MIN_TRACK_FRAMES, (
+                f"Track {i} has only {valid_count} valid frames — normal track incorrectly filtered"
+            )
+
+    def test_short_track_zeroed_not_removed(self):
+        """Output shape is always (n_tracks, n_frames) — short tracks are zeroed, not removed."""
+        from pipeline.multi_speaker import link_f0_tracks
+        top_k_f0s = np.zeros((2, 30))
+        top_k_f0s[0, :] = 14.0
+        top_k_scores = np.ones((2, 30))
+        tracks = link_f0_tracks(top_k_f0s, top_k_scores)
+        assert tracks.shape[0] == 2, f"Expected 2 tracks (shape preserved), got {tracks.shape[0]}"
+
+
 # ─── is_harmonic_overlap ───────────────────────────────────────────────────────
 
 class TestIsHarmonicOverlap:
