@@ -10,7 +10,7 @@ Six phases from raw field recordings to judge-ready demo. Phases 1-2 build the v
 - [x] **Phase 2: Harmonic Detection & Denoising** - Detect elephant f0, build comb mask, apply residual cleanup — proven on real calls (completed 2026-04-12)
 - [x] **Phase 3: Demo Spectrograms & Measurements** - Publication-quality before/after figures with f0 contours, harmonic markers, and SNR annotations for pitch (completed 2026-04-12)
 - [x] **Phase 4: Batch Processing & API** - Scale to all 212 calls with confidence scoring and FastAPI layer (completed 2026-04-12)
-- [ ] **Phase 5: React Frontend & Demo** - Spectrogram visualization, A/B audio toggle, LALAL.AI comparison, confidence dashboard
+- [x] **Phase 5: React Frontend & Demo** - Spectrogram visualization, A/B audio toggle, LALAL.AI comparison, confidence dashboard (completed 2026-04-12)
 - [ ] **Phase 6: Multi-Speaker Separation** - Detect and separate overlapping elephant calls using crossing harmonic analysis
 
 ## Phase Details
@@ -95,7 +95,7 @@ Plans:
 - [x] 05-01-PLAN.md — Backend endpoints: GET /api/batch/results + GET /api/upload/{file_id}/audio
 - [x] 05-02-PLAN.md — Frontend scaffold: Vite + React + TS + wavesurfer deps, types, api client, useJobStatus hook
 - [x] 05-03-PLAN.md — SpectrogramView + CombOverlay + ABPlayer components (UI-01, UI-02)
-- [ ] 05-04-PLAN.md — UploadPanel + ConfidenceTable + CallDetail + ComparisonPanel + App wiring + verification checkpoint (UI-03, UI-04, UI-05)
+- [x] 05-04-PLAN.md — UploadPanel + ConfidenceTable + CallDetail + ComparisonPanel + App wiring + verification checkpoint (UI-03, UI-04, UI-05)
 
 ### Phase 6: Multi-Speaker Separation
 **Goal**: When multiple elephants vocalize simultaneously, the system detects separate f0 tracks, identifies crossing harmonics, and outputs individual cleaned tracks per caller — demonstrated on at least one overlapping call
@@ -116,5 +116,5 @@ Plans:
 | 2. Harmonic Detection & Denoising | 2/2 | Complete | 2026-04-12 |
 | 3. Demo Spectrograms & Measurements | 1/1 | Complete   | 2026-04-12 |
 | 4. Batch Processing & API | 4/4 | Complete   | 2026-04-12 |
-| 5. React Frontend & Demo | 2/4 | In Progress|  |
+| 5. React Frontend & Demo | 4/4 | Complete   | 2026-04-12 |
 | 6. Multi-Speaker Separation | 0/TBD | Not started | - |

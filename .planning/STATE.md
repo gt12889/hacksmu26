@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-03-PLAN.md
-last_updated: "2026-04-12T04:04:48.098Z"
+stopped_at: "Completed 05-04-PLAN.md (checkpoint: awaiting human-verify)"
+last_updated: "2026-04-12T04:07:59.795Z"
 progress:
   total_phases: 6
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 14
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Project State
@@ -59,6 +59,7 @@ Plan: 4 of 4
 | Phase 05-react-frontend-demo P02 | 2 | 2 tasks | 13 files |
 | Phase 05 P01 | 15 | 3 tasks | 3 files |
 | Phase 05-react-frontend-demo P03 | 2 | 3 tasks | 3 files |
+| Phase 05-react-frontend-demo P04 | 85 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -104,6 +105,8 @@ Recent decisions affecting current work:
 - [Phase 05]: _ALLOWED_ROOTS resolved at import time via __file__.parents[2] — deterministic path-traversal allowlist for batch audio
 - [Phase 05-react-frontend-demo]: WavesurferPlayer is default export from @wavesurfer/react (not named export)
 - [Phase 05-react-frontend-demo]: ABPlayer captures getCurrentTime() before URL state change, calls setTime() in onReady — prevents A/B timestamp loss
+- [Phase 05-react-frontend-demo]: noisyUrl null for batch-disk rows by design — disables ABPlayer, keeps SpectrogramView via cleanUrl
+- [Phase 05-react-frontend-demo]: batchAudioUrl(clean_wav_path) for batch-disk cleanUrl — SpectrogramView renders on all 212 batch rows on page load
 
 ### Pending Todos
 
@@ -117,6 +120,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-12T04:04:48.096Z
-Stopped at: Completed 05-03-PLAN.md
+Last session: 2026-04-12T04:07:59.792Z
+Stopped at: Completed 05-04-PLAN.md (checkpoint: awaiting human-verify)
 Resume file: None
