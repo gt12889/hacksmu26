@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-02-PLAN.md
-last_updated: "2026-04-12T04:00:39.427Z"
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-04-12T04:00:59.819Z"
 progress:
   total_phases: 6
   completed_phases: 4
@@ -57,6 +57,7 @@ Plan: 3 of 4
 | Phase 04-batch-processing-api P03 | 2 | 1 tasks | 1 files |
 | Phase 04-batch-processing-api P04 | 5 minutes | 2 tasks | 12 files |
 | Phase 05-react-frontend-demo P02 | 2 | 2 tasks | 13 files |
+| Phase 05 P01 | 15 | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -97,6 +98,9 @@ Recent decisions affecting current work:
 - [Phase 05-react-frontend-demo]: React 18.3.1 (not 19.x) locked for wavesurfer.js 7.x compatibility
 - [Phase 05-react-frontend-demo]: tsconfig project references split (app + node) required for tsc -b build script
 - [Phase 05-react-frontend-demo]: Vite proxy target localhost:8000 — FastAPI runs on port 8000
+- [Phase 05]: Returns 200+empty list (not 404) when data/outputs/ absent — empty is valid state for fresh checkout
+- [Phase 05]: clean_wav_path rewritten to absolute in batch_results — React passes verbatim to /api/batch/audio
+- [Phase 05]: _ALLOWED_ROOTS resolved at import time via __file__.parents[2] — deterministic path-traversal allowlist for batch audio
 
 ### Pending Todos
 
@@ -110,6 +114,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-12T04:00:31.343Z
-Stopped at: Completed 05-02-PLAN.md
+Last session: 2026-04-12T04:00:59.817Z
+Stopped at: Completed 05-01-PLAN.md
 Resume file: None
