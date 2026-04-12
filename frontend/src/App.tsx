@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import type { DemoStatus, NoiseType, Metadata, StatusResponse } from './types'
+import { UploadPanel } from './components/UploadPanel'
+import { CallDetail } from './components/CallDetail'
+import { ConfidenceTable } from './components/ConfidenceTable'
+import { getBatchResults, batchAudioUrl, uploadAudioUrl, audioUrl } from './api/client'
+import type { CallResult } from './types/api'
 
 // ─── Noise type config ──────────────────────────────────────────────────────
 const NOISE_CONFIG = {
@@ -365,12 +370,139 @@ function SpecsBar() {
   )
 }
 
+// ─── Active result state type ─────────────────────────────────────────────────
+interface ActiveResult {
+  result: CallResult
+  noisyUrl: string | null
+  cleanUrl: string | null
+}
+
+// ─── Upload section ───────────────────────────────────────────────────────────
+function UploadSection({
+  active,
+  onActive,
+}: {
+  active: ActiveResult | null
+  onActive: (a: ActiveResult) => void
+}) {
+  const handleComplete = useCallback(
+    ({
+      jobId,
+      fileId,
+      results,
+    }: {
+      jobId: string
+      fileId: string
+      file: File
+      results: CallResult[]
+    }) => {
+      if (results.length === 0) return
+      const r = results[0]
+      // noisyUrl: serve the original uploaded audio from the API
+      const noisyU = uploadAudioUrl(fileId)
+      // cleanUrl: serve the cleaned result audio
+      const cleanU = audioUrl(jobId, 0)
+      onActive({ result: r, noisyUrl: noisyU, cleanUrl: cleanU })
+    },
+    [onActive],
+  )
+
+  return (
+    <section className="section container">
+      <div className="section-header">
+        <p className="section-label">Upload Your Recording</p>
+        <h2 className="section-title">Process a Field Recording</h2>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+          Upload a WAV file — the pipeline will denoise it using harmonic comb masking
+          and return spectrograms, SNR metrics, and A/B audio.
+        </p>
+      </div>
+      <div className="upload-section">
+        <UploadPanel onComplete={handleComplete} />
+      </div>
+      {active && (
+        <div className="call-detail-section">
+          <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: '1rem', color: 'var(--brown)' }}>
+            Result: {active.result.filename}
+          </h3>
+          <CallDetail
+            result={active.result}
+            noisyUrl={active.noisyUrl}
+            cleanUrl={active.cleanUrl}
+          />
+        </div>
+      )}
+    </section>
+  )
+}
+
+// ─── Batch results section ────────────────────────────────────────────────────
+function BatchSection() {
+  const [results, setResults] = useState<CallResult[]>([])
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getBatchResults()
+      .then((r) => setResults(r.results))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  const selected = selectedIndex !== null ? results[selectedIndex] : null
+
+  return (
+    <section className="section-alt">
+      <div className="section container">
+        <div className="section-header">
+          <p className="section-label">Batch Analysis</p>
+          <h2 className="section-title">Confidence Dashboard</h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+            All 212 processed calls sorted by confidence. Click any row to view its
+            spectrogram, A/B audio, and comparison metrics.
+          </p>
+        </div>
+        <div className="confidence-section">
+          {loading ? (
+            <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>
+              Loading batch results...
+            </p>
+          ) : results.length === 0 ? (
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+              No batch results yet. Run <code>python scripts/batch_process.py</code> to populate.
+            </p>
+          ) : (
+            <ConfidenceTable
+              results={results}
+              selectedIndex={selectedIndex}
+              onSelect={setSelectedIndex}
+            />
+          )}
+        </div>
+        {selected && (
+          <div className="call-detail-section" style={{ marginTop: '2rem' }}>
+            <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: '1rem', color: 'var(--brown)' }}>
+              Call Detail: {selected.filename}
+            </h3>
+            <CallDetail
+              result={selected}
+              noisyUrl={null}
+              cleanUrl={batchAudioUrl(selected.clean_wav_path)}
+            />
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [status, setStatus] = useState<DemoStatus>('checking')
   const [jobProgress, setJobProgress] = useState(0)
   const [jobMessage, setJobMessage] = useState('')
   const [metadata, setMetadata] = useState<Metadata | null>(null)
+  const [activeUpload, setActiveUpload] = useState<ActiveResult | null>(null)
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const stopPolling = useCallback(() => {
@@ -541,6 +673,10 @@ export default function App() {
       <ScienceSection />
       <div className="divider" />
       <ComparisonSection />
+      <div className="divider" />
+      <UploadSection active={activeUpload} onActive={setActiveUpload} />
+      <div className="divider" />
+      <BatchSection />
 
       {/* Footer */}
       <footer className="footer">
