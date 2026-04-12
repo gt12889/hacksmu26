@@ -276,6 +276,51 @@ def test_get_upload_audio_ok(wav_file: Path):
 
 
 # ---------------------------------------------------------------------------
+# Batch audio endpoint (GET /api/batch/audio?path=...)
+# ---------------------------------------------------------------------------
+
+
+def test_batch_audio_forbidden():
+    """GET /api/batch/audio?path=/etc/passwd returns 403 (path traversal guard)."""
+    response = client.get("/api/batch/audio?path=/etc/passwd")
+    assert response.status_code == 403
+
+
+def test_batch_audio_not_found(tmp_path: Path):
+    """GET /api/batch/audio?path=<allowed_root>/nonexistent.wav returns 404."""
+    import api.routes.batch as batch_module
+
+    original = batch_module._ALLOWED_ROOTS
+    batch_module._ALLOWED_ROOTS = [tmp_path.resolve()]
+    try:
+        nonexistent = str(tmp_path / "nonexistent.wav")
+        response = client.get(f"/api/batch/audio?path={nonexistent}")
+        assert response.status_code == 404
+    finally:
+        batch_module._ALLOWED_ROOTS = original
+
+
+def test_batch_audio_ok(wav_file: Path, tmp_path: Path):
+    """GET /api/batch/audio?path=<wav> returns 200 when file is in an allowed root."""
+    import api.routes.batch as batch_module
+
+    # Place the wav in an allowed tmp dir
+    allowed_dir = tmp_path / "allowed"
+    allowed_dir.mkdir()
+    import shutil
+    target = allowed_dir / "test_clean.wav"
+    shutil.copy(str(wav_file), str(target))
+
+    original = batch_module._ALLOWED_ROOTS
+    batch_module._ALLOWED_ROOTS = [allowed_dir.resolve()]
+    try:
+        response = client.get(f"/api/batch/audio?path={target}")
+        assert response.status_code == 200
+    finally:
+        batch_module._ALLOWED_ROOTS = original
+
+
+# ---------------------------------------------------------------------------
 # Batch results endpoint (GET /api/batch/results)
 # ---------------------------------------------------------------------------
 
