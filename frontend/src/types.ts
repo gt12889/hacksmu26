@@ -9,6 +9,9 @@ export interface NoiseMetrics {
   f0_max: number
   f0_median: number
   duration: number
+  source_file?: string
+  call_window?: string
+  real_data?: boolean
 }
 
 export interface Metadata {

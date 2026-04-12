@@ -96,7 +96,37 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
             <span>{cfg.icon}</span>
             {cfg.label}
           </span>
+          {metrics?.real_data && (
+            <span
+              style={{
+                marginLeft: '0.5rem',
+                display: 'inline-block',
+                padding: '0.15rem 0.5rem',
+                background: 'rgba(0, 200, 100, 0.12)',
+                color: '#00c864',
+                border: '1px solid rgba(0, 200, 100, 0.3)',
+                borderRadius: '4px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.65rem',
+                fontWeight: 700,
+                letterSpacing: '0.05em',
+                verticalAlign: 'middle',
+              }}
+            >
+              ● REAL DATA
+            </span>
+          )}
           <p className="card-desc">{cfg.description}</p>
+          {metrics?.source_file && (
+            <p style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.65rem',
+              color: 'var(--text-muted)',
+              marginTop: '0.25rem',
+            }}>
+              {metrics.source_file} · {metrics.call_window}
+            </p>
+          )}
         </div>
       </div>
 
@@ -132,9 +162,9 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
           </span>
         </div>
         <div className="metric">
-          <span className="metric-label">Improvement</span>
+          <span className="metric-label">Δ SNR</span>
           <span className="metric-value positive">
-            {metrics ? `+${metrics.snr_improvement.toFixed(1)} dB` : '—'}
+            {metrics ? `${metrics.snr_improvement >= 0 ? '+' : ''}${metrics.snr_improvement.toFixed(1)} dB` : '—'}
           </span>
         </div>
         <div className="metric">
@@ -496,6 +526,59 @@ function BatchSection() {
   )
 }
 
+// ─── Multi-Speaker Section ──────────────────────────────────────────────────
+function MultiSpeakerSection() {
+  return (
+    <section className="section container">
+      <div className="section-header">
+        <p className="section-label">Stretch Goal</p>
+        <h2 className="section-title">Multi-Speaker Separation</h2>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem', maxWidth: '70ch' }}>
+          When two elephants vocalize simultaneously, their harmonic series are independent —
+          their trajectories may cross in the time-frequency plane. We detect multiple f<sub>0</sub>{' '}
+          tracks via top-K subharmonic summation, then link them across time with a greedy
+          pitch-continuity algorithm. Validated on a synthetic 14 Hz + 18 Hz two-caller mixture.
+        </p>
+      </div>
+      <div style={{
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border)',
+        borderRadius: '8px',
+        padding: '1.5rem',
+        marginTop: '1rem'
+      }}>
+        <img
+          src="/static/demo/multi_speaker_demo.png"
+          alt="Multi-speaker separation spectrogram"
+          style={{ width: '100%', maxWidth: '1200px', display: 'block', margin: '0 auto' }}
+        />
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '1rem',
+          marginTop: '1.5rem',
+          maxWidth: '800px',
+          marginLeft: 'auto',
+          marginRight: 'auto'
+        }}>
+          <div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#FF4444', marginBottom: '0.25rem' }}>
+              CALLER 1 · f₀ ≈ 14 Hz
+            </div>
+            <audio controls src="/static/demo/demo_caller_1.wav" style={{ width: '100%' }} />
+          </div>
+          <div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#4488FF', marginBottom: '0.25rem' }}>
+              CALLER 2 · f₀ ≈ 18 Hz
+            </div>
+            <audio controls src="/static/demo/demo_caller_2.wav" style={{ width: '100%' }} />
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [status, setStatus] = useState<DemoStatus>('checking')
@@ -677,6 +760,8 @@ export default function App() {
       <UploadSection active={activeUpload} onActive={setActiveUpload} />
       <div className="divider" />
       <BatchSection />
+      <div className="divider" />
+      <MultiSpeakerSection />
 
       {/* Footer */}
       <footer className="footer">
