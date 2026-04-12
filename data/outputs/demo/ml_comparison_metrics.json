@@ -1,19 +1,24 @@
 {
   "generator": {
     "baseline": {
-      "harmonic_dominance": 0.6888,
+      "harmonic_dominance": 0.6265,
       "approach": "noisereduce-only"
     },
     "ml_finetuned": {
-      "harmonic_dominance": 0.7596,
+      "harmonic_dominance": 0.765,
       "approach": "sklearn-mlp-trained-on-80-rumbles"
     },
+    "ml_pytorch": {
+      "harmonic_dominance": 0.7701,
+      "approach": "pytorch-1d-conv-unet-trained-on-same-data"
+    },
     "ours": {
-      "harmonic_dominance": 0.7645,
+      "harmonic_dominance": 0.6424,
       "approach": "hpss+shs+comb+noisereduce"
     },
-    "improvement_pct": 11,
-    "ml_vs_baseline_pct": 10,
+    "improvement_pct": 3,
+    "ml_vs_baseline_pct": 22,
+    "torch_vs_baseline_pct": 23,
     "f0_median_hz": 19.72,
     "engine_hz_estimate": 29.3
   },
@@ -26,12 +31,17 @@
       "harmonic_dominance": 0.7502,
       "approach": "sklearn-mlp-trained-on-80-rumbles"
     },
+    "ml_pytorch": {
+      "harmonic_dominance": 0.7608,
+      "approach": "pytorch-1d-conv-unet-trained-on-same-data"
+    },
     "ours": {
       "harmonic_dominance": 0.6779,
       "approach": "hpss+shs+comb+noisereduce"
     },
     "improvement_pct": 8,
     "ml_vs_baseline_pct": 20,
+    "torch_vs_baseline_pct": 22,
     "f0_median_hz": 16.79,
     "engine_hz_estimate": 58.59
   },
@@ -41,15 +51,20 @@
       "approach": "noisereduce-only"
     },
     "ml_finetuned": {
-      "harmonic_dominance": 0.7286,
+      "harmonic_dominance": 0.7325,
       "approach": "sklearn-mlp-trained-on-80-rumbles"
     },
+    "ml_pytorch": {
+      "harmonic_dominance": 0.7387,
+      "approach": "pytorch-1d-conv-unet-trained-on-same-data"
+    },
     "ours": {
-      "harmonic_dominance": 0.6808,
+      "harmonic_dominance": 0.6809,
       "approach": "hpss+shs+comb+noisereduce"
     },
     "improvement_pct": 3,
     "ml_vs_baseline_pct": 11,
+    "torch_vs_baseline_pct": 12,
     "f0_median_hz": 16.79,
     "engine_hz_estimate": 5.86
   }

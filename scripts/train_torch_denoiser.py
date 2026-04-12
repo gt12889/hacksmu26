@@ -83,10 +83,10 @@ def main() -> int:
     # ── Step 1: Architecture info ──────────────────────────────────────────────
     model_info = SmallConvUNet()
     n_params = count_params(model_info)
-    print(f"Model: SmallConvUNet")
-    print(f"  Encoder: Conv1d(1→32, k=7) → Conv1d(32→64, k=5) → Conv1d(64→128, k=3)")
-    print(f"  Decoder: Symmetric with skip connections")
-    print(f"  Output:  Conv1d(16→1, k=1) + Sigmoid")
+    print(f"Model: SmallConvUNet (MLP U-Net encoder-decoder)")
+    print(f"  Encoder: Linear(256→256) → Linear(256→128) → Bottleneck(128→64)")
+    print(f"  Decoder: Linear(64+128→128) → Linear(128+256→256) with skip connections")
+    print(f"  Output:  Sigmoid gains in [0, 1]")
     print(f"  Params:  {n_params:,}")
     print()
 
