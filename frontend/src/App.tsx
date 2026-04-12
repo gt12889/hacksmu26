@@ -1318,6 +1318,11 @@ export default function App() {
   const fetchMetadata = useCallback(async () => {
     try {
       const res = await fetch('/api/demo/metadata')
+      if (res.ok) { setMetadata(await res.json()); return }
+    } catch {}
+    // Fallback: load pre-built static metadata (works on static hosts like Vercel)
+    try {
+      const res = await fetch('/static/demo/metadata.json')
       if (res.ok) setMetadata(await res.json())
     } catch {}
   }, [])
@@ -1325,27 +1330,35 @@ export default function App() {
   const checkStatus = useCallback(async () => {
     try {
       const res = await fetch('/api/demo/status')
-      if (!res.ok) { setStatus('error'); return }
-      const data: StatusResponse = await res.json()
-
-      setJobProgress(data.job.progress)
-      setJobMessage(data.job.message)
-
-      if (data.ready) {
-        stopPolling()
-        setStatus('ready')
-        fetchMetadata()
-      } else if (data.job.status === 'running') {
-        setStatus('generating')
-      } else if (data.job.status === 'error') {
-        stopPolling()
-        setStatus('error')
-      } else {
-        setStatus('not_ready')
+      if (res.ok) {
+        const data: StatusResponse = await res.json()
+        setJobProgress(data.job.progress)
+        setJobMessage(data.job.message)
+        if (data.ready) {
+          stopPolling()
+          setStatus('ready')
+          fetchMetadata()
+        } else if (data.job.status === 'running') {
+          setStatus('generating')
+        } else if (data.job.status === 'error') {
+          stopPolling()
+          setStatus('error')
+        } else {
+          setStatus('not_ready')
+        }
+        return
       }
-    } catch {
-      setStatus('error')
-    }
+    } catch {}
+    // No backend — check if static demo assets exist
+    try {
+      const res = await fetch('/static/demo/metadata.json')
+      if (res.ok) {
+        setMetadata(await res.json())
+        setStatus('ready')
+        return
+      }
+    } catch {}
+    setStatus('error')
   }, [stopPolling, fetchMetadata])
 
   useEffect(() => {

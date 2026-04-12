@@ -4,8 +4,8 @@
 pipeline/
 scripts/
 tests/
-models/
-data/
+/models/
+/data/
 .planning/
 *.py
 requirements.txt
