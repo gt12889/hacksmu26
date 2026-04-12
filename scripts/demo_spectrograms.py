@@ -112,7 +112,7 @@ def make_demo_figure(
     ctx: dict,
     y: np.ndarray,
     output_dir: Path,
-) -> tuple[Path, Path]:
+) -> tuple[Path, Path, Path]:
     """
     Render 3-panel spectrogram figure and export cleaned WAV.
 
@@ -127,11 +127,11 @@ def make_demo_figure(
     Args:
         noise_type:  Noise type label (for filenames and titles)
         ctx:         Context dict from process_call()
-        y:           Original audio (for duration annotation)
+        y:           Original audio (for duration annotation and original WAV export)
         output_dir:  Directory to write PNG and WAV files
 
     Returns:
-        (png_path, wav_path) as Path objects
+        (png_path, wav_path, wav_original_path) as Path objects
     """
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -264,12 +264,17 @@ def make_demo_figure(
     out_wav = output_dir / f"{noise_type}_clean.wav"
     sf.write(str(out_wav), audio_norm, sr, subtype="PCM_16")
 
+    # ── Original WAV export (needed by frontend A/B toggle) ───────────────────
+    y_norm = y / (np.abs(y).max() + 1e-10)
+    out_wav_original = output_dir / f"{noise_type}_original.wav"
+    sf.write(str(out_wav_original), y_norm, sr, subtype="PCM_16")
+
     print(
-        f"[demo] {noise_type}: saved {out_png.name}, {out_wav.name} "
+        f"[demo] {noise_type}: saved {out_png.name}, {out_wav.name}, {out_wav_original.name} "
         f"(SNR {snr_before:.1f}\u2192{snr_after:.1f} dB)"
     )
 
-    return out_png, out_wav
+    return out_png, out_wav, out_wav_original
 
 
 # ─── Call selection from annotations ──────────────────────────────────────────
