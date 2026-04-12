@@ -250,6 +250,32 @@ def test_spectrogram_404_when_no_png_path():
 
 
 # ---------------------------------------------------------------------------
+# Upload audio endpoint (GET /api/upload/{file_id}/audio)
+# ---------------------------------------------------------------------------
+
+
+def test_get_upload_audio_not_found():
+    """GET /api/upload/{file_id}/audio returns 404 for unknown file_id."""
+    response = client.get("/api/upload/does-not-exist/audio")
+    assert response.status_code == 404
+
+
+def test_get_upload_audio_ok(wav_file: Path):
+    """After uploading a file, GET /api/upload/{file_id}/audio returns 200 with audio/wav."""
+    with wav_file.open("rb") as f:
+        upload_response = client.post(
+            "/api/upload",
+            files={"file": ("test_call.wav", f, "audio/wav")},
+        )
+    assert upload_response.status_code == 200
+    file_id = upload_response.json()["file_id"]
+
+    audio_response = client.get(f"/api/upload/{file_id}/audio")
+    assert audio_response.status_code == 200
+    assert audio_response.headers["content-type"].startswith("audio/")
+
+
+# ---------------------------------------------------------------------------
 # Batch results endpoint (GET /api/batch/results)
 # ---------------------------------------------------------------------------
 
