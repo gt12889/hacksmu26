@@ -38,6 +38,7 @@ from pipeline.config import HOP_LENGTH  # noqa: E402
 from pipeline.harmonic_processor import process_call  # noqa: E402
 from pipeline.ingestor import extract_noise_gaps, load_call_segment  # noqa: E402
 from pipeline.noise_classifier import classify_noise_type  # noqa: E402
+from pipeline.scoring import compute_snr_db  # noqa: E402
 from pipeline.spectrogram import compute_stft  # noqa: E402
 
 # ─── Constants ─────────────────────────────────────────────────────────────────
@@ -45,45 +46,6 @@ from pipeline.spectrogram import compute_stft  # noqa: E402
 DISPLAY_FREQ_MAX_HZ = 500  # Hz — covers 35+ harmonics at 14 Hz f0
 NOISE_TYPES = ["generator", "car", "plane"]
 DEFAULT_SR = 44100
-
-
-# ─── SNR measurement ───────────────────────────────────────────────────────────
-
-def compute_snr_db(
-    magnitude: np.ndarray,
-    freq_bins: np.ndarray,
-    f0_median: float,
-    bandwidth_hz: float = 5.0,
-) -> float:
-    """
-    Compute SNR in dB: harmonic band power vs out-of-band noise power.
-
-    SNR is computed on linear power (magnitude**2), NOT on dB-scale magnitude.
-
-    Args:
-        magnitude:   Magnitude spectrogram, shape (n_freq_bins, n_frames)
-        freq_bins:   Frequency value per bin in Hz, shape (n_freq_bins,)
-        f0_median:   Median f0 in Hz (used as harmonic spacing)
-        bandwidth_hz: Half-bandwidth around each harmonic (±bandwidth_hz)
-
-    Returns:
-        SNR in dB as float. Returns -999.0 if no harmonic bins found.
-    """
-    harmonic_mask = np.zeros(len(freq_bins), dtype=bool)
-    for k in range(1, 20):
-        center = k * f0_median
-        if center > freq_bins[-1]:
-            break
-        harmonic_mask |= (
-            (freq_bins >= center - bandwidth_hz) & (freq_bins <= center + bandwidth_hz)
-        )
-
-    if not harmonic_mask.any():
-        return -999.0
-
-    signal_power = float(np.mean(magnitude[harmonic_mask, :] ** 2))
-    noise_power = float(np.mean(magnitude[~harmonic_mask, :] ** 2)) if (~harmonic_mask).any() else 1e-10
-    return float(10 * np.log10(signal_power / (noise_power + 1e-10)))
 
 
 # ─── Synthetic call generator ──────────────────────────────────────────────────
