@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-pipeline-foundation 01-03-PLAN.md
-last_updated: "2026-04-11T23:44:23.108Z"
+stopped_at: Completed 02-harmonic-detection-denoising 02-01-PLAN.md
+last_updated: "2026-04-12T01:06:02.655Z"
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 5
+  completed_plans: 4
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-11)
 
 **Core value:** Denoise elephant vocalizations by exploiting their harmonic integer-multiple structure — surgical extraction where generic AI tools fail on infrasonic content
-**Current focus:** Phase 01 — Pipeline Foundation
+**Current focus:** Phase 02 — Harmonic Detection & Denoising
 
 ## Current Position
 
-Phase: 2
-Plan: Not started
+Phase: 02 (Harmonic Detection & Denoising) — EXECUTING
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -49,6 +49,7 @@ Plan: Not started
 | Phase 01-pipeline-foundation P01 | 4 | 3 tasks | 10 files |
 | Phase 01-pipeline-foundation P02 | 3 | 2 tasks | 4 files |
 | Phase 01-pipeline-foundation P03 | 2 | 2 tasks | 3 files |
+| Phase 02-harmonic-detection-denoising P01 | 4 minutes | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Recent decisions affecting current work:
 - [Phase 01-pipeline-foundation]: Car vs plane separated by temporal variance of column-wise mean power (threshold 0.05)
 - [Phase 01-pipeline-foundation]: All tests use synthetic numpy fixtures — no real recordings required, making CI portable
 - [Phase 01-pipeline-foundation]: CLI scripts use sys.path.insert(0, repo_root) to import pipeline.* without installing as package
+- [Phase 02-harmonic-detection-denoising]: apply_noisereduce generator+no-clip fallback: RuntimeWarning + non-stationary (not ValueError raise)
+- [Phase 02-harmonic-detection-denoising]: detect_f0_shs uses vectorized NSSH loop (not per-frame Python loop) for <1s/call performance
 
 ### Pending Todos
 
@@ -82,6 +85,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-11T23:41:32.488Z
-Stopped at: Completed 01-pipeline-foundation 01-03-PLAN.md
+Last session: 2026-04-12T01:06:02.653Z
+Stopped at: Completed 02-harmonic-detection-denoising 02-01-PLAN.md
 Resume file: None
