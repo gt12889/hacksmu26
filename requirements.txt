@@ -1,0 +1,26 @@
+# Core audio DSP
+librosa==0.11.0
+scipy>=1.13
+numpy>=1.26
+soundfile>=0.12
+noisereduce==3.0.3
+
+# Data ingestion
+pandas>=2.0
+openpyxl>=3.1
+
+# Progress and visualization
+tqdm>=4.66
+matplotlib>=3.8
+
+# Web API
+fastapi>=0.111
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+
+# Testing
+pytest>=8.0
+
+# Linting (dev)
+black>=24.0
+ruff>=0.4
