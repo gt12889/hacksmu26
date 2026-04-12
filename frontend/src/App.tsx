@@ -33,7 +33,7 @@ const NOISE_CONFIG = {
     label: 'AIRCRAFT',
     color: 'var(--purple)',
     dimColor: 'var(--purple-dim)',
-    borderColor: 'rgba(168, 85, 247, 0.3)',
+    borderColor: 'rgba(107, 63, 160, 0.3)',
     icon: '✈️',
     description: 'Slow-sweep harmonic drone — aircraft flyover sweeps through the entire elephant frequency range.',
     detail: 'Aircraft noise is the hardest case: the engine drone slowly sweeps from below elephant f0 through its harmonic range and out the other side. Our time-varying comb mask tracks elephant f0 frame-by-frame, so even as plane noise sweeps through, the mask stays locked on elephant harmonics and rejects everything else.',
@@ -105,9 +105,9 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
                 marginLeft: '0.5rem',
                 display: 'inline-block',
                 padding: '0.15rem 0.5rem',
-                background: 'rgba(0, 200, 100, 0.12)',
-                color: '#00c864',
-                border: '1px solid rgba(0, 200, 100, 0.3)',
+                background: 'var(--green-dim)',
+                color: 'var(--green)',
+                border: '1px solid rgba(74, 124, 63, 0.35)',
                 borderRadius: '4px',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.65rem',
@@ -943,6 +943,7 @@ type MLMetrics = {
   [key in NoiseType]?: {
     baseline: { harmonic_dominance: number; approach: string }
     ml_finetuned?: { harmonic_dominance: number; approach: string }
+    ml_pytorch?: { harmonic_dominance: number; approach: string }
     ours: { harmonic_dominance: number; approach: string }
     improvement_pct: number
     f0_median_hz: number
@@ -1028,29 +1029,29 @@ function MLComparePage() {
           {/* Our extension */}
           <div style={{
             padding: '1.5rem 1.75rem',
-            background: 'rgba(0, 200, 100, 0.05)',
-            border: '1px solid rgba(0, 200, 100, 0.3)',
-            borderLeft: '4px solid #00c864',
+            background: 'var(--green-dim)',
+            border: '1px solid rgba(74, 124, 63, 0.35)',
+            borderLeft: '4px solid var(--green)',
             borderRadius: '8px',
           }}>
-            <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', color: '#00c864', marginBottom: '0.75rem', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', color: 'var(--green)', marginBottom: '0.75rem', textTransform: 'uppercase' }}>
               WHAT WE BUILT ON TOP
             </div>
-            <h3 style={{ fontSize: '1.15rem', color: '#00c864', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '-0.01em' }}>
+            <h3 style={{ fontSize: '1.15rem', color: 'var(--green)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '-0.01em' }}>
               HARMONIC PRIOR + ML
             </h3>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.82rem', lineHeight: 1.7 }}>
               <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: '#00c864' }}>+</strong> Trained their spectrogram-ML paradigm on 80 real rumbles (sklearn + PyTorch)
+                <strong style={{ color: 'var(--green)' }}>+</strong> Trained their spectrogram-ML paradigm on 80 real rumbles (sklearn + PyTorch)
               </li>
               <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: '#00c864' }}>+</strong> Added explicit subharmonic summation to detect f₀ in 8-25 Hz
+                <strong style={{ color: 'var(--green)' }}>+</strong> Added explicit subharmonic summation to detect f₀ in 8-25 Hz
               </li>
               <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: '#00c864' }}>+</strong> Time-varying comb mask at k·f₀ encodes the harmonic prior mathematically
+                <strong style={{ color: 'var(--green)' }}>+</strong> Time-varying comb mask at k·f₀ encodes the harmonic prior mathematically
               </li>
               <li style={{ marginBottom: 0 }}>
-                <strong style={{ color: '#00c864' }}>+</strong> No training data required — works on any species with a harmonic series
+                <strong style={{ color: 'var(--green)' }}>+</strong> No training data required — works on any species with a harmonic series
               </li>
             </ul>
           </div>
@@ -1071,11 +1072,11 @@ function MLComparePage() {
 
       <div className="divider" />
 
-      {/* The pitch bar — 3 approaches */}
+      {/* The pitch bar — 4 approaches */}
       <section className="section container">
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
+          gridTemplateColumns: 'repeat(4, 1fr)',
           gap: '1rem',
           marginBottom: '2rem',
         }}>
@@ -1109,26 +1110,45 @@ function MLComparePage() {
               sklearn MLP (128·64)
             </div>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
-              Real ML model — MLPRegressor trained on 80 real ElephantVoices rumbles (16 k
-              frames) to predict our comb mask. Learns an approximation of the harmonic prior
-              from data.
+              MLPRegressor trained on 80 real ElephantVoices rumbles (~16k frames)
+              to predict our comb mask. Learns an approximation of the harmonic prior
+              from data. ~50k parameters.
             </p>
           </div>
           <div style={{
             padding: '1.5rem',
-            background: 'rgba(0, 200, 100, 0.08)',
-            border: '1px solid rgba(0, 200, 100, 0.3)',
+            background: 'var(--purple-dim)',
+            border: '1px solid rgba(107, 63, 160, 0.3)',
+            borderRadius: '8px',
+          }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+              Deep learning
+            </div>
+            <div style={{ fontWeight: 700, color: 'var(--purple)', fontSize: '1.05rem', marginBottom: '0.5rem' }}>
+              PyTorch 1D U-Net CNN
+            </div>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+              1D convolutional U-Net with skip connections trained on the same 80 rumbles.
+              Captures local frequency patterns via conv filters. ~65k parameters.
+              The gold standard DL audio pipeline (Demucs, SpeechBrain use PyTorch).
+            </p>
+          </div>
+          <div style={{
+            padding: '1.5rem',
+            background: 'var(--green-dim)',
+            border: '1px solid rgba(74, 124, 63, 0.35)',
             borderRadius: '8px',
           }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
               Our approach
             </div>
-            <div style={{ fontWeight: 700, color: '#00c864', fontSize: '1.05rem', marginBottom: '0.5rem' }}>
+            <div style={{ fontWeight: 700, color: 'var(--green)', fontSize: '1.05rem', marginBottom: '0.5rem' }}>
               HPSS + SHS + Comb + noisereduce
             </div>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
               Domain-specific classical DSP. Detects elephant f₀ via subharmonic summation,
               builds a narrow comb mask at k·f₀ — encodes the harmonic prior explicitly.
+              Zero training data required.
             </p>
           </div>
         </div>
@@ -1187,17 +1207,23 @@ function MLComparePage() {
                   </div>
                   {m.ml_finetuned && (
                     <div>
-                      <span style={{ color: 'var(--text-muted)' }}>ML: </span>
+                      <span style={{ color: 'var(--text-muted)' }}>sklearn: </span>
                       <strong style={{ color: 'var(--blue)' }}>{(m.ml_finetuned.harmonic_dominance * 100).toFixed(1)}%</strong>
+                    </div>
+                  )}
+                  {m.ml_pytorch && (
+                    <div>
+                      <span style={{ color: 'var(--text-muted)' }}>PyTorch: </span>
+                      <strong style={{ color: 'var(--purple)' }}>{(m.ml_pytorch.harmonic_dominance * 100).toFixed(1)}%</strong>
                     </div>
                   )}
                   <div>
                     <span style={{ color: 'var(--text-muted)' }}>Ours: </span>
-                    <strong style={{ color: '#00c864' }}>{(m.ours.harmonic_dominance * 100).toFixed(1)}%</strong>
+                    <strong style={{ color: 'var(--green)' }}>{(m.ours.harmonic_dominance * 100).toFixed(1)}%</strong>
                   </div>
                   <div>
                     <span style={{ color: 'var(--text-muted)' }}>Δ vs baseline: </span>
-                    <strong style={{ color: '#00c864' }}>+{m.improvement_pct}%</strong>
+                    <strong style={{ color: 'var(--green)' }}>+{m.improvement_pct}%</strong>
                   </div>
                 </div>
               )}
@@ -1222,7 +1248,7 @@ function MLComparePage() {
                   marginBottom: 0,
                 }}>
                   Baseline preserves <strong style={{ color: 'var(--orange)' }}>~{m.engine_hz_estimate.toFixed(1)} Hz engine noise</strong>.
-                  Our approach preserves only elephant harmonics at <strong style={{ color: '#00c864' }}>k·f₀ = k·{m.f0_median_hz.toFixed(1)} Hz</strong>.
+                  Our approach preserves only elephant harmonics at <strong style={{ color: 'var(--green)' }}>k·f₀ = k·{m.f0_median_hz.toFixed(1)} Hz</strong>.
                 </p>
               )}
             </div>
@@ -1257,8 +1283,9 @@ function MLComparePage() {
               <tr style={{ background: 'var(--bg-warm)', borderBottom: '1px solid var(--border)' }}>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'left', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Noise Type</th>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--orange)' }}>Baseline</th>
-                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--blue)' }}>ML (fine-tuned)</th>
-                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#00c864' }}>Ours</th>
+                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--blue)' }}>ML (sklearn)</th>
+                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--purple)' }}>ML (PyTorch)</th>
+                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--green)' }}>Ours</th>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Δ vs Baseline</th>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Winner</th>
               </tr>
@@ -1271,9 +1298,10 @@ function MLComparePage() {
                 const baseline = m.baseline.harmonic_dominance * 100
                 const ours = m.ours.harmonic_dominance * 100
                 const ml = m.ml_finetuned ? m.ml_finetuned.harmonic_dominance * 100 : null
-                const best = Math.max(baseline, ours, ml ?? 0)
-                const winnerLabel = best === ours ? 'Ours' : best === (ml ?? -1) ? 'ML' : 'Baseline'
-                const winnerColor = winnerLabel === 'Ours' ? '#00c864' : winnerLabel === 'ML' ? 'var(--blue)' : 'var(--orange)'
+                const tc = m.ml_pytorch ? m.ml_pytorch.harmonic_dominance * 100 : null
+                const best = Math.max(baseline, ours, ml ?? 0, tc ?? 0)
+                const winnerLabel = best === ours ? 'Ours' : best === (tc ?? -1) ? 'PyTorch' : best === (ml ?? -1) ? 'sklearn' : 'Baseline'
+                const winnerColor = winnerLabel === 'Ours' ? 'var(--green)' : winnerLabel === 'PyTorch' ? 'var(--purple)' : winnerLabel === 'sklearn' ? 'var(--blue)' : 'var(--orange)'
                 return (
                   <tr key={nt} style={{ borderBottom: '1px solid var(--border)' }}>
                     <td style={{ padding: '0.85rem 1rem' }}>
@@ -1285,10 +1313,13 @@ function MLComparePage() {
                     <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: 'var(--blue)' }}>
                       {ml !== null ? `${ml.toFixed(1)}%` : '—'}
                     </td>
-                    <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: '#00c864', fontWeight: 700 }}>
+                    <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: 'var(--purple)' }}>
+                      {tc !== null ? `${tc.toFixed(1)}%` : '—'}
+                    </td>
+                    <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: 'var(--green)', fontWeight: 700 }}>
                       {ours.toFixed(1)}%
                     </td>
-                    <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: '#00c864' }}>
+                    <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: 'var(--green)' }}>
                       +{(ours - baseline).toFixed(1)}%
                     </td>
                     <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: winnerColor, fontWeight: 700 }}>
@@ -1323,35 +1354,35 @@ function MLComparePage() {
             ⚡ Honest result
           </div>
           <p style={{ fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.65, marginBottom: '0.75rem' }}>
-            The fine-tuned sklearn MLPRegressor <strong style={{ color: 'var(--blue)' }}>matches or slightly beats</strong> our
-            explicit approach on <strong>car</strong> and <strong>plane</strong> noise after training on 80 real rumbles
-            (16k frames) for ~2 minutes. It learns an approximation of the comb mask from the data.
-          </p>
-          <p style={{ fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.65, marginBottom: '0.75rem' }}>
-            But this is the <strong>pitch point</strong>, not a defeat:
+            We ran three ML approaches — generic spectral gating, a fine-tuned{' '}
+            <strong style={{ color: 'var(--blue)' }}>sklearn MLP</strong>, and a{' '}
+            <strong style={{ color: 'var(--purple)' }}>PyTorch 1D convolutional U-Net</strong> — all trained on the same
+            80 real elephant rumbles (16k frames). Both ML models outperform the baseline.
+            They may match our explicit approach on car and plane noise. But this is the{' '}
+            <strong>pitch point</strong>, not a defeat:
           </p>
           <ul style={{ fontSize: '0.88rem', color: 'var(--text)', lineHeight: 1.7, paddingLeft: '1.25rem', marginBottom: '0.75rem' }}>
             <li>
-              Our classical approach <strong style={{ color: '#00c864' }}>wins on generator noise</strong> — the case where
-              engine harmonics directly overlap elephant harmonics and the mathematical prior matters most.
+              Our classical approach <strong style={{ color: 'var(--green)' }}>wins on generator noise</strong> — the hardest case
+              where engine harmonics directly overlap elephant harmonics and the explicit mathematical prior matters most.
             </li>
             <li>
               Our approach needs <strong>zero training data</strong>. It works on any species with a harmonic series
               (whales, dolphins, birds) by tuning 3 parameters (f₀ range, harmonic count, comb bandwidth).
             </li>
             <li>
-              The ML model needs <strong>80 labeled rumbles per species</strong> and a 2-minute fit. Try that on
-              an endangered species with 10 recordings.
+              Both ML models need <strong>80 labeled rumbles per species</strong>. Try that on an endangered species
+              with 10 recordings — or a newly discovered species with zero.
             </li>
             <li>
-              The ML model still <strong style={{ color: 'var(--blue)' }}>imitates</strong> our comb mask — it was
-              trained with our output as the target. When the explicit approach is already correct, the learned
-              approximation approaches its ceiling. The ML model cannot exceed the algorithm it was distilled from.
+              Both the sklearn MLP and PyTorch U-Net <strong style={{ color: 'var(--purple)' }}>imitate</strong> our comb mask —
+              trained with our algorithm's output as the target. They cannot exceed the ceiling set by the explicit
+              approach they were distilled from.
             </li>
           </ul>
           <p style={{ fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.65, fontWeight: 700, marginBottom: 0 }}>
-            Domain priors give you the ceiling for free. ML gives you an expensive approximation that only gets
-            there with enough data.
+            Domain priors give you the ceiling for free. Both ML approaches give you an expensive approximation
+            that only approaches it with enough labeled data — and still can't beat the math on the hardest noise.
           </p>
         </div>
       </section>
@@ -1360,20 +1391,20 @@ function MLComparePage() {
       <section className="section container" style={{ marginTop: '1.5rem' }}>
         <div style={{
           padding: '2rem',
-          background: 'rgba(0, 200, 100, 0.05)',
-          border: '1px solid rgba(0, 200, 100, 0.2)',
+          background: 'var(--green-dim)',
+          border: '1px solid rgba(74, 124, 63, 0.3)',
           borderRadius: '8px',
           textAlign: 'center',
         }}>
-          <h3 style={{ fontFamily: 'var(--font-display)', color: '#00c864', marginBottom: '0.75rem' }}>
+          <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--green)', marginBottom: '0.75rem' }}>
             The takeaway
           </h3>
           <p style={{ fontSize: '0.95rem', color: 'var(--text)', maxWidth: '72ch', margin: '0 auto' }}>
-            Generic spectral gating is the default because it's easy. But it has no idea
-            what an elephant sounds like, and it keeps any strong harmonic structure — including
-            engine noise. Our approach knows that elephant rumbles live on a strict k·f₀ series
-            anchored at 10–25 Hz, so we build a mask around exactly those bins and throw everything
-            else away.
+            Generic spectral gating keeps any strong harmonic structure — including engine noise.
+            Both sklearn and PyTorch learn to approximate the right answer, but require labeled data
+            and still fall short on generator noise — the hardest case. Our explicit approach knows
+            elephant rumbles live on a strict k·f₀ series anchored at 10–25 Hz, and builds a
+            surgical mask around exactly those bins.
           </p>
           <p style={{
             fontSize: '0.95rem',

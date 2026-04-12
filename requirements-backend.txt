@@ -13,6 +13,9 @@ openpyxl>=3.1
 scikit-learn>=1.4
 joblib>=1.3
 
+# PyTorch deep learning denoiser (1D Conv U-Net trained on same rumble data)
+torch>=2.0  # CPU-only: pip install torch>=2.0 --index-url https://download.pytorch.org/whl/cpu
+
 # Progress and visualization
 tqdm>=4.66
 matplotlib>=3.8
