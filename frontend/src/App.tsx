@@ -926,8 +926,6 @@ function DemoPage({
       <div className="divider" />
       <PipelineVisualizerSection />
       <div className="divider" />
-      <UploadSection active={activeUpload} onActive={setActiveUpload} />
-      <div className="divider" />
       <BatchSection />
       <div className="divider" />
       <MultiSpeakerSection />
