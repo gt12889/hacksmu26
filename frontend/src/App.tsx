@@ -141,10 +141,13 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
         <img
           src={`/static/demo/${noiseType}_demo.png`}
           alt={`${noiseType} noise — before/after spectrogram`}
-          style={{ display: imgLoaded ? 'block' : 'none' }}
+          style={{
+            display: 'block',
+            opacity: imgLoaded ? 1 : 0,
+            transition: 'opacity 0.3s ease',
+          }}
           onLoad={() => setImgLoaded(true)}
           onError={() => setImgLoaded(false)}
-          loading="lazy"
         />
       </div>
 

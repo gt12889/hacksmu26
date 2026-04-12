@@ -384,13 +384,16 @@ code, .mono { font-family: var(--font-mono); }
 .spectrogram-wrap:hover img { transform: scale(1.015); }
 
 .spectrogram-placeholder {
-  aspect-ratio: 3/1;
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
   font-size: 0.8rem;
   background: var(--bg-warm);
+  font-family: var(--font-mono);
+  z-index: 1;
 }
 
 .card-metrics {

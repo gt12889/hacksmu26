@@ -218,13 +218,57 @@ function StageView({
   onPlayToggle: (which: 'original' | 'clean') => void
 }) {
   const [imgVisible, setImgVisible] = useState(false)
+  const [computing, setComputing] = useState(true)
+  const [computeProgress, setComputeProgress] = useState(0)
   const imgSrc = stageImage(stage)
+
+  // Simulated compute phase: ~900ms of "loading" before revealing the image
+  const COMPUTE_MS = 900
 
   useEffect(() => {
     setImgVisible(false)
-    const t = setTimeout(() => setImgVisible(true), 80)
-    return () => clearTimeout(t)
+    setComputing(true)
+    setComputeProgress(0)
+
+    const start = performance.now()
+    let raf = 0
+    const tick = () => {
+      const elapsed = performance.now() - start
+      const p = Math.min(1, elapsed / COMPUTE_MS)
+      setComputeProgress(p)
+      if (p < 1) {
+        raf = requestAnimationFrame(tick)
+      } else {
+        setComputing(false)
+        setTimeout(() => setImgVisible(true), 50)
+      }
+    }
+    raf = requestAnimationFrame(tick)
+
+    return () => cancelAnimationFrame(raf)
   }, [stage.id])
+
+  // Stage-specific loading message
+  const loadingMessage = (() => {
+    switch (stage.id) {
+      case 'stft':
+        return 'Computing Short-Time Fourier Transform @ n_fft=8192...'
+      case 'classify':
+        return 'Analyzing spectral flatness of noise gaps...'
+      case 'hpss':
+        return 'Median filtering harmonic vs percussive components...'
+      case 'shs':
+        return 'Sweeping f₀ candidates from 8–25 Hz, summing subharmonics...'
+      case 'comb_mask':
+        return 'Building time-varying bandpass at integer multiples of f₀...'
+      case 'reconstruct':
+        return 'Applying mask to magnitude, reconstructing via phase-preserved ISTFT...'
+      case 'denoise':
+        return 'Running residual non-stationary spectral gating...'
+      default:
+        return `Processing ${(stage as { name: string }).name}...`
+    }
+  })()
 
   return (
     <div style={{
@@ -289,13 +333,31 @@ function StageView({
         </div>
       </div>
 
-      {/* Stage image */}
+      {/* Stage image with loading overlay */}
       {imgSrc && (
         <div style={{
           background: '#0a0a0a',
           overflow: 'hidden',
           position: 'relative',
+          minHeight: '200px',
         }}>
+          {/* Blurred placeholder */}
+          <img
+            src={imgSrc}
+            alt=""
+            aria-hidden="true"
+            style={{
+              width: '100%',
+              display: 'block',
+              opacity: 0.15,
+              filter: 'blur(16px) brightness(0.6)',
+              transform: 'scale(1.05)',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+            }}
+          />
+          {/* Full-res image (fades in after compute) */}
           <img
             src={imgSrc}
             alt={stage.name}
@@ -303,10 +365,77 @@ function StageView({
               width: '100%',
               display: 'block',
               opacity: imgVisible ? 1 : 0,
-              transform: imgVisible ? 'scale(1)' : 'scale(0.98)',
-              transition: 'opacity 0.4s ease, transform 0.4s ease',
+              transform: imgVisible ? 'scale(1)' : 'scale(0.985)',
+              transition: 'opacity 0.45s ease, transform 0.45s ease',
+              position: 'relative',
             }}
           />
+          {/* Loading overlay */}
+          {computing && (
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '1rem',
+              background: 'rgba(10, 10, 10, 0.55)',
+              backdropFilter: 'blur(2px)',
+              zIndex: 2,
+              pointerEvents: 'none',
+            }}>
+              {/* Spinner ring */}
+              <div style={{
+                width: '52px',
+                height: '52px',
+                border: '3px solid rgba(255, 255, 255, 0.12)',
+                borderTopColor: 'var(--orange, #ff7c2a)',
+                borderRightColor: 'var(--orange, #ff7c2a)',
+                borderRadius: '50%',
+                animation: 'spin 0.8s linear infinite',
+              }} />
+              {/* Status text */}
+              <div style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.78rem',
+                color: '#fff',
+                textAlign: 'center',
+                maxWidth: '80%',
+                lineHeight: 1.5,
+                textShadow: '0 1px 4px rgba(0,0,0,0.8)',
+              }}>
+                <div style={{
+                  color: 'var(--orange, #ff7c2a)',
+                  fontSize: '0.68rem',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  marginBottom: '0.4rem',
+                  fontWeight: 700,
+                }}>
+                  ⚙ Running stage {stageIndex + 1}/{totalStages}
+                </div>
+                {loadingMessage}
+              </div>
+              {/* Progress bar */}
+              <div style={{
+                width: '55%',
+                maxWidth: '340px',
+                height: '3px',
+                background: 'rgba(255,255,255,0.12)',
+                borderRadius: '2px',
+                overflow: 'hidden',
+              }}>
+                <div style={{
+                  width: `${computeProgress * 100}%`,
+                  height: '100%',
+                  background: 'linear-gradient(90deg, var(--orange, #ff7c2a), #ffb347)',
+                  transition: 'width 0.05s linear',
+                  boxShadow: '0 0 12px rgba(255, 124, 42, 0.6)',
+                }} />
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -574,11 +703,14 @@ export function PipelineVisualizer() {
     const stage = result.stages[currentStage]
     if (!stage) return
 
+    // Ensure at least 1800ms so the loading illusion (900ms) + reveal + view (900ms)
+    // all get a chance to play even if the backend reports a shorter duration.
+    const displayMs = Math.max(stage.duration_ms, 1800)
     timerRef.current = setTimeout(() => {
       if (currentStage < result.stages.length - 1) {
         setCurrentStage(i => i + 1)
       }
-    }, stage.duration_ms)
+    }, displayMs)
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
