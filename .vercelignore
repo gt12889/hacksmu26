@@ -1,6 +1,6 @@
 # Python backend — not deployed to Vercel (too large, and we only ship the static frontend)
 .venv/
-api/
+/api/
 pipeline/
 scripts/
 tests/
