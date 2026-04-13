@@ -20,6 +20,7 @@ import base64
 import io
 import tempfile
 import time
+from pathlib import Path
 import warnings
 from typing import Any
 
@@ -410,14 +411,20 @@ async def pipeline_visualize(file: UploadFile = File(...)) -> JSONResponse:
     The final stage includes final_audio_b64 and original_audio_b64.
     """
     # ── Load audio ────────────────────────────────────────────────────────────
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
+    # Use delete=False to avoid Windows permission error (file handle lock
+    # prevents librosa from opening the file while the context manager holds it).
+    tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+    try:
         content = await file.read()
         tmp.write(content)
         tmp.flush()
+        tmp.close()
         try:
             y, sr = librosa.load(tmp.name, sr=None, mono=True)
         except Exception as exc:
             raise HTTPException(status_code=422, detail=f"Cannot decode audio: {exc}")
+    finally:
+        Path(tmp.name).unlink(missing_ok=True)
 
     # Clamp extremely long recordings to first 20 s (keeps processing fast for demo)
     MAX_DURATION_SEC = 20.0

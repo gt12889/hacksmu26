@@ -3,9 +3,9 @@ import type { DemoStatus, NoiseType, Metadata, StatusResponse } from './types'
 import { UploadPanel } from './components/UploadPanel'
 import { PipelineVisualizer } from './components/PipelineVisualizer'
 import { CallDetail } from './components/CallDetail'
-import { DashboardTable } from './components/DashboardTable'
-import { getDashboardRows, getBatchResults, batchAudioUrl, uploadAudioUrl, audioUrl } from './api/client'
-import type { CallResult, DashboardRow } from './types/api'
+import { ConfidenceTable } from './components/ConfidenceTable'
+import { getBatchResults, batchAudioUrl, uploadAudioUrl, audioUrl } from './api/client'
+import type { CallResult } from './types/api'
 import ElephantViewer from './ElephantViewer'
 import CurvedLoop from './components/CurvedLoop'
 
@@ -16,8 +16,8 @@ const NOISE_CONFIG = {
     color: 'var(--orange)',
     dimColor: 'var(--orange-dim)',
     borderColor: 'rgba(255, 124, 42, 0.3)',
-    icon: '',
-    description: 'Constant 30 Hz tonal hum  engine fundamentals overlap directly with elephant f0 range.',
+    icon: '⚡',
+    description: 'Constant 30 Hz tonal hum — engine fundamentals overlap directly with elephant f0 range.',
     detail: 'Generator noise produces a steady harmonic series at ~30 Hz. Because elephant rumbles also have fundamentals at 10–25 Hz, the 2nd harmonic of a generator (60 Hz) lands squarely on elephant 4f0. Generic tools trained on speech mistakenly preserve the engine tone. Our stationary noisereduce profile mode eliminates it cleanly.',
   },
   car: {
@@ -25,17 +25,17 @@ const NOISE_CONFIG = {
     color: 'var(--blue)',
     dimColor: 'var(--blue-dim)',
     borderColor: 'rgba(59, 130, 246, 0.3)',
-    icon: '',
-    description: 'Transient broadband burst  engine startup and idle spread energy across the full infrasonic band.',
+    icon: '🚗',
+    description: 'Transient broadband burst — engine startup and idle spread energy across the full infrasonic band.',
     detail: 'Car engine noise is non-stationary: it sweeps rapidly as RPM changes, contaminating wide frequency bands in short bursts. We use adaptive non-stationary spectral gating after comb masking to clean the residual. The comb mask already removed most car harmonics that overlapped elephant content.',
   },
   plane: {
     label: 'AIRCRAFT',
     color: 'var(--purple)',
     dimColor: 'var(--purple-dim)',
-    borderColor: 'rgba(107, 63, 160, 0.3)',
-    icon: '',
-    description: 'Slow-sweep harmonic drone, aircraft flyover sweeps through the entire elephant frequency range.',
+    borderColor: 'rgba(168, 85, 247, 0.3)',
+    icon: '✈️',
+    description: 'Slow-sweep harmonic drone — aircraft flyover sweeps through the entire elephant frequency range.',
     detail: 'Aircraft noise is the hardest case: the engine drone slowly sweeps from below elephant f0 through its harmonic range and out the other side. Our time-varying comb mask tracks elephant f0 frame-by-frame, so even as plane noise sweeps through, the mask stays locked on elephant harmonics and rejects everything else.',
   },
 } as const
@@ -105,9 +105,9 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
                 marginLeft: '0.5rem',
                 display: 'inline-block',
                 padding: '0.15rem 0.5rem',
-                background: 'var(--green-dim)',
-                color: 'var(--green)',
-                border: '1px solid rgba(74, 124, 63, 0.35)',
+                background: 'rgba(0, 200, 100, 0.12)',
+                color: '#00c864',
+                border: '1px solid rgba(0, 200, 100, 0.3)',
                 borderRadius: '4px',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.65rem',
@@ -142,7 +142,7 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
         )}
         <img
           src={`/static/demo/${noiseType}_demo.png`}
-          alt={`${noiseType} noise  before/after spectrogram`}
+          alt={`${noiseType} noise — before/after spectrogram`}
           style={{
             display: 'block',
             opacity: imgLoaded ? 1 : 0,
@@ -160,7 +160,7 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
           <span className="metric-value">
             {metrics?.harmonic_dominance_baseline !== undefined
               ? `${metrics.harmonic_dominance_baseline.toFixed(1)}%`
-              : ''}
+              : '—'}
           </span>
         </div>
         <div className="metric">
@@ -168,7 +168,7 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
           <span className="metric-value positive">
             {metrics?.harmonic_dominance_ours !== undefined
               ? `${metrics.harmonic_dominance_ours.toFixed(1)}%`
-              : ''}
+              : '—'}
           </span>
         </div>
         <div className="metric">
@@ -176,25 +176,25 @@ function DemoCard({ noiseType, metadata }: { noiseType: NoiseType; metadata: Met
           <span className="metric-value positive">
             {metrics?.harmonic_dominance_delta !== undefined
               ? `${metrics.harmonic_dominance_delta >= 0 ? '+' : ''}${metrics.harmonic_dominance_delta.toFixed(1)}%`
-              : ''}
+              : '—'}
           </span>
         </div>
         <div className="metric">
           <span className="metric-label">f₀ Range</span>
           <span className="metric-value cyan" style={{ fontSize: '0.72rem' }}>
-            {metrics ? `${metrics.f0_min.toFixed(0)}–${metrics.f0_max.toFixed(0)} Hz` : ''}
+            {metrics ? `${metrics.f0_min.toFixed(0)}–${metrics.f0_max.toFixed(0)} Hz` : '—'}
           </span>
         </div>
         <div className="metric">
           <span className="metric-label">f₀ Median</span>
           <span className="metric-value cyan">
-            {metrics ? `${metrics.f0_median.toFixed(1)} Hz` : ''}
+            {metrics ? `${metrics.f0_median.toFixed(1)} Hz` : '—'}
           </span>
         </div>
         <div className="metric">
           <span className="metric-label">Duration</span>
           <span className="metric-value">
-            {metrics ? `${metrics.duration.toFixed(1)}s` : ''}
+            {metrics ? `${metrics.duration.toFixed(1)}s` : '—'}
           </span>
         </div>
       </div>
@@ -275,12 +275,12 @@ function NotReadyPanel({ onGenerate }: { onGenerate: () => void }) {
     <div className="not-ready-panel">
       <h3>Demo Not Yet Generated</h3>
       <p>
-        Click below to run the full denoising pipeline on synthetic test audio 
+        Click below to run the full denoising pipeline on synthetic test audio —
         generator, car, and aircraft noise types.
         Processing takes ~30–90 seconds.
       </p>
       <button className="btn-primary" onClick={onGenerate}>
-        <span></span> Generate Demo
+        <span>⚗</span> Generate Demo
       </button>
       <p style={{ marginTop: '1.5rem', fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
         Uses synthetic harmonic test audio (f0 = 14 Hz, 6s per call)
@@ -305,7 +305,7 @@ function ScienceSection() {
           <p className="science-body">
             Elephant rumbles produce energy at <strong>exact integer multiples</strong> of a
             fundamental frequency (f0 = 8–25 Hz, harmonics up to 1 kHz).
-            Critically, the <strong>2nd harmonic is stronger than the fundamental</strong>  so
+            Critically, the <strong>2nd harmonic is stronger than the fundamental</strong> — so
             we detect f0 via subharmonic summation (NSSH), not direct peak picking.
           </p>
           <div className="science-formula">
@@ -320,7 +320,7 @@ function ScienceSection() {
           <p className="science-body">
             A <strong>time-varying soft comb filter</strong> is built at each detected f0 frame.
             It passes only frequencies at kf0 (±5 Hz bandwidth), rejecting everything else.
-            Engine noise at 30 Hz, 60 Hz, 90 Hz  <strong>eliminated</strong>, even when it
+            Engine noise at 30 Hz, 60 Hz, 90 Hz — <strong>eliminated</strong>, even when it
             directly overlaps elephant harmonics.
           </p>
           <div className="science-formula">
@@ -331,12 +331,12 @@ function ScienceSection() {
         </div>
 
         <div className="science-card brown-top">
-          <span className="science-icon"></span>
+          <span className="science-icon">✕</span>
           <h3 className="science-title">vs Generic AI</h3>
           <p className="science-body">
             LALAL.AI and media.io are trained on <strong>speech and music (100–8000 Hz)</strong>.
             They have no concept of infrasonic content. Our method exploits the
-            <strong> mathematical structure unique to elephant vocalizations</strong> 
+            <strong> mathematical structure unique to elephant vocalizations</strong> —
             30% higher precision/recall than spectrogram cross-correlation at low SNR.
           </p>
           <div className="science-formula">
@@ -363,21 +363,21 @@ function ComparisonSection() {
         <div className="compare-card">
           <h3 className="compare-title">LALAL.AI / Generic AI Tools</h3>
           <ul className="compare-list">
-            <li><span className="cross"></span> Trained on speech (300–3400 Hz) and music  no infrasonic knowledge</li>
-            <li><span className="cross"></span> Cannot resolve 5 Hz frequency differences at 44.1 kHz with n_fft=1024</li>
-            <li><span className="cross"></span> Treats engine harmonics at 30/60/90 Hz as "signal to preserve"</li>
-            <li><span className="cross"></span> No awareness of elephant harmonic structure</li>
-            <li><span className="cross"></span> Outputs are either over-suppressed (artifacts) or under-suppressed (noise retained)</li>
+            <li><span className="cross">✗</span> Trained on speech (300–3400 Hz) and music — no infrasonic knowledge</li>
+            <li><span className="cross">✗</span> Cannot resolve 5 Hz frequency differences at 44.1 kHz with n_fft=1024</li>
+            <li><span className="cross">✗</span> Treats engine harmonics at 30/60/90 Hz as "signal to preserve"</li>
+            <li><span className="cross">✗</span> No awareness of elephant harmonic structure</li>
+            <li><span className="cross">✗</span> Outputs are either over-suppressed (artifacts) or under-suppressed (noise retained)</li>
           </ul>
         </div>
         <div className="compare-card ours">
-          <h3 className="compare-title">ElePhone</h3>
+          <h3 className="compare-title">ElephantVoices Denoiser</h3>
           <ul className="compare-list">
-            <li><span className="check"></span> n_fft=8192 → 5.4 Hz / bin  resolves individual elephant harmonics</li>
-            <li><span className="check"></span> NSSH detects f0 even when the fundamental is fully masked by noise</li>
-            <li><span className="check"></span> Time-varying comb mask tracks f0 glides across each call</li>
-            <li><span className="check"></span> Noise type adaptive: stationary profile for generators, non-stationary for car/plane</li>
-            <li><span className="check"></span> Per-call confidence scores  212 calls ranked for researcher prioritization</li>
+            <li><span className="check">✓</span> n_fft=8192 → 5.4 Hz / bin — resolves individual elephant harmonics</li>
+            <li><span className="check">✓</span> NSSH detects f0 even when the fundamental is fully masked by noise</li>
+            <li><span className="check">✓</span> Time-varying comb mask tracks f0 glides across each call</li>
+            <li><span className="check">✓</span> Noise type adaptive: stationary profile for generators, non-stationary for car/plane</li>
+            <li><span className="check">✓</span> Per-call confidence scores — 212 calls ranked for researcher prioritization</li>
           </ul>
         </div>
       </div>
@@ -427,7 +427,7 @@ function PipelineVisualizerSection() {
         <p className="section-label">Interactive Pipeline</p>
         <h2 className="section-title">Animated Pipeline Visualizer</h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem', maxWidth: '60ch', marginLeft: 'auto', marginRight: 'auto' }}>
-          Upload any WAV file and watch the full 7-stage denoising pipeline animate in real time 
+          Upload any WAV file and watch the full 7-stage denoising pipeline animate in real time —
           STFT, noise classification, HPSS, SHS f0 detection, comb masking, ISTFT reconstruction,
           and residual spectral gating.
         </p>
@@ -473,7 +473,7 @@ function UploadSection({
         <p className="section-label">Upload Your Recording</p>
         <h2 className="section-title">Process a Field Recording</h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Upload a WAV file  the pipeline will denoise it using harmonic comb masking
+          Upload a WAV file — the pipeline will denoise it using harmonic comb masking
           and return spectrograms, SNR metrics, and A/B audio.
         </p>
       </div>
@@ -498,35 +498,25 @@ function UploadSection({
 
 // ─── Batch results section ────────────────────────────────────────────────────
 function BatchSection() {
-  const [dashRows, setDashRows] = useState<DashboardRow[]>([])
-  const [batchResults, setBatchResults] = useState<CallResult[]>([])
-  const [selectedCallIndex, setSelectedCallIndex] = useState<number | null>(null)
+  const [results, setResults] = useState<CallResult[]>([])
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
-    // Load dashboard scores (4-approach comparison)
-    getDashboardRows()
-      .then((d) => setDashRows(d.rows))
+    getBatchResults()
+      .then((r) => setResults(r.results))
       .catch(() => {})
       .finally(() => setLoading(false))
-
-    // Also load batch results for CallDetail audio playback
-    getBatchResults()
-      .then((r) => setBatchResults(r.results))
-      .catch(() => {})
   }, [])
 
-  // Find the CallResult for the selected dashboard row (for audio playback)
-  const selectedBatchResult =
-    selectedCallIndex !== null ? batchResults[selectedCallIndex] ?? null : null
-
-  const rowCount = dashRows.length
+  const selected = selectedIndex !== null ? results[selectedIndex] : null
+  const rowCount = results.length
 
   return (
     <section className="section-alt">
       <div className="section container">
-        {/* Collapsible header */}
+        {/* Collapsible header — clickable */}
         <button
           type="button"
           onClick={() => setExpanded(e => !e)}
@@ -546,7 +536,7 @@ function BatchSection() {
           <div style={{ flex: 1 }}>
             <p className="section-label" style={{ margin: 0 }}>Batch Analysis</p>
             <h2 className="section-title" style={{ margin: 0 }}>
-              Per-Call Comparison Across All 4 Denoisers
+              Confidence Dashboard
               {!loading && rowCount > 0 && (
                 <span style={{
                   marginLeft: '0.75rem',
@@ -562,8 +552,8 @@ function BatchSection() {
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '0.4rem', marginBottom: 0 }}>
               {expanded
-                ? '212 real ElephantVoices rumbles. Four approaches applied to each. Harmonic dominance measured on the re-STFT of each cleaned output. Sortable by any approach; click a row to play DSP-cleaned audio.'
-                : `${rowCount || 212} calls -- four denoisers compared per call. Click to expand.`}
+                ? 'Click any row to view its spectrogram, A/B audio, and comparison metrics.'
+                : `${rowCount || 212} processed calls sorted by confidence. Click to expand.`}
             </p>
           </div>
           <span
@@ -601,29 +591,29 @@ function BatchSection() {
             }}>
               {loading ? (
                 <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', padding: '1rem' }}>
-                  Loading comparison data...
+                  Loading batch results...
                 </p>
-              ) : dashRows.length === 0 ? (
+              ) : results.length === 0 ? (
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', padding: '1rem' }}>
-                  No dashboard data yet. Run <code>python scripts/rescore_dashboard.py</code> to populate.
+                  No batch results yet. Run <code>python scripts/batch_process.py</code> to populate.
                 </p>
               ) : (
-                <DashboardTable
-                  rows={dashRows}
-                  selectedIndex={selectedCallIndex}
-                  onSelect={setSelectedCallIndex}
+                <ConfidenceTable
+                  results={results}
+                  selectedIndex={selectedIndex}
+                  onSelect={setSelectedIndex}
                 />
               )}
             </div>
-            {selectedBatchResult && (
+            {selected && (
               <div className="call-detail-section" style={{ marginTop: '2rem' }}>
                 <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: '1rem', color: 'var(--brown)' }}>
-                  Call Detail: {selectedBatchResult.filename}
+                  Call Detail: {selected.filename}
                 </h3>
                 <CallDetail
-                  result={selectedBatchResult}
+                  result={selected}
                   noisyUrl={null}
-                  cleanUrl={batchAudioUrl(selectedBatchResult.clean_wav_path)}
+                  cleanUrl={batchAudioUrl(selected.clean_wav_path)}
                 />
               </div>
             )}
@@ -642,7 +632,7 @@ function MultiSpeakerSection() {
         <p className="section-label">Stretch Goal</p>
         <h2 className="section-title">Multi-Speaker Separation</h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem', maxWidth: '70ch' }}>
-          When two elephants vocalize simultaneously, their harmonic series are independent 
+          When two elephants vocalize simultaneously, their harmonic series are independent —
           their trajectories may cross in the time-frequency plane. We detect multiple f<sub>0</sub>{' '}
           tracks via top-K subharmonic summation, then link them across time with a greedy
           pitch-continuity algorithm. Validated on a synthetic 14 Hz + 18 Hz two-caller mixture.
@@ -724,7 +714,7 @@ function AppHeader({ route, navigate }: { route: Route; navigate: (r: Route) => 
           >
             <span className="logo-mark">🐘</span>
             <div>
-              <span className="logo-text">ElePhone</span>
+              <span className="logo-text">ElephantVoices Denoiser</span>
               <span className="logo-sub">Harmonic Comb Masking · Infrasonic Bioacoustics</span>
             </div>
           </a>
@@ -795,12 +785,12 @@ function AppHeader({ route, navigate }: { route: Route; navigate: (r: Route) => 
 function HomePage({ navigate }: { navigate: (r: Route) => void }) {
   return (
     <>
-      {/* Hero  industrial, minimal */}
+      {/* Hero — industrial, minimal */}
       <div className="hero">
         <div className="hero-inner hero-split">
           <div className="hero-text">
             <div className="hero-eyebrow fade-up fade-up-1">
-              HACKSMU 2026 · ELEPHONE
+              HACKSMU 2026 · ELEPHANTVOICES
             </div>
             <h1 className="hero-headline fade-up fade-up-2">
               DENOISE<br />
@@ -838,7 +828,7 @@ function HomePage({ navigate }: { navigate: (r: Route) => void }) {
         borderBottom: '2px solid var(--brown)',
       }}>
         <CurvedLoop
-          marqueeText="🐘 ELEPHONE · ELEPHANT RUMBLE · HARMONIC COMB · SUBHARMONIC SUMMATION · "
+          marqueeText="🐘 ELEPHANTVOICES · RUMBLE · HARMONIC COMB · SUBHARMONIC SUMMATION · "
           speed={1.5}
           curveAmount={180}
           direction="left"
@@ -889,7 +879,7 @@ function DemoPage({
           <h2 className="section-title">Three Noise Types</h2>
           {status === 'ready' && (
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-              3-panel spectrograms: Original · Comb Mask · Cleaned  y-axis 0–500 Hz
+              3-panel spectrograms: Original · Comb Mask · Cleaned — y-axis 0–500 Hz
             </p>
           )}
         </div>
@@ -904,7 +894,7 @@ function DemoPage({
               Demo assets not yet generated.
             </p>
             <button className="btn-primary" onClick={handleGenerate}>
-               Generate Demo Now
+              ⚗ Generate Demo Now
             </button>
           </div>
         )}
@@ -944,136 +934,7 @@ function DemoPage({
       <BatchSection />
       <div className="divider" />
       <MultiSpeakerSection />
-      <div className="divider" />
-      <DataSourcesSection />
     </>
-  )
-}
-
-// ─── Data Sources Section ────────────────────────────────────────────────────
-function DataSourcesSection() {
-  return (
-    <section className="section container">
-      <div className="section-header">
-        <p className="section-label">Data Sources</p>
-        <h2 className="section-title" style={{ textTransform: 'uppercase', letterSpacing: '-0.01em' }}>
-          REAL PRODUCTION DATASETS
-        </h2>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem', maxWidth: '70ch' }}>
-          The 44 recordings used for training and validation were provided by ElephantVoices.
-          The pipeline is designed to be deployed against the two public databases below, which
-          hold the bulk of their labeled acoustic data.
-        </p>
-      </div>
-
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: '1rem',
-        marginTop: '1.5rem',
-      }}>
-        <a
-          href="https://www.elephantvoices.org/elephant-calls-database.html"
-          target="_blank"
-          rel="noreferrer"
-          style={{
-            display: 'block',
-            padding: '1.75rem 2rem',
-            background: 'var(--bg-card)',
-            border: '1px solid var(--border)',
-            borderLeft: '4px solid var(--brown)',
-            borderRadius: '8px',
-            textDecoration: 'none',
-            color: 'inherit',
-            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-2px)'
-            e.currentTarget.style.boxShadow = 'var(--shadow-md, 0 4px 12px rgba(0,0,0,0.08))'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = ''
-            e.currentTarget.style.boxShadow = ''
-          }}
-        >
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-            PRIMARY DATABASE
-          </div>
-          <h3 style={{ fontSize: '1.3rem', color: 'var(--brown)', marginBottom: '0.5rem', letterSpacing: '-0.01em' }}>
-            ELEPHANT CALLS DATABASE
-          </h3>
-          <div style={{ fontSize: '1.8rem', color: 'var(--brown)', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
-            10,400+ CALLS
-          </div>
-          <p style={{ fontSize: '0.82rem', color: 'var(--text)', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-            The largest publicly accessible corpus of labeled elephant vocalizations. Browsable by
-            call type, context, and caller identity. Each entry includes a playable audio sample
-            and a short behavioural description.
-          </p>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--brown)', letterSpacing: '0.02em' }}>
-            elephantvoices.org/elephant-calls-database.html →
-          </div>
-        </a>
-
-        <a
-          href="https://www.elephantethogram.org/"
-          target="_blank"
-          rel="noreferrer"
-          style={{
-            display: 'block',
-            padding: '1.75rem 2rem',
-            background: 'var(--bg-card)',
-            border: '1px solid var(--border)',
-            borderLeft: '4px solid var(--brown)',
-            borderRadius: '8px',
-            textDecoration: 'none',
-            color: 'inherit',
-            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-2px)'
-            e.currentTarget.style.boxShadow = 'var(--shadow-md, 0 4px 12px rgba(0,0,0,0.08))'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = ''
-            e.currentTarget.style.boxShadow = ''
-          }}
-        >
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-            BEHAVIOURAL ATLAS
-          </div>
-          <h3 style={{ fontSize: '1.3rem', color: 'var(--brown)', marginBottom: '0.5rem', letterSpacing: '-0.01em' }}>
-            THE ELEPHANT ETHOGRAM
-          </h3>
-          <div style={{ fontSize: '1.8rem', color: 'var(--brown)', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
-            250 FIELD RECORDINGS
-          </div>
-          <p style={{ fontSize: '0.82rem', color: 'var(--text)', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-            A living behavioural atlas that pairs audio with video and written context. Entries
-            are grouped by behavioural category (Affiliative, Antagonistic, Self-directed, etc.),
-            each with inline playable recordings from the field.
-          </p>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--brown)', letterSpacing: '0.02em' }}>
-            elephantethogram.org →
-          </div>
-        </a>
-      </div>
-
-      <div style={{
-        marginTop: '1.25rem',
-        padding: '0.9rem 1.25rem',
-        background: 'var(--bg-warm)',
-        border: '1px solid var(--border)',
-        borderRadius: '6px',
-        fontSize: '0.78rem',
-        fontFamily: 'var(--font-mono)',
-        color: 'var(--text-muted)',
-        lineHeight: 1.6,
-      }}>
-        Both databases are curated by ElephantVoices (Dr. Joyce Poole and Petter Granli).
-        The pipeline shown on this site is deployable against either corpus without retraining.
-      </div>
-    </section>
   )
 }
 
@@ -1082,7 +943,6 @@ type MLMetrics = {
   [key in NoiseType]?: {
     baseline: { harmonic_dominance: number; approach: string }
     ml_finetuned?: { harmonic_dominance: number; approach: string }
-    ml_pytorch?: { harmonic_dominance: number; approach: string }
     ours: { harmonic_dominance: number; approach: string }
     improvement_pct: number
     f0_median_hz: number
@@ -1105,117 +965,26 @@ function MLComparePage() {
       {/* Hero */}
       <div className="hero" style={{ minHeight: 'auto', padding: '3rem 2rem 2rem' }}>
         <div className="hero-inner">
-          <div className="hero-eyebrow fade-up fade-up-1">EXTENDING ELEPHANTVOICES' APPROACH</div>
+          <div className="hero-eyebrow fade-up fade-up-1">Scientific Comparison</div>
           <h1 className="hero-headline fade-up fade-up-2" style={{ fontSize: '2.5rem' }}>
-            START WHERE THEY ARE. <span className="accent">GO FURTHER.</span>
+            Generic ML vs <span className="accent">Domain Priors</span>
           </h1>
           <p className="hero-sub fade-up fade-up-3" style={{ maxWidth: '72ch' }}>
-            ElephantVoices currently denoises field recordings with{' '}
-            <strong>spectrogram-based analysis and supervised ML classifiers</strong>, often in
-            collaboration with <strong>UC Berkeley Linguistics</strong>. We replicated that approach
-            on their exact data, then added an explicit harmonic prior on top.
+            What happens when you throw a generic spectral-gating denoiser at an elephant rumble,
+            compared to our approach that knows elephants have a <strong>strict integer-multiple harmonic series</strong>?
+            Both run on the <strong>same real ElephantVoices recording</strong>. Same input, different priors,
+            different outputs.
           </p>
         </div>
       </div>
 
-      {/* Their approach → our extension */}
-      <section className="section container" style={{ paddingTop: '2rem', paddingBottom: '1.5rem' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 0.1fr 1fr',
-          gap: '1rem',
-          alignItems: 'stretch',
-        }}>
-          {/* Their current approach */}
-          <div style={{
-            padding: '1.5rem 1.75rem',
-            background: 'var(--bg-card)',
-            border: '1px solid var(--border)',
-            borderLeft: '4px solid var(--brown)',
-            borderRadius: '8px',
-          }}>
-            <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase' }}>
-              ELEPHANTVOICES TODAY
-            </div>
-            <h3 style={{ fontSize: '1.15rem', color: 'var(--brown)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '-0.01em' }}>
-              SPECTROGRAM + SUPERVISED ML
-            </h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.82rem', lineHeight: 1.7 }}>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: 'var(--brown)' }}>›</strong> Visual spectrogram analysis isolates vocalizations from background noise
-              </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: 'var(--brown)' }}>›</strong> Supervised ML classifiers tag call types (requires high-quality input)
-              </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: 'var(--brown)' }}>›</strong> 10,400+ calls in the Elephant Calls Database, 250 in the Elephant Ethogram
-              </li>
-              <li style={{ marginBottom: 0 }}>
-                <strong style={{ color: 'var(--brown)' }}>›</strong> Denoising quality gates what enters the ECD
-              </li>
-            </ul>
-          </div>
-          {/* Arrow */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '2rem',
-            color: 'var(--brown)',
-          }}>
-            →
-          </div>
-          {/* Our extension */}
-          <div style={{
-            padding: '1.5rem 1.75rem',
-            background: 'var(--green-dim)',
-            border: '1px solid rgba(74, 124, 63, 0.35)',
-            borderLeft: '4px solid var(--green)',
-            borderRadius: '8px',
-          }}>
-            <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', color: 'var(--green)', marginBottom: '0.75rem', textTransform: 'uppercase' }}>
-              WHAT WE BUILT
-            </div>
-            <h3 style={{ fontSize: '1.15rem', color: 'var(--green)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '-0.01em' }}>
-              FOUR DENOISERS, ONE BENCHMARK
-            </h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.82rem', lineHeight: 1.7 }}>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: 'var(--orange)' }}>1.</strong> Baseline: <strong>noisereduce</strong> stationary spectral gating (the industry default)
-              </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: 'var(--blue)' }}>2.</strong> ML: <strong>sklearn MLPRegressor</strong> (128·64) trained on 80 real rumbles
-              </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <strong style={{ color: 'var(--purple)' }}>3.</strong> Deep ML: <strong>PyTorch 1D U-Net</strong> (230k params, early-stopped on val loss)
-              </li>
-              <li style={{ marginBottom: 0 }}>
-                <strong style={{ color: 'var(--green)' }}>4.</strong> Mathematical DSP: <strong>HPSS + SHS + comb mask</strong>, explicit prior, zero training
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Context strip */}
-        <p style={{
-          marginTop: '1.5rem',
-          fontSize: '0.82rem',
-          color: 'var(--text-muted)',
-          textAlign: 'center',
-          fontStyle: 'italic',
-        }}>
-          Every approach below runs on the same three real ElephantVoices recordings. Same input,
-          different priors, different outputs.
-        </p>
-      </section>
-
       <div className="divider" />
 
-      {/* The pitch bar  4 approaches */}
+      {/* The pitch bar — 3 approaches */}
       <section className="section container">
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
+          gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '1rem',
           marginBottom: '2rem',
         }}>
@@ -1233,7 +1002,7 @@ function MLComparePage() {
             </div>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
               Generic spectral-gating. Zero domain knowledge. What 99% of bioacoustic
-              projects use. Preserves any strong harmonic structure  including engines.
+              projects use. Preserves any strong harmonic structure — including engines.
             </p>
           </div>
           <div style={{
@@ -1249,44 +1018,26 @@ function MLComparePage() {
               sklearn MLP (128·64)
             </div>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
-              MLPRegressor trained on 80 real ElephantVoices rumbles (~16k frames)
-              to predict our comb mask. Learns an approximation of the harmonic prior
-              from data. ~50k parameters.
+              Real ML model — MLPRegressor trained on 80 real ElephantVoices rumbles (16 k
+              frames) to predict our comb mask. Learns an approximation of the harmonic prior
+              from data.
             </p>
           </div>
           <div style={{
             padding: '1.5rem',
-            background: 'var(--purple-dim)',
-            border: '1px solid rgba(107, 63, 160, 0.3)',
+            background: 'rgba(0, 200, 100, 0.08)',
+            border: '1px solid rgba(0, 200, 100, 0.3)',
             borderRadius: '8px',
           }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
-              Deep learning
+              Our approach
             </div>
-            <div style={{ fontWeight: 700, color: 'var(--purple)', fontSize: '1.05rem', marginBottom: '0.5rem' }}>
-              PyTorch 1D U-Net CNN
-            </div>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
-              1D convolutional U-Net with skip connections trained on the same 80 rumbles.
-              Captures local frequency patterns via conv filters. ~65k parameters.
-              The gold standard DL audio pipeline (Demucs, SpeechBrain use PyTorch).
-            </p>
-          </div>
-          <div style={{
-            padding: '1.5rem',
-            background: 'var(--green-dim)',
-            border: '1px solid rgba(74, 124, 63, 0.35)',
-            borderRadius: '8px',
-          }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
-              Mathematical DSP Pipeline
-            </div>
-            <div style={{ fontWeight: 700, color: 'var(--green)', fontSize: '1.05rem', marginBottom: '0.5rem' }}>
+            <div style={{ fontWeight: 700, color: '#00c864', fontSize: '1.05rem', marginBottom: '0.5rem' }}>
               HPSS + SHS + Comb + noisereduce
             </div>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
-              Explicit harmonic prior, no training. Detects elephant f₀ via subharmonic summation,
-              builds a narrow comb mask at k·f₀, encodes the math directly. Zero training data required.
+              Domain-specific classical DSP. Detects elephant f₀ via subharmonic summation,
+              builds a narrow comb mask at k·f₀ — encodes the harmonic prior explicitly.
             </p>
           </div>
         </div>
@@ -1345,23 +1096,17 @@ function MLComparePage() {
                   </div>
                   {m.ml_finetuned && (
                     <div>
-                      <span style={{ color: 'var(--text-muted)' }}>sklearn: </span>
+                      <span style={{ color: 'var(--text-muted)' }}>ML: </span>
                       <strong style={{ color: 'var(--blue)' }}>{(m.ml_finetuned.harmonic_dominance * 100).toFixed(1)}%</strong>
                     </div>
                   )}
-                  {m.ml_pytorch && (
-                    <div>
-                      <span style={{ color: 'var(--text-muted)' }}>PyTorch: </span>
-                      <strong style={{ color: 'var(--purple)' }}>{(m.ml_pytorch.harmonic_dominance * 100).toFixed(1)}%</strong>
-                    </div>
-                  )}
                   <div>
-                    <span style={{ color: 'var(--text-muted)' }}>DSP: </span>
-                    <strong style={{ color: 'var(--green)' }}>{(m.ours.harmonic_dominance * 100).toFixed(1)}%</strong>
+                    <span style={{ color: 'var(--text-muted)' }}>Ours: </span>
+                    <strong style={{ color: '#00c864' }}>{(m.ours.harmonic_dominance * 100).toFixed(1)}%</strong>
                   </div>
                   <div>
                     <span style={{ color: 'var(--text-muted)' }}>Δ vs baseline: </span>
-                    <strong style={{ color: 'var(--green)' }}>+{m.improvement_pct}%</strong>
+                    <strong style={{ color: '#00c864' }}>+{m.improvement_pct}%</strong>
                   </div>
                 </div>
               )}
@@ -1386,7 +1131,7 @@ function MLComparePage() {
                   marginBottom: 0,
                 }}>
                   Baseline preserves <strong style={{ color: 'var(--orange)' }}>~{m.engine_hz_estimate.toFixed(1)} Hz engine noise</strong>.
-                  The DSP pipeline preserves only elephant harmonics at <strong style={{ color: 'var(--green)' }}>k·f₀ = k·{m.f0_median_hz.toFixed(1)} Hz</strong>.
+                  Our approach preserves only elephant harmonics at <strong style={{ color: '#00c864' }}>k·f₀ = k·{m.f0_median_hz.toFixed(1)} Hz</strong>.
                 </p>
               )}
             </div>
@@ -1421,9 +1166,8 @@ function MLComparePage() {
               <tr style={{ background: 'var(--bg-warm)', borderBottom: '1px solid var(--border)' }}>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'left', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Noise Type</th>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--orange)' }}>Baseline</th>
-                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--blue)' }}>ML (sklearn)</th>
-                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--purple)' }}>ML (PyTorch)</th>
-                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--green)' }}>DSP</th>
+                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--blue)' }}>ML (fine-tuned)</th>
+                <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#00c864' }}>Ours</th>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Δ vs Baseline</th>
                 <th style={{ padding: '0.8rem 1rem', textAlign: 'right', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Winner</th>
               </tr>
@@ -1436,10 +1180,9 @@ function MLComparePage() {
                 const baseline = m.baseline.harmonic_dominance * 100
                 const ours = m.ours.harmonic_dominance * 100
                 const ml = m.ml_finetuned ? m.ml_finetuned.harmonic_dominance * 100 : null
-                const tc = m.ml_pytorch ? m.ml_pytorch.harmonic_dominance * 100 : null
-                const best = Math.max(baseline, ours, ml ?? 0, tc ?? 0)
-                const winnerLabel = best === ours ? 'DSP' : best === (tc ?? -1) ? 'PyTorch' : best === (ml ?? -1) ? 'sklearn' : 'Baseline'
-                const winnerColor = winnerLabel === 'DSP' ? 'var(--green)' : winnerLabel === 'PyTorch' ? 'var(--purple)' : winnerLabel === 'sklearn' ? 'var(--blue)' : 'var(--orange)'
+                const best = Math.max(baseline, ours, ml ?? 0)
+                const winnerLabel = best === ours ? 'Ours' : best === (ml ?? -1) ? 'ML' : 'Baseline'
+                const winnerColor = winnerLabel === 'Ours' ? '#00c864' : winnerLabel === 'ML' ? 'var(--blue)' : 'var(--orange)'
                 return (
                   <tr key={nt} style={{ borderBottom: '1px solid var(--border)' }}>
                     <td style={{ padding: '0.85rem 1rem' }}>
@@ -1449,15 +1192,12 @@ function MLComparePage() {
                       {baseline.toFixed(1)}%
                     </td>
                     <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: 'var(--blue)' }}>
-                      {ml !== null ? `${ml.toFixed(1)}%` : ''}
+                      {ml !== null ? `${ml.toFixed(1)}%` : '—'}
                     </td>
-                    <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: 'var(--purple)' }}>
-                      {tc !== null ? `${tc.toFixed(1)}%` : ''}
-                    </td>
-                    <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: 'var(--green)', fontWeight: 700 }}>
+                    <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: '#00c864', fontWeight: 700 }}>
                       {ours.toFixed(1)}%
                     </td>
-                    <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: 'var(--green)' }}>
+                    <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: '#00c864' }}>
                       +{(ours - baseline).toFixed(1)}%
                     </td>
                     <td style={{ padding: '0.85rem 1rem', textAlign: 'right', color: winnerColor, fontWeight: 700 }}>
@@ -1471,75 +1211,87 @@ function MLComparePage() {
         </div>
       </section>
 
-      {/* Findings */}
+      {/* Honest result — the interesting finding */}
       <section className="section container" style={{ marginTop: '1.5rem' }}>
         <div style={{
-          padding: '1.75rem 2rem',
-          background: 'var(--bg-card)',
-          border: '1px solid var(--border)',
+          padding: '1.5rem 1.75rem',
+          background: 'rgba(59, 130, 246, 0.05)',
+          border: '1px solid rgba(59, 130, 246, 0.25)',
+          borderLeft: '4px solid var(--blue)',
           borderRadius: '8px',
         }}>
           <div style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: '0.68rem',
-            color: 'var(--text-muted)',
+            fontSize: '0.7rem',
+            color: 'var(--blue)',
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            marginBottom: '0.75rem',
+            marginBottom: '0.6rem',
+            fontWeight: 700,
           }}>
-            Findings
+            ⚡ Honest result
           </div>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text)', lineHeight: 1.65, marginBottom: '0.75rem' }}>
-            Both ML models (sklearn MLP, PyTorch 1D U-Net) trained on 80 labeled rumbles
-            (~16,000 frames) outperform stationary spectral gating. On car and plane noise they
-            are statistically indistinguishable from the DSP pipeline. On generator noise the
-            DSP pipeline recovers measurably more harmonic energy, because engine and elephant
-            harmonic series coincide in frequency and the comb mask encodes that constraint
-            exactly.
+          <p style={{ fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.65, marginBottom: '0.75rem' }}>
+            The fine-tuned sklearn MLPRegressor <strong style={{ color: 'var(--blue)' }}>matches or slightly beats</strong> our
+            explicit approach on <strong>car</strong> and <strong>plane</strong> noise after training on 80 real rumbles
+            (16k frames) for ~2 minutes. It learns an approximation of the comb mask from the data.
           </p>
-          <ul style={{ fontSize: '0.88rem', color: 'var(--text)', lineHeight: 1.7, paddingLeft: '1.25rem', margin: 0 }}>
+          <p style={{ fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.65, marginBottom: '0.75rem' }}>
+            But this is the <strong>pitch point</strong>, not a defeat:
+          </p>
+          <ul style={{ fontSize: '0.88rem', color: 'var(--text)', lineHeight: 1.7, paddingLeft: '1.25rem', marginBottom: '0.75rem' }}>
             <li>
-              The DSP pipeline requires no labeled data. Parameters (f₀ search range,
-              harmonic count, comb bandwidth) generalize to any species with a harmonic call
-              structure.
+              Our classical approach <strong style={{ color: '#00c864' }}>wins on generator noise</strong> — the case where
+              engine harmonics directly overlap elephant harmonics and the mathematical prior matters most.
             </li>
             <li>
-              The ML models were trained with the comb mask as the supervision target.
-              Their accuracy is bounded above by the algorithm they distill.
+              Our approach needs <strong>zero training data</strong>. It works on any species with a harmonic series
+              (whales, dolphins, birds) by tuning 3 parameters (f₀ range, harmonic count, comb bandwidth).
             </li>
             <li>
-              Generalization beyond the training distribution (novel species, sparse labels)
-              is an open question for both ML models. The DSP pipeline has no training
-              distribution to leave.
+              The ML model needs <strong>80 labeled rumbles per species</strong> and a 2-minute fit. Try that on
+              an endangered species with 10 recordings.
+            </li>
+            <li>
+              The ML model still <strong style={{ color: 'var(--blue)' }}>imitates</strong> our comb mask — it was
+              trained with our output as the target. When the explicit approach is already correct, the learned
+              approximation approaches its ceiling. The ML model cannot exceed the algorithm it was distilled from.
             </li>
           </ul>
+          <p style={{ fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.65, fontWeight: 700, marginBottom: 0 }}>
+            Domain priors give you the ceiling for free. ML gives you an expensive approximation that only gets
+            there with enough data.
+          </p>
         </div>
       </section>
 
-      {/* Conclusion */}
-      <section className="section container" style={{ marginTop: '1.5rem', marginBottom: '3rem' }}>
+      {/* Final takeaway */}
+      <section className="section container" style={{ marginTop: '1.5rem' }}>
         <div style={{
-          padding: '1.75rem 2rem',
-          background: 'var(--bg-card)',
-          border: '1px solid var(--border)',
+          padding: '2rem',
+          background: 'rgba(0, 200, 100, 0.05)',
+          border: '1px solid rgba(0, 200, 100, 0.2)',
           borderRadius: '8px',
+          textAlign: 'center',
         }}>
-          <div style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.68rem',
-            color: 'var(--text-muted)',
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            marginBottom: '0.75rem',
+          <h3 style={{ fontFamily: 'var(--font-display)', color: '#00c864', marginBottom: '0.75rem' }}>
+            The takeaway
+          </h3>
+          <p style={{ fontSize: '0.95rem', color: 'var(--text)', maxWidth: '72ch', margin: '0 auto' }}>
+            Generic spectral gating is the default because it's easy. But it has no idea
+            what an elephant sounds like, and it keeps any strong harmonic structure — including
+            engine noise. Our approach knows that elephant rumbles live on a strict k·f₀ series
+            anchored at 10–25 Hz, so we build a mask around exactly those bins and throw everything
+            else away.
+          </p>
+          <p style={{
+            fontSize: '0.95rem',
+            color: 'var(--text)',
+            maxWidth: '72ch',
+            margin: '1rem auto 0',
+            fontWeight: 700,
           }}>
-            Conclusion
-          </div>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text)', lineHeight: 1.65, margin: 0 }}>
-            Four denoisers were evaluated on identical inputs drawn from real field
-            recordings. Performance converges on broadband noise; domain-specific priors
-            diverge from learned approximations on noise that shares the target signal's
-            harmonic structure. The harmonic comb approach offers a data-free baseline that
-            scales to new species without retraining.
+            Same input. Same compute. Different priors. Measurably cleaner output.
           </p>
         </div>
       </section>
@@ -1566,11 +1318,6 @@ export default function App() {
   const fetchMetadata = useCallback(async () => {
     try {
       const res = await fetch('/api/demo/metadata')
-      if (res.ok) { setMetadata(await res.json()); return }
-    } catch {}
-    // Fallback: load pre-built static metadata (works on static hosts like Vercel)
-    try {
-      const res = await fetch('/static/demo/metadata.json')
       if (res.ok) setMetadata(await res.json())
     } catch {}
   }, [])
@@ -1578,35 +1325,27 @@ export default function App() {
   const checkStatus = useCallback(async () => {
     try {
       const res = await fetch('/api/demo/status')
-      if (res.ok) {
-        const data: StatusResponse = await res.json()
-        setJobProgress(data.job.progress)
-        setJobMessage(data.job.message)
-        if (data.ready) {
-          stopPolling()
-          setStatus('ready')
-          fetchMetadata()
-        } else if (data.job.status === 'running') {
-          setStatus('generating')
-        } else if (data.job.status === 'error') {
-          stopPolling()
-          setStatus('error')
-        } else {
-          setStatus('not_ready')
-        }
-        return
-      }
-    } catch {}
-    // No backend  check if static demo assets exist
-    try {
-      const res = await fetch('/static/demo/metadata.json')
-      if (res.ok) {
-        setMetadata(await res.json())
+      if (!res.ok) { setStatus('error'); return }
+      const data: StatusResponse = await res.json()
+
+      setJobProgress(data.job.progress)
+      setJobMessage(data.job.message)
+
+      if (data.ready) {
+        stopPolling()
         setStatus('ready')
-        return
+        fetchMetadata()
+      } else if (data.job.status === 'running') {
+        setStatus('generating')
+      } else if (data.job.status === 'error') {
+        stopPolling()
+        setStatus('error')
+      } else {
+        setStatus('not_ready')
       }
-    } catch {}
-    setStatus('error')
+    } catch {
+      setStatus('error')
+    }
   }, [stopPolling, fetchMetadata])
 
   useEffect(() => {
@@ -1652,7 +1391,7 @@ export default function App() {
           <div className="footer-left">
             Built at <strong>HackSMU 2026</strong> · Southern Methodist University ·{' '}
             <span style={{ color: 'var(--green)', fontFamily: 'var(--font-mono)', fontSize: '0.72rem' }}>
-              🐘 ElePhone
+              🐘 ElephantVoices Denoiser
             </span>
           </div>
           <div className="footer-links">
