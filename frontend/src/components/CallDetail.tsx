@@ -5,9 +5,9 @@ import { ComparisonPanel } from './ComparisonPanel'
 
 export interface CallDetailProps {
   result: CallResult
-  /** Noisy audio URL  only available for fresh uploads (blob URL) */
+  /** Noisy audio URL — only available for fresh uploads (blob URL) */
   noisyUrl: string | null
-  /** Clean audio URL  available for BOTH fresh uploads and batch-disk rows */
+  /** Clean audio URL — available for BOTH fresh uploads and batch-disk rows */
   cleanUrl: string | null
 }
 

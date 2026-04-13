@@ -1,5 +1,5 @@
 /**
- * CurvedLoop  marquee text that follows a curved SVG path.
+ * CurvedLoop — marquee text that follows a curved SVG path.
  *
  * Adapted from react-bits CurvedLoop-JS-CSS (MIT). Standalone implementation
  * so we don't need Tailwind / shadcn.

@@ -55,7 +55,7 @@ export function UploadPanel({ onComplete }: UploadPanelProps) {
       </button>
       {status && (
         <span style={{ marginLeft: 12, opacity: 0.7 }}>
-          {status.status}  {status.progress}/{status.total}
+          {status.status} — {status.progress}/{status.total}
         </span>
       )}
       {error && <div style={{ color: '#f66' }}>{error}</div>}

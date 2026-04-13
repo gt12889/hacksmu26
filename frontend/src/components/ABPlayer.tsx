@@ -35,7 +35,7 @@ export function ABPlayer({ noisyUrl, cleanUrl, f0Hz }: ABPlayerProps) {
   const handleToggle = () => {
     const ws = wsRef.current
     if (ws) {
-      // CRITICAL: capture state BEFORE changing URL (Pitfall 3  A/B loses timestamp).
+      // CRITICAL: capture state BEFORE changing URL (Pitfall 3 — A/B loses timestamp).
       // setTime() is called inside onReady of the new instance after decode completes.
       setResumeAt(ws.getCurrentTime())
       setWasPlaying(ws.isPlaying())
@@ -78,7 +78,7 @@ export function ABPlayer({ noisyUrl, cleanUrl, f0Hz }: ABPlayerProps) {
         <span style={{ opacity: 0.6 }}>f0 = {f0Hz.toFixed(1)} Hz</span>
       </div>
       {/* key={activeUrl} forces SpectrogramView remount on URL change so onReady fires
-          reliably  necessary for setTime to execute after new audio has decoded */}
+          reliably — necessary for setTime to execute after new audio has decoded */}
       <SpectrogramView
         key={activeUrl}
         audioUrl={activeUrl}
