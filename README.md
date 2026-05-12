@@ -1,3 +1,14 @@
+---
+title: ElephantVoices Denoiser
+emoji: 🐘
+colorFrom: gray
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+short_description: Domain-specific denoising for elephant rumbles using harmonic comb masking
+---
+
 # ElephantVoices Denoiser — HackSMU 2026
 
 Hackathon project for **HackSMU** at SMU: a **bioacoustic denoising pipeline** for elephant field recordings contaminated by mechanical noise (generators, cars, aircraft). Generic speech/music denoisers fail on infrasonic rumbles (roughly 10–20 Hz fundamentals with harmonics into the kHz range) that overlap engine noise. This repo uses **harmonic structure** (STFT, HPSS-style separation, comb masking, scoring) plus optional **multi-speaker** separation, exposed through a **FastAPI** service and a **React + Vite** demo UI.
