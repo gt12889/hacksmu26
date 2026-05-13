@@ -59,7 +59,10 @@ Important design rules encoded in code:
 
 
 
-More techincal details on the approach:
+### More techincal details on the approach:
+
+
+
 The denoiser exploits a property unique to elephant rumbles: their energy lives on integer multiples of a fundamental frequency f₀ between roughly 8–25 Hz, while mechanical noise (generators, cars, planes) has its own unrelated harmonic series or broadband shape — so per-frame, we run subharmonic summation (SHS) on the HPSS-enhanced magnitude to find the f₀ that best explains the rumble's harmonic stack (with an octave-correction step to prevent locking onto f₀/2, then a median filter over time so the f₀ contour doesn't jitter into engine territory). Once we have a time-varying f₀, we build a soft triangular comb mask at integer multiples k·f₀ (soft edges instead of hard binary gates, which kills the "musical noise" artifact common in spectral subtraction), multiply it against the original magnitude spectrogram (not the HPSS-enhanced one — HPSS is used only as a voting aid for f₀), and reconstruct audio via ISTFT using the original phase, which keeps the rumble's transient structure intact. Finally, the residual noise that fell inside the comb's pass-bands is removed by noisereduce, which we run last with a key twist: the noise classifier upstream (noise_classifier.py) inspects spectral flatness and 25–100 Hz energy ratio in the silence between calls to pick the right mode automatically stationary with an explicit noise profile when a generator is detected, non-stationary for car/plane/mixed where the noise floor sweeps over time — so the same pipeline adapts per recording without manual tuning.
 
 
